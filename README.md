@@ -11,7 +11,7 @@
 </div>
 <br />
 
-![Example PandaCI workflow](https://raw.githubusercontent.com/pixeleye-io/pixeleye/main/.assets/playground.png)
+![Example PandaCI workflow](https://raw.githubusercontent.com/pandaci-com/pandaci/main/.assets/example-run.png)
 
 ## Project structure
 
