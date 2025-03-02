@@ -3,7 +3,7 @@ import {
   StartTaskData_Docker_DockerVolume_Type,
   type TaskMeta,
   WorkflowAlert_Type,
-} from "@pandaci/grpc";
+} from "@pandaci/proto";
 import type {
   DockerTaskFn,
   DockerTaskOptions,
