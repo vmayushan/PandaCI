@@ -1,4 +1,4 @@
-import { WorkflowService } from "@pandaci/grpc";
+import { WorkflowService } from "@pandaci/proto";
 import {
   type Client,
   createClient,

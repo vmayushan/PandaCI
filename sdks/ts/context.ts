@@ -1,5 +1,5 @@
 import { AsyncLocalStorage } from "node:async_hooks";
-import type { JobMeta, TaskMeta } from "@pandaci/grpc";
+import type { JobMeta, TaskMeta } from "@pandaci/proto";
 
 export interface JobContext {
   meta: JobMeta;

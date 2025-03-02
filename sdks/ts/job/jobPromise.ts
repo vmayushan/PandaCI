@@ -1,4 +1,4 @@
-import { Conclusion, WorkflowAlert_Type } from "@pandaci/grpc";
+import { Conclusion, WorkflowAlert_Type } from "@pandaci/proto";
 import type { JobOptions, JobResult } from "./jobTypes.ts";
 import { setImmediate } from "node:timers";
 import { jobContext } from "../context.ts";

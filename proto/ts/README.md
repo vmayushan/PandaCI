@@ -1,4 +1,4 @@
-# @pandaci/grpc
+# @pandaci/proto
 
 Generated grpc code for pandaci. This package is used by @pandaci/workflow.
 

@@ -1,4 +1,4 @@
-import { WorkflowAlert_Type } from "@pandaci/grpc";
+import { WorkflowAlert_Type } from "@pandaci/proto";
 import type { JobContext, TaskContext } from "../context.ts";
 import { setImmediate } from "node:timers";
 import { getWorkflowClient } from "../api.ts";
