@@ -25,8 +25,7 @@ func (h *Handler) GithubAccountCallback(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "State is required")
 	}
 
-	accountState, err := h.queries.GetAccountRefreshStateByID(c.Request().Context(), state)
-	if err != nil && err != sql.ErrNoRows {
+	if accountState, err := h.queries.GetAccountRefreshStateByID(c.Request().Context(), state); err != nil && err != sql.ErrNoRows {
 		return err
 	} else if err == sql.ErrNoRows || accountState.UserID != user.ID || accountState.Type != typesDB.UserAccountTypeGithub {
 		log.Info().Msg("Bad github oauth state")
