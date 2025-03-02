@@ -16,5 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
       - name: Publish package
         run: deno publish
+        working-directory: ./proto/ts
