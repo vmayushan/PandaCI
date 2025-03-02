@@ -43,7 +43,7 @@ importers:
         version: 5.1.1
       '@lukemorales/query-key-factory':
         specifier: ^1.3.4
-        version: 1.3.4(@tanstack/query-core@5.62.7)(@tanstack/react-query@5.59.15(react@18.3.1))
+        version: 1.3.4(@tanstack/query-core@5.66.2)(@tanstack/react-query@5.59.15(react@18.3.1))
       '@ory/client':
         specifier: ^1.17.2
         version: 1.17.2
@@ -63,8 +63,8 @@ importers:
         specifier: ^4.0.9
         version: 4.0.9(vite@6.2.0(@types/node@22.10.5)(jiti@2.4.2)(lightningcss@1.29.1)(yaml@2.7.0))
       '@tanstack/svelte-query':
-        specifier: https://pkg.pr.new/@tanstack/svelte-query@56f67c7
-        version: https://pkg.pr.new/@tanstack/svelte-query@56f67c7(svelte@5.20.5)
+        specifier: https://pkg.pr.new/@tanstack/svelte-query@8c9ce99
+        version: https://pkg.pr.new/@tanstack/svelte-query@8c9ce99(svelte@5.20.5)
       '@zag-js/accordion':
         specifier: ^1.2.1
         version: 1.2.1
@@ -956,21 +956,21 @@ packages:
   '@tanstack/query-core@5.59.13':
     resolution: {integrity: sha512-Oou0bBu/P8+oYjXsJQ11j+gcpLAMpqW42UlokQYEz4dE7+hOtVO9rVuolJKgEccqzvyFzqX4/zZWY+R/v1wVsQ==}
 
-  '@tanstack/query-core@5.62.7':
-    resolution: {integrity: sha512-fgpfmwatsrUal6V+8EC2cxZIQVl9xvL7qYa03gsdsCy985UTUlS4N+/3hCzwR0PclYDqisca2AqR1BVgJGpUDA==}
+  '@tanstack/query-core@5.66.2':
+    resolution: {integrity: sha512-GL/Rx7rIUxyYgJPWSpFjz09lizvAAZut2RueuRXnedAJzJMI+NxpwKA6dojJ9gc26RdUviH5pvSvEiYXo8vSTg==}
 
-  '@tanstack/query-core@https://pkg.pr.new/TanStack/query/@tanstack/query-core@56f67c7d62d60b26a3dfbf8e359f12257dcbc8eb':
-    resolution: {tarball: https://pkg.pr.new/TanStack/query/@tanstack/query-core@56f67c7d62d60b26a3dfbf8e359f12257dcbc8eb}
-    version: 5.62.7
+  '@tanstack/query-core@https://pkg.pr.new/TanStack/query/@tanstack/query-core@8c9ce998d84573adafedcbac4488159cd75e2473':
+    resolution: {tarball: https://pkg.pr.new/TanStack/query/@tanstack/query-core@8c9ce998d84573adafedcbac4488159cd75e2473}
+    version: 5.66.2
 
   '@tanstack/react-query@5.59.15':
     resolution: {integrity: sha512-QbVlAkTI78wB4Mqgf2RDmgC0AOiJqer2c5k9STOOSXGv1S6ZkY37r/6UpE8DbQ2Du0ohsdoXgFNEyv+4eDoPEw==}
     peerDependencies:
       react: ^18 || ^19
 
-  '@tanstack/svelte-query@https://pkg.pr.new/@tanstack/svelte-query@56f67c7':
-    resolution: {tarball: https://pkg.pr.new/@tanstack/svelte-query@56f67c7}
-    version: 5.62.7
+  '@tanstack/svelte-query@https://pkg.pr.new/@tanstack/svelte-query@8c9ce99':
+    resolution: {tarball: https://pkg.pr.new/@tanstack/svelte-query@8c9ce99}
+    version: 5.66.2
     peerDependencies:
       svelte: ^5.0.0
 
@@ -2724,9 +2724,9 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@lukemorales/query-key-factory@1.3.4(@tanstack/query-core@5.62.7)(@tanstack/react-query@5.59.15(react@18.3.1))':
+  '@lukemorales/query-key-factory@1.3.4(@tanstack/query-core@5.66.2)(@tanstack/react-query@5.59.15(react@18.3.1))':
     dependencies:
-      '@tanstack/query-core': 5.62.7
+      '@tanstack/query-core': 5.66.2
       '@tanstack/react-query': 5.59.15(react@18.3.1)
 
   '@mapbox/node-pre-gyp@2.0.0':
@@ -2990,18 +2990,18 @@ snapshots:
 
   '@tanstack/query-core@5.59.13': {}
 
-  '@tanstack/query-core@5.62.7': {}
+  '@tanstack/query-core@5.66.2': {}
 
-  '@tanstack/query-core@https://pkg.pr.new/TanStack/query/@tanstack/query-core@56f67c7d62d60b26a3dfbf8e359f12257dcbc8eb': {}
+  '@tanstack/query-core@https://pkg.pr.new/TanStack/query/@tanstack/query-core@8c9ce998d84573adafedcbac4488159cd75e2473': {}
 
   '@tanstack/react-query@5.59.15(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 5.59.13
       react: 18.3.1
 
-  '@tanstack/svelte-query@https://pkg.pr.new/@tanstack/svelte-query@56f67c7(svelte@5.20.5)':
+  '@tanstack/svelte-query@https://pkg.pr.new/@tanstack/svelte-query@8c9ce99(svelte@5.20.5)':
     dependencies:
-      '@tanstack/query-core': https://pkg.pr.new/TanStack/query/@tanstack/query-core@56f67c7d62d60b26a3dfbf8e359f12257dcbc8eb
+      '@tanstack/query-core': https://pkg.pr.new/TanStack/query/@tanstack/query-core@8c9ce998d84573adafedcbac4488159cd75e2473
       svelte: 5.20.5
 
   '@types/cookie@0.6.0': {}
