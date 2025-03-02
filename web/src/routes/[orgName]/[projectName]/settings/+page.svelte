@@ -54,12 +54,13 @@
 			);
 		},
 		onSuccess: (updatedProject) => {
+			const oldProject = project.data;
 			queryClient.setQueryData(
 				queries.organization.getByName(page.params.orgName)._ctx.projectByName(updatedProject.slug)
 					.queryKey,
 				updatedProject
 			);
-			if (updatedProject.slug !== project.data?.slug) {
+			if (updatedProject.slug !== oldProject?.slug) {
 				goto(`/${page.params.orgName}/${updatedProject.slug}/settings`);
 			}
 		},
