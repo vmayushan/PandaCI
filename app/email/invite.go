@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"strings"
 	"text/template"
+	"html"
 )
 
 type OrgInviteEmailNewUserData struct {
@@ -22,6 +23,12 @@ var orgInviteEmailNewUserTemplate string
 
 // SendOrgInviteEmailToNewUser sends an email to a new user inviting them to join an organization
 func (h *Handler) SendOrgInviteEmailToNewUser(ctx context.Context, data OrgInviteEmailNewUserData) error {
+	data.To = html.EscapeString(data.To)
+	data.TeamName = html.EscapeString(data.TeamName)
+	data.TeamAvatarURL = html.EscapeString(data.TeamAvatarURL)
+	data.TeamSlug = html.EscapeString(data.TeamSlug)
+	data.InvitedByName = html.EscapeString(data.InvitedByName)
+	data.InvitedByEmail = html.EscapeString(data.InvitedByEmail)
 
 	tmpl, err := template.New("InviteEmail").Parse(orgInviteEmailNewUserTemplate)
 	if err != nil {
@@ -58,6 +65,13 @@ var orgInviteEmailExistingUserTemplate string
 
 // Sends an email intended for an existing user who has been invited to an organization
 func (h *Handler) SendOrgInviteEmailToExistingUser(ctx context.Context, data OrgInviteEmailExistingUserData) error {
+	data.To = html.EscapeString(data.To)
+	data.InviteeName = html.EscapeString(data.InviteeName)
+	data.TeamName = html.EscapeString(data.TeamName)
+	data.TeamAvatarURL = html.EscapeString(data.TeamAvatarURL)
+	data.TeamSlug = html.EscapeString(data.TeamSlug)
+	data.InvitedByName = html.EscapeString(data.InvitedByName)
+	data.InvitedByEmail = html.EscapeString(data.InvitedByEmail)
 
 	tmpl, err := template.New("InviteEmail").Parse(orgInviteEmailExistingUserTemplate)
 	if err != nil {
