@@ -1,0 +1,82 @@
+@import 'tailwindcss';
+
+@variant dark (@media (prefers-color-scheme: dark));
+
+@theme {
+	--color-surface-dark: var(--color-zinc-900);
+	--color-surface-light: var(--color-zinc-100);
+
+	--color-on-surface-dark: var(--color-zinc-50);
+	--color-on-surface-light: var(--color-zinc-900);
+
+	--color-on-surface-variant-dark: var(--color-zinc-400);
+	--color-on-surface-variant-light: var(--color-zinc-600);
+
+	--color-outline-dark: var(--color-zinc-600);
+	--color-outline-light: var(--color-zinc-300);
+
+	--color-outline-variant-dark: var(--color-zinc-800);
+	--color-outline-variant-light: var(--color-zinc-200);
+
+	--color-surface-high-dark: var(--color-zinc-800);
+	--color-surface-high-light: var(--color-zinc-200);
+
+	--color-surface-low-dark: #121214;
+	--color-surface-low-light: var(--color-zinc-50);
+
+	/** Light colors */
+	--color-surface: var(--color-surface-light);
+	--color-surface-inverse: var(--color-surface-dark);
+	--color-surface-high: var(--color-surface-high-light);
+	--color-surface-high-inverse: var(--color-surface-high-dark);
+	--color-surface-low: var(--color-surface-low-light);
+
+	--color-on-surface: var(--color-on-surface-light);
+	--color-on-surface-inverse: var(--color-on-surface-dark);
+	--color-on-surface-variant: var(--color-on-surface-variant-light);
+
+	--color-outline: var(--color-outline-light);
+	--color-outline-variant: var(--color-outline-variant-light);
+}
+
+:root {
+	@media (prefers-color-scheme: dark) {
+		/** Dark colors */
+		--color-surface: var(--color-surface-dark);
+		--color-surface-inverse: var(--color-surface-light);
+		--color-surface-high: var(--color-surface-high-dark);
+		--color-surface-high-inverse: var(--color-surface-high-light);
+		--color-surface-low: var(--color-surface-low-dark);
+
+		--color-on-surface: var(--color-on-surface-dark);
+		--color-on-surface-inverse: var(--color-on-surface-light);
+		--color-on-surface-variant: var(--color-on-surface-variant-dark);
+
+		--color-outline: var(--color-outline-dark);
+		--color-outline-variant: var(--color-outline-variant-dark);
+	}
+}
+
+@theme {
+	--font-sans:
+		Inter Variable, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+		'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+html {
+	@apply lg:bg-surface-low text-on-surface bg-surface antialiased;
+}
+
+:root {
+	view-transition-name: none;
+}
+
+@media (prefers-color-scheme: dark) {
+	html {
+		color-scheme: dark;
+	}
+}
+
+.scrollbar-thin {
+	scrollbar-width: thin;
+}

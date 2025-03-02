@@ -1,0 +1,8 @@
+{
+	"deno.enable": true,
+	"deno.enablePaths": ["."],
+	"deno.disablePaths": ["./web"],
+	"typescript.tsdk": "node_modules\\typescript\\lib",
+	"makefile.configureOnOpen": false,
+	"eslint.validate": ["javascript", "javascriptreact", "svelte"]
+}

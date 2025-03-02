@@ -1,0 +1,147 @@
+version: v1.3.1
+
+serve:
+  public:
+    base_url: https://auth.pandaci.com/
+    host: "0.0.0.0"
+    port: 4433
+    cors:
+      enabled: true
+      allowed_origins:
+        - https://pandaci.com
+        - https://app.pandaci.com
+        - https://*.app.pandaci.com
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Cookie
+        - Content-Type
+      exposed_headers:
+        - Content-Type
+        - Set-Cookie
+  admin:
+    host: "fly-local-6pn"
+    port: 4434
+
+selfservice:
+  default_browser_return_url: https://app.pandaci.com/
+  allowed_return_urls:
+    - https://app.pandaci.com/
+
+  methods:
+    password:
+      enabled: false
+    oidc:
+      config:
+        providers:
+          - client_id: CHANGE_ME
+            client_secret: CHANGE_ME
+            id: github
+            label: github
+            mapper_url: file:///etc/config/kratos/github.jsonnet
+            provider: github-app
+            scope: []
+      enabled: true
+    totp:
+      config:
+        issuer: Kratos
+      enabled: false
+    lookup_secret:
+      enabled: false
+    link:
+      enabled: true
+    code:
+      enabled: true
+
+  flows:
+    error:
+      ui_url: https://app.pandaci.com/auth-error
+
+    settings:
+      ui_url: https://app.pandaci.com/account/profile
+      privileged_session_max_age: 15m
+      required_aal: highest_available
+
+    recovery:
+      enabled: true
+      ui_url: https://app.pandaci.com/recovery
+      use: code
+
+    verification:
+      enabled: true
+      ui_url: https://app.pandaci.com/verification
+      use: code
+      after:
+        default_browser_return_url: https://app.pandaci.com/
+
+    logout:
+      after:
+        default_browser_return_url: https://pandaci.com/
+
+    login:
+      ui_url: https://app.pandaci.com/login
+      lifespan: 10m
+      after:
+        default_browser_return_url: https://app.pandaci.com/
+
+    registration:
+      lifespan: 10m
+      ui_url: https://app.pandaci.com/signup
+      after:
+        default_browser_return_url: https://app.pandaci.com/welcome
+
+        password:
+          hooks:
+            - hook: session
+            - hook: show_verification_ui
+        oidc:
+          hooks:
+            - hook: session
+            - hook: show_verification_ui
+        hooks:
+          - hook: web_hook
+            config:
+              url: https://api.pandaci.com/v1/ory/after/registration
+              method: POST
+              body: file:///etc/config/kratos/webhook.jsonnet
+              response:
+                ignore: true
+              auth:
+                type: api_key
+                config:
+                  name: Authorization
+                  value: Basic PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+                  in: header
+
+log:
+  level: info
+  format: text
+  leak_sensitive_values: false
+
+ciphers:
+  algorithm: xchacha20-poly1305
+
+hashers:
+  algorithm: bcrypt
+  bcrypt:
+    cost: 12
+
+session:
+  cookie:
+    domain: pandaci.com
+
+identity:
+  default_schema_id: default
+  schemas:
+    - id: default
+      url: file:///etc/config/kratos/identity.schema.json
+
+courier:
+  smtp:
+    from_address: no-reply@pandaci.com
+    from_name: PandaCI

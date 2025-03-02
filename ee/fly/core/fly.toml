@@ -1,0 +1,18 @@
+primary_region = 'iad'
+kill_timeout = '2m0s'
+
+[build]
+dockerfile = 'Dockerfile'
+
+[http_service]
+internal_port = 5000
+force_https = true
+auto_stop_machines = 'stop'
+auto_start_machines = true
+min_machines_running = 0
+processes = ['app']
+
+[[vm]]
+memory = '1GB'
+cpu_kind = 'shared'
+cpus = 2

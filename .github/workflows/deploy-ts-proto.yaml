@@ -1,0 +1,23 @@
+name: Publish to JSR
+
+on:
+  push:
+    tags:
+      - '*@pandaci/proto.*.*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: latest
+
+      - name: Publish to JSR
+        run: deno publish --allow-dirty
+        env:
+          JSR_AUTH_TOKEN: ${{ secrets.JSR_AUTH_TOKEN }}

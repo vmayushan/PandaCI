@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package proto.v1;
+
+import "proto/v1/shared.proto";
+
+option go_package = "proto/go/v1";
+
+// TODO - we can simplify our sdks by remove a lot of this logic and just using ids.
+// The workflow sideapp can store all the needed data
+
+message WorkflowServiceStartTaskRequest {
+  string workflow_jwt = 1;
+  JobMeta job_meta = 2;
+  StartTaskData data = 3;
+  bool skipped = 4;
+}
+
+message WorkflowServiceStartTaskResponse {
+  TaskMeta task_meta = 1;
+}
+
+message WorkflowServiceStopTaskRequest {
+  string workflow_jwt = 1;
+  JobMeta job_meta = 2;
+  TaskMeta task_meta = 3;
+  Conclusion conclusion = 4;
+}
+
+message WorkflowServiceStopTaskResponse {}
+
+message WorkflowServiceStopJobRequest {
+  string workflow_jwt = 1;
+  JobMeta job_meta = 2;
+  Conclusion conclusion = 3;
+}
+
+message WorkflowServiceStopJobResponse {
+  Conclusion conclusion = 1;
+}
+
+message WorkflowServiceStartJobRequest {
+  string workflow_jwt = 1;
+
+  string name = 2;
+  optional string runner = 3;
+  bool skipped = 4;
+}
+
+message WorkflowServiceStartJobResponse {
+  JobMeta job_meta = 1;
+}
+
+message WorkflowServiceStartStepRequest {
+  string workflow_jwt = 1;
+  JobMeta job_meta = 2;
+  optional TaskMeta task_meta = 3;
+
+  oneof data {
+    ExecInfo exec_data = 5;
+  }
+}
+
+message WorkflowServiceStartStepResponse {
+  oneof payload {
+    StepExecPayload exec = 1;
+  }
+}
+
+message WorkflowServiceStopStepRequest {}
+message WorkflowServiceStopStepResponse {}
+
+message WorkflowServiceCreateJobVolumeRequest {
+  string workflow_jwt = 1;
+  JobMeta job_meta = 2;
+
+  optional string host = 3;
+}
+
+message WorkflowServiceCreateJobVolumeResponse {
+  string source = 1;
+}
+
+message WorkflowServiceCreateWorkflowAlertRequest {
+    string workflow_jwt = 1;
+
+    WorkflowAlert alert = 2;
+}
+
+message WorkflowServiceCreateWorkflowAlertResponse {}
+
+message WorkflowServicePingRequest {}
+message WorkflowServicePingResponse {}
+
+service WorkflowService {
+  rpc StartJob(WorkflowServiceStartJobRequest) returns (WorkflowServiceStartJobResponse);
+  rpc StopJob(WorkflowServiceStopJobRequest) returns (WorkflowServiceStopJobResponse);
+
+  rpc StartTask(WorkflowServiceStartTaskRequest) returns (WorkflowServiceStartTaskResponse);
+  rpc StopTask(WorkflowServiceStopTaskRequest) returns (WorkflowServiceStopTaskResponse);
+
+  rpc StartStep(WorkflowServiceStartStepRequest) returns (stream WorkflowServiceStartStepResponse);
+  rpc StopStep(WorkflowServiceStopStepRequest) returns (WorkflowServiceStopStepResponse);
+
+  rpc CreateJobVolume(WorkflowServiceCreateJobVolumeRequest) returns (WorkflowServiceCreateJobVolumeResponse);
+
+  rpc CreateWorkflowAlert(WorkflowServiceCreateWorkflowAlertRequest) returns (WorkflowServiceCreateWorkflowAlertResponse);
+
+  rpc Ping(WorkflowServicePingRequest) returns (WorkflowServicePingResponse);
+}

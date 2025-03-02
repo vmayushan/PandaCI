@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package proto.v1;
+
+import "google/protobuf/timestamp.proto";
+import "proto/v1/shared.proto";
+
+option go_package = "proto/go/v1";
+
+message RunnerServiceStartJobRequest {
+  WorkflowMeta workflow_meta = 1;
+
+  string id = 2;
+  string name = 3;
+  string runner = 4;
+}
+
+message RunnerServiceStartJobResponse {
+  JobMeta job_meta = 1;
+}
+
+message RunnerServiceStartWorkflowRequest {
+  string workflow_jwt = 1;
+  string name = 2;
+  google.protobuf.Timestamp timeout_at = 3;
+  string image = 4;
+  string file_path = 5;
+
+  repeated EnvironmentVariable env = 6;
+
+  GitRepo git_info = 7;
+
+  Trigger trigger = 8;
+
+  optional int32 pr_number = 9;
+
+  string presigned_output_url = 10;
+
+  message DenoConfig {
+    string version = 1;
+  }
+
+  oneof language_config {
+    DenoConfig deno_config = 11;
+  }
+}
+
+message RunnerServiceStartWorkflowResponse {
+  oneof runner_meta {
+    FlyRunMeta fly_meta = 1;
+    DockerRunMeta docker_meta = 2;
+  }
+}
+
+message RunnerServiceStopJobRequest {
+  WorkflowMeta workflow_meta = 1;
+  JobMeta job_meta = 2;
+}
+message RunnerServiceStopJobResponse {}
+
+
+message RunnerServiceStopWorkflowRequest {
+  WorkflowMeta workflow_meta = 1;
+}
+message RunnerServiceStopWorkflowResponse {}
+
+message RunnerServiceJobStartedRequest {
+  WorkflowMeta workflow_meta = 1;
+  string address = 2;
+  string id = 3;
+}
+
+message RunnerServiceJobStartedResponse {}
+
+message RunnerServiceGetLogStreamRequest {
+  string workflow_jwt = 1;
+  optional string step_id = 2;
+}
+
+message RunnerServiceGetLogStreamResponse {
+  string url = 1;
+}
+
+message RunnerServiceCleanUpJobsRequest {
+  string workflow_jwt = 1;
+}
+
+message RunnerServiceCleanUpJobsResponse {}
+
+service RunnerService {
+  rpc StartWorkflow(RunnerServiceStartWorkflowRequest) returns (RunnerServiceStartWorkflowResponse);
+
+  rpc StartJob(RunnerServiceStartJobRequest) returns (RunnerServiceStartJobResponse);
+  rpc StopJob(RunnerServiceStopJobRequest) returns (RunnerServiceStopJobResponse);
+  rpc JobStarted(RunnerServiceJobStartedRequest) returns (RunnerServiceJobStartedResponse);
+
+  rpc GetLogStream(RunnerServiceGetLogStreamRequest) returns (RunnerServiceGetLogStreamResponse);
+
+  rpc CleanUpJobs(RunnerServiceCleanUpJobsRequest) returns (RunnerServiceCleanUpJobsResponse);
+}

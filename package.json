@@ -1,0 +1,21 @@
+{
+	"private": true,
+	"scripts": {
+		"lint": "prettier --check .",
+		"format": "prettier --write .",
+		"migrations": "pnpm atlas migrate diff --env psql",
+		"prepare": "husky"
+	},
+	"devDependencies": {
+		"@ariga/atlas": "^0.31.0",
+		"@bufbuild/buf": "^1.50.0",
+		"@bufbuild/protoc-gen-es": "^2.2.3",
+		"eslint": "^9.21.0",
+		"eslint-config-prettier": "^10.0.1",
+		"husky": "^9.1.7",
+		"prettier": "^3.5.2",
+		"prettier-plugin-svelte": "^3.3.3",
+		"prettier-plugin-tailwindcss": "^0.6.11"
+	},
+	"packageManager": "pnpm@10.5.2+sha512.da9dc28cd3ff40d0592188235ab25d3202add8a207afbedc682220e4a0029ffbff4562102b9e6e46b4e3f9e8bd53e6d05de48544b0c57d4b0179e22c76d1199b"
+}

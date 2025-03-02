@@ -1,0 +1,14 @@
+node_modules
+pnpm-lock.yaml
+
+build
+.vercel
+
+proto
+
+.pandaci
+configs
+docker
+ee
+sdks
+.svelte-kit

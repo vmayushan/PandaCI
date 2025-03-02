@@ -1,0 +1,104 @@
+package handlersProject
+
+import (
+	"net/http"
+
+	"github.com/alfiejones/panda-ci/app/api/middleware"
+	middlewareLoaders "github.com/alfiejones/panda-ci/app/api/middleware/loaders"
+	utilsValidator "github.com/alfiejones/panda-ci/pkg/utils/validator"
+	"github.com/alfiejones/panda-ci/platform/analytics"
+	typesDB "github.com/alfiejones/panda-ci/types/database"
+	typesHTTP "github.com/alfiejones/panda-ci/types/http"
+	"github.com/labstack/echo/v4"
+	"github.com/posthog/posthog-go"
+)
+
+func (h *Handler) CreateProjectEnvironment(c echo.Context) error {
+
+	user := middleware.GetUser(c)
+
+	environmentReq := typesHTTP.CreateProjectEnvironmentBody{}
+
+	if err := c.Bind(&environmentReq); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	validate := utilsValidator.NewValidator()
+	if err := validate.Struct(environmentReq); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, utilsValidator.ValidatorErrors(err))
+	}
+
+	project, err := middlewareLoaders.GetProject(c)
+	if err != nil {
+		return err
+	}
+
+	environment := typesDB.ProjectEnvironment{
+		Name:          environmentReq.Name,
+		ProjectID:     project.ID,
+		BranchPattern: environmentReq.BranchPattern,
+	}
+
+	if err := h.queries.CreateProjectEnvironment(c.Request().Context(), &environment); err != nil {
+		return err
+	}
+
+	analytics.TrackUserProjectEvent(user, *project, posthog.Capture{
+		Event: "project_environment_created",
+	})
+
+	return c.JSON(http.StatusCreated, typesHTTP.ProjectEnvironment{
+		ID:            environment.ID,
+		ProjectID:     environment.ProjectID,
+		Name:          environment.Name,
+		BranchPattern: environment.BranchPattern,
+		UpdatedAt:     environment.UpdatedAt,
+		CreatedAt:     environment.CreatedAt,
+	})
+}
+
+func (h *Handler) DeleteProjectEnvironment(c echo.Context) error {
+	id := c.Param("environment_id")
+
+	project, err := middlewareLoaders.GetProject(c)
+	if err != nil {
+		return err
+	}
+
+	if err := h.queries.DeleteProjectEnvironmentByID(c.Request().Context(), *project, id); err != nil {
+		return err
+	}
+
+	analytics.TrackUserProjectEvent(middleware.GetUser(c), *project, posthog.Capture{
+		Event: "project_environment_deleted",
+	})
+
+	return c.NoContent(http.StatusOK)
+}
+
+func (h *Handler) GetProjectEnvironments(c echo.Context) error {
+
+	project, err := middlewareLoaders.GetProject(c)
+	if err != nil {
+		return err
+	}
+
+	environmentsDB, err := h.queries.GetProjectEnvironments(c.Request().Context(), project)
+	if err != nil {
+		return err
+	}
+
+	environments := make([]typesHTTP.ProjectEnvironment, len(environmentsDB))
+	for i, environment := range environmentsDB {
+		environments[i] = typesHTTP.ProjectEnvironment{
+			ID:            environment.ID,
+			ProjectID:     environment.ProjectID,
+			Name:          environment.Name,
+			BranchPattern: environment.BranchPattern,
+			UpdatedAt:     environment.UpdatedAt,
+			CreatedAt:     environment.CreatedAt,
+		}
+	}
+
+	return c.JSON(http.StatusOK, environments)
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@pandaci/proto",
+  "version": "0.0.1",
+  "exports": "./mod.ts",
+  "license": "MIT",
+  "imports": {
+    "@bufbuild/protobuf": "npm:@bufbuild/protobuf@2.2.3"
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["ban-ts-comment", "no-slow-types", "ban-types"]
+    }
+  },
+  "tasks": {
+    "fix-proto": "deno lint --fix --unstable-sloppy-imports"
+  }
+}

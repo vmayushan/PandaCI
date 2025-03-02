@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package proto.v1;
+
+import "proto/v1/shared.proto";
+
+option go_package = "proto/go/v1";
+
+
+message WorkflowRunnerInitConfig {
+    WorkflowMeta workflow_meta = 1;
+    string orchestrator_address = 2;
+    string file = 3;
+    string public_jwt_key = 4;
+    string presigned_output_url = 5;
+    string host = 6;
+    optional int32 port = 7;
+    repeated EnvironmentVariable env = 8;
+}
+
+message JobRunnerInitConfig {
+    WorkflowMeta workflow_meta = 1;
+    JobMeta job_meta = 2;
+    string orchestrator_address = 3;
+    string runner_address = 4;
+    string public_jwt_key = 5;
+    string host = 6;
+    optional int32 port = 7;
+}

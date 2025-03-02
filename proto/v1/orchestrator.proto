@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package proto.v1;
+
+import "proto/v1/shared.proto";
+
+option go_package = "proto/go/v1";
+
+message OrchestratorServiceWorkflowStartedRequest {
+  WorkflowMeta workflow_meta = 1;
+}
+
+message OrchestratorServiceWorkflowStartedResponse {}
+
+message OrchestratorServiceCreateJobRequest {
+  WorkflowMeta workflow_meta = 1;
+
+  string name = 2;
+  optional string runner = 3;
+
+  bool skipped = 4;
+}
+
+message OrchestratorServiceCreateJobResponse {
+  JobMeta job_meta = 1;
+}
+
+message OrchestratorServiceCreateTaskRequest {
+  WorkflowMeta workflow_meta = 1;
+  JobMeta job_meta = 2;
+  StartTaskData data = 3;
+  bool skipped = 4;
+}
+
+message OrchestratorServiceCreateTaskResponse {
+  string id = 1;
+}
+
+message OrchestratorServiceFinishWorkflowRequest {
+  WorkflowMeta workflow_meta = 1;
+  Conclusion conclusion = 2;
+}
+message OrchestratorServiceFinishWorkflowResponse {}
+
+
+message OrchestratorServiceFinishTaskRequest {
+  WorkflowMeta workflow_meta = 1;
+  JobMeta job_meta = 2;
+  TaskMeta task_meta = 3;
+  Conclusion conclusion = 4;
+}
+
+message OrchestratorServiceFinishTaskResponse {}
+
+
+message OrchestratorServiceFinishJobRequest {
+  WorkflowMeta workflow_meta = 1;
+  JobMeta job_meta = 2;
+  Conclusion conclusion = 3;
+}
+
+message OrchestratorServiceFinishJobResponse {}
+
+
+message OrchestratorServiceCreateStepRequest {
+  WorkflowMeta workflow_meta = 1;
+  JobMeta job_meta = 2;
+  optional TaskMeta task_meta = 3;
+
+  string name = 4;
+
+  oneof step_data {
+    ExecInfo exec_data = 5;
+  }
+}
+
+message OrchestratorServiceCreateStepResponse {
+  string id = 1;
+  string presigned_output_url = 2;
+}
+
+message OrchestratorServiceFinishStepRequest {
+  WorkflowMeta workflow_meta = 1;
+  JobMeta job_meta = 2;
+  TaskMeta task_meta = 3;
+  string id = 4;
+  Conclusion conclusion = 5;
+}
+message OrchestratorServiceFinishStepResponse {}
+
+message OrchestratorServiceJobStartedRequest {
+  WorkflowMeta workflow_meta = 1;
+  JobMeta job_meta = 2;
+}
+
+message OrchestratorServiceJobStartedResponse {}
+
+message OrchestratorServiceCreateWorkflowAlertRequest {
+    WorkflowMeta workflow_meta = 1;
+
+    WorkflowAlert alert = 2;
+}
+
+message OrchestratorServiceCreateWorkflowAlertResponse {}
+
+service OrchestratorService {
+  rpc WorkflowStarted(OrchestratorServiceWorkflowStartedRequest) returns (OrchestratorServiceWorkflowStartedResponse);
+  rpc FinishWorkflow(OrchestratorServiceFinishWorkflowRequest) returns (OrchestratorServiceFinishWorkflowResponse);
+
+  rpc CreateJob(OrchestratorServiceCreateJobRequest) returns (OrchestratorServiceCreateJobResponse);
+  rpc FinishJob(OrchestratorServiceFinishJobRequest) returns (OrchestratorServiceFinishJobResponse);
+  rpc JobStarted(OrchestratorServiceJobStartedRequest) returns (OrchestratorServiceJobStartedResponse);
+
+  rpc CreateTask(OrchestratorServiceCreateTaskRequest) returns (OrchestratorServiceCreateTaskResponse);
+  rpc FinishTask(OrchestratorServiceFinishTaskRequest) returns (OrchestratorServiceFinishTaskResponse);
+
+  rpc CreateStep(OrchestratorServiceCreateStepRequest) returns (OrchestratorServiceCreateStepResponse);
+  rpc FinishStep(OrchestratorServiceFinishStepRequest) returns (OrchestratorServiceFinishStepResponse);
+
+  rpc CreateWorkflowAlert(OrchestratorServiceCreateWorkflowAlertRequest) returns (OrchestratorServiceCreateWorkflowAlertResponse);
+}

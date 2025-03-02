@@ -1,0 +1,9 @@
+{
+	"workspace": ["./proto/ts", "./sdks/ts", "./.pandaci"],
+	"lock": false,
+	"nodeModulesDir": "auto",
+	"exclude": ["package.json", "web", "docs"],
+	"lint": {
+		"exclude": ["no-slow-types"]
+	}
+}

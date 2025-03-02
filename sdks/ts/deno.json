@@ -1,0 +1,14 @@
+{
+  "name": "@pandaci/workflow",
+  "version": "0.0.0-alpha.1",
+  "license": "MIT",
+  "exports": "./mod.ts",
+  "lint": {
+    "exclude": ["no-slow-types"]
+  },
+  "imports": {},
+  "tasks": {
+    "test": "export PANDA_IGNORE_ENV_ERROR=true && deno test --allow-env",
+    "coverage": "deno coverage --exclude='api/orchestration.ts'"
+  }
+}

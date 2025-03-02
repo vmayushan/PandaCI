@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package proto.v1;
+
+import "proto/v1/shared.proto";
+
+option go_package = "proto/go/v1";
+
+
+message JobServiceStartTaskRequest {
+  WorkflowMeta workflow_meta = 1;
+  JobMeta job_meta = 2;
+  StartTaskData data = 3;
+  string id = 4;
+}
+
+message JobServiceStartTaskResponse {
+  TaskMeta task_meta = 1;
+}
+
+
+message JobServiceStopTaskRequest {
+  WorkflowMeta workflow_meta = 1;
+  JobMeta job_meta = 2;
+  TaskMeta task_meta = 3;
+}
+
+message JobServiceStopTaskResponse {}
+
+
+message JobServiceStartStepRequest {
+  string workflow_jwt = 1;
+  JobMeta job_meta = 2;
+  optional TaskMeta task_meta = 3;
+  string id = 4;
+  string presigned_output_url = 5;
+
+  oneof data {
+    ExecInfo exec_data = 6;
+  }
+}
+
+message JobServiceStartStepResponse {
+  oneof payload {
+    StepExecPayload exec = 1;
+  }
+}
+
+message JobServiceStopStepRequest {}
+
+message JobServiceStopStepResponse {}
+
+
+message JobServiceCreateJobVolumeRequest {
+  WorkflowMeta workflow_meta = 1;
+  JobMeta job_meta = 2;
+
+  optional string host = 3;
+}
+
+message JobServiceCreateJobVolumeResponse {
+  string source = 1;
+}
+
+message JobServicePingRequest {}
+message JobServicePingResponse {}
+
+
+service JobService {
+  rpc StartTask(JobServiceStartTaskRequest) returns (JobServiceStartTaskResponse);
+  rpc StopTask(JobServiceStopTaskRequest) returns (JobServiceStopTaskResponse);
+
+  rpc StartStep(JobServiceStartStepRequest) returns (stream JobServiceStartStepResponse);
+  rpc StopStep(JobServiceStopStepRequest) returns (JobServiceStopStepResponse);
+
+  rpc CreateJobVolume(JobServiceCreateJobVolumeRequest) returns (JobServiceCreateJobVolumeResponse);
+
+  rpc Ping(JobServicePingRequest) returns (JobServicePingResponse);
+}

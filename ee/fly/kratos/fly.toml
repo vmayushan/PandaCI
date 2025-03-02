@@ -1,0 +1,29 @@
+# fly.toml app configuration file generated for pandaci-kratos-prod on 2024-11-28T17:49:05Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'pandaci-kratos-prod'
+primary_region = 'iad'
+
+
+[build]
+
+args = { APP_NAME = "pandaci-kratos-prod" }
+
+[http_service]
+internal_port = 4433
+force_https = true
+auto_stop_machines = 'stop'
+auto_start_machines = true
+min_machines_running = 0
+processes = ['app']
+
+[[vm]]
+memory = '512mb'
+cpu_kind = 'shared'
+cpus = 2
+
+
+[deploy]
+release_command = "-c /etc/config/kratos/kratos.yaml migrate sql -e --yes"
