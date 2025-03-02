@@ -60,9 +60,8 @@
 					.queryKey,
 				updatedProject
 			);
-			if (updatedProject.slug !== oldProject?.slug) {
+			if (updatedProject.slug !== oldProject?.slug)
 				goto(`/${page.params.orgName}/${updatedProject.slug}/settings`);
-			}
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries(
