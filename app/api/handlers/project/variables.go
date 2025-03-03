@@ -59,6 +59,101 @@ func (h *Handler) GetProjectVariables(c echo.Context) error {
 	return c.JSON(http.StatusOK, variables)
 }
 
+func (h *Handler) UpdateProjectVariable(c echo.Context) error {
+	id := c.Param("variable_id")
+
+	user := middleware.GetUser(c)
+
+	project, err := middlewareLoaders.GetProject(c)
+	if err != nil {
+		return err
+	}
+
+	variableReq := typesHTTP.EditProjectVariableBody{}
+
+	if err := c.Bind(&variableReq); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	validate := utilsValidator.NewValidator()
+	if err := validate.Struct(variableReq); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, utilsValidator.ValidatorErrors(err))
+	}
+
+	if strings.HasPrefix(variableReq.Key, "PANDACI_") {
+		return echo.NewHTTPError(http.StatusBadRequest, map[string]string{"message": "Variable key cannot start with 'PANDACI_' prefix"})
+	}
+
+	variable, err := h.queries.GetProjectVariableByID(c.Request().Context(), project, id)
+	if err != nil {
+		return err
+	}
+
+	// Encrypt the variable value
+	keyID, err := env.GetCurrentEncryptionKeyID()
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get current encryption key ID")
+		return err
+	}
+
+	key, err := env.GetEncryptionKey(*keyID)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get encryption key")
+		return err
+	}
+
+	encrypted, iv, err := encryption.Encrypt(variableReq.Value, *key)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to encrypt variable")
+		return err
+	}
+
+	variable.Key = variableReq.Key
+	variable.Value = encrypted
+	variable.InitialisationVector = iv
+	variable.EncryptionKeyID = *keyID
+	variable.Sensitive = variableReq.Sensitive
+
+	// Check for duplicate variables with same key in same environment
+	currentVariables, err := h.queries.GetProjectVariablesWithEnvironments(c.Request().Context(), project)
+	if err != nil {
+		return err
+	}
+
+	for _, currentVariable := range currentVariables {
+		// Skip the current variable being updated
+		if currentVariable.ID == variable.ID {
+			continue
+		}
+
+		if currentVariable.Key != variable.Key {
+			continue
+		}
+
+		if len(currentVariable.Environments) == 0 && len(variableReq.ProjectEnvironmentIDs) == 0 {
+			return echo.NewHTTPError(http.StatusBadRequest, map[string]string{"message": fmt.Sprintf("A variable with the same key has already been created for the default environment")})
+		}
+
+		for _, env := range currentVariable.Environments {
+			for _, reqEnvID := range variableReq.ProjectEnvironmentIDs {
+				if env.ID == reqEnvID {
+					return echo.NewHTTPError(http.StatusBadRequest, map[string]string{"message": fmt.Sprintf("A variable with the same key is already attached to the %s environment", env.Name)})
+				}
+			}
+		}
+	}
+
+	if err := h.queries.UpdateProjectVariable(c.Request().Context(), variable, variableReq.ProjectEnvironmentIDs); err != nil {
+		return err
+	}
+
+	analytics.TrackUserProjectEvent(user, *project, posthog.Capture{
+		Event: "project_variable_updated",
+	})
+
+	return c.NoContent(http.StatusOK)
+}
+
 func (h *Handler) DeleteProjectVariable(c echo.Context) error {
 	id := c.Param("variable_id")
 

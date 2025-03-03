@@ -52,11 +52,13 @@ func RegisterOrgRoutes(e *echo.Echo, queries *queries.Queries, gitHandler *git.H
 	namedProject.POST("/environments", projectHandler.CreateProjectEnvironment)
 	namedProject.GET("/environments", projectHandler.GetProjectEnvironments)
 	namedProject.DELETE("/environments/:environment_id", projectHandler.DeleteProjectEnvironment)
+	namedProject.PUT("/environments/:environment_id", projectHandler.UpdateProjectEnvironment)
 
 	namedProject.GET("/variables", projectHandler.GetProjectVariables)
 	namedProject.POST("/variables", projectHandler.CreateProjectVariable)
 	namedProject.GET("/variables/:variable_id", projectHandler.GetProjectVariable)
 	namedProject.DELETE("/variables/:variable_id", projectHandler.DeleteProjectVariable)
+	namedProject.PUT("/variables/:variable_id", projectHandler.UpdateProjectVariable)
 
 	workflowIDRun := namedProject.Group("/run/:run_id")
 	workflowIDRun.Use(loaderMiddleware.LoadWorkflowRun)

@@ -2,7 +2,6 @@
 	import {
 		Dialog,
 		DialogTitle,
-		DialogDescription,
 		DialogBody,
 		DialogActions,
 		Text,
@@ -14,30 +13,31 @@
 		Button,
 		Description
 	} from '$lib/components';
-	import type { Project, Organization } from '$lib/api/organization';
+	import type { Project, Organization, ProjectEnvironment } from '$lib/api/organization';
 	import { API, type apiDefs } from '$lib/api';
 	import { createMutation, useQueryClient } from '@tanstack/svelte-query';
 	import { handleForm } from '$lib/utils';
 	import { queries } from '$lib/queries';
 	import DialogCloseButton from '$lib/components/dialog/dialogCloseButton.svelte';
+	import { untrack } from 'svelte';
 
-	interface CreateEnvironmentModal {
-		open: boolean;
+	interface EditVariableModal {
 		project: Project;
 		org: Organization;
+		oldEnvironment?: ProjectEnvironment;
 	}
 
-	let { open = $bindable(), org, project }: CreateEnvironmentModal = $props();
+	let { oldEnvironment = $bindable(), org, project }: EditVariableModal = $props();
 
 	const queryClient = useQueryClient();
 
 	const projectEnvironmentMutation = createMutation(() => ({
 		mutationFn: (
-			data: apiDefs['POST']['/v1/orgs/{orgSlug}/projects/{projectSlug}/environments']['req']
+			data: apiDefs['PUT']['/v1/orgs/{orgSlug}/projects/{projectSlug}/environments/{environmentID}']['req']
 		) =>
-			API.post('/v1/orgs/{orgSlug}/projects/{projectSlug}/environments', {
+			API.put('/v1/orgs/{orgSlug}/projects/{projectSlug}/environments/{environmentID}', {
 				body: { ...data },
-				params: { orgSlug: org.slug, projectSlug: project.slug }
+				params: { orgSlug: org.slug, projectSlug: project.slug, environmentID: oldEnvironment!.id }
 			}),
 		onSettled: () => {
 			queryClient.invalidateQueries(
@@ -45,13 +45,28 @@
 			);
 		}
 	}));
+
+	let open = $state(oldEnvironment !== undefined);
+
+	$effect(() => {
+		if (oldEnvironment) {
+			untrack(() => {
+				open = true;
+			});
+		}
+	});
+
+	$effect(() => {
+		if (!open) {
+			untrack(() => {
+				oldEnvironment = undefined;
+			});
+		}
+	});
 </script>
 
 <Dialog bind:open>
-	<DialogTitle>Create environment</DialogTitle>
-	<DialogDescription>
-		Environments are used to group variables and restrict which branches can access them.
-	</DialogDescription>
+	<DialogTitle>Edit environment</DialogTitle>
 	{#if projectEnvironmentMutation.error}
 		<Text variant="error">{projectEnvironmentMutation.error.message}</Text>
 	{/if}
@@ -60,7 +75,7 @@
 		onsubmit={(e) => {
 			const { data } =
 				handleForm<
-					apiDefs['POST']['/v1/orgs/{orgSlug}/projects/{projectSlug}/environments']['req']
+					apiDefs['PUT']['/v1/orgs/{orgSlug}/projects/{projectSlug}/environments/{environmentID}']['req']
 				>(e);
 
 			projectEnvironmentMutation.mutate(
@@ -81,7 +96,7 @@
 				<FieldGroup>
 					<Field>
 						<Label>Name</Label>
-						<Input autofocus={true} type="text" name="name" />
+						<Input defaultValue={oldEnvironment?.name} autofocus={true} type="text" name="name" />
 					</Field>
 
 					<Field>
@@ -89,7 +104,7 @@
 						<Description>
 							Use globs to match branches, e.g <pre class="inline">feat/*</pre>
 						</Description>
-						<Input type="text" name="branchPattern" />
+						<Input defaultValue={oldEnvironment?.branchPattern} type="text" name="branchPattern" />
 					</Field>
 				</FieldGroup>
 			</Fieldset>

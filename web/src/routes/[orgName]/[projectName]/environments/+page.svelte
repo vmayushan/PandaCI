@@ -12,14 +12,17 @@
 		TableBody
 	} from '$lib/components';
 	import { queries } from '$lib/queries';
-	import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
+	import { createQuery } from '@tanstack/svelte-query';
 	import { page } from '$app/state';
-	import { API } from '$lib/api';
 	import clsx from 'clsx';
 	import CreateEnvironmentModal from './createEnvironmentModal.svelte';
 	import dayjs from 'dayjs';
 	import relativeDate from 'dayjs/plugin/relativeTime';
 	import Tooltip from '$lib/components/tooltip/tooltip.svelte';
+	import EditEnvironmentModal from './editEnvironmentModal.svelte';
+	import { PencilSimple, TrashSimple } from 'phosphor-svelte';
+	import type { ProjectEnvironment } from '$lib/api/organization';
+	import DeleteEnvironmentModal from './deleteEnvironmentModal.svelte';
 
 	dayjs.extend(relativeDate);
 
@@ -29,33 +32,16 @@
 			._ctx.list()
 	);
 
-	const queryClient = useQueryClient();
-
 	const project = createQuery(() =>
 		queries.organization.getByName(page.params.orgName)._ctx.projectByName(page.params.projectName)
 	);
 
 	const org = createQuery(() => queries.organization.getByName(page.params.orgName));
 
-	const deleteProjectEnvironmentsMutation = createMutation(() => ({
-		mutationFn: (id: string) =>
-			API.delete('/v1/orgs/{orgSlug}/projects/{projectSlug}/environments/{environmentID}', {
-				params: {
-					orgSlug: page.params.orgName,
-					projectSlug: page.params.projectName,
-					environmentID: id
-				}
-			}),
-		onSettled: () => {
-			queryClient.invalidateQueries(
-				queries.environments
-					.projectEnvironments(page.params.orgName, page.params.projectName)
-					._ctx.list()
-			);
-		}
-	}));
-
 	let createModalOpen = $state(false);
+
+	let editEnvironment = $state<ProjectEnvironment | undefined>();
+	let deleteEnvironment = $state<ProjectEnvironment | undefined>();
 </script>
 
 <Title title="Environments">
@@ -67,6 +53,22 @@
 
 {#if org.data && project.data}
 	<CreateEnvironmentModal org={org.data} project={project.data} bind:open={createModalOpen} />
+{/if}
+
+{#if org.data && project.data}
+	<EditEnvironmentModal
+		org={org.data}
+		project={project.data}
+		bind:oldEnvironment={editEnvironment}
+	/>
+{/if}
+
+{#if org.data && project.data}
+	<DeleteEnvironmentModal
+		org={org.data}
+		project={project.data}
+		bind:environment={deleteEnvironment}
+	/>
 {/if}
 
 {#if environments.data?.length === 0}
@@ -99,12 +101,25 @@
 							</TableCell>
 							<TableCell>
 								<Button
-									outline
+									plain
+									tooltip="Delete"
 									onclick={() => {
-										deleteProjectEnvironmentsMutation.mutate(environment.id);
+										deleteEnvironment = environment;
 									}}
 								>
-									Delete
+									<span class="sr-only">Delete {environment.name}</span>
+									<TrashSimple weight="fill" data-slot="icon" />
+								</Button>
+
+								<Button
+									plain
+									tooltip="Edit"
+									onclick={() => {
+										editEnvironment = environment;
+									}}
+								>
+									<span class="sr-only">Edit {environment.name}</span>
+									<PencilSimple weight="fill" data-slot="icon" />
 								</Button>
 							</TableCell>
 						</TableRow>

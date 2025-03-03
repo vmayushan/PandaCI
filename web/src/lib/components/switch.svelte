@@ -30,7 +30,7 @@
 		id: randID,
 		name: name ?? undefined,
 		disabled,
-		checked: props.defaultChecked
+		defaultChecked: props.defaultChecked
 	});
 
 	const api = $derived(zagSwitch.connect(service, normalizeProps));

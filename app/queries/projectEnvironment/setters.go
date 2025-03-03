@@ -8,6 +8,21 @@ import (
 	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
+func (q *ProjectEnvironmentQueries) UpdateProjectEnvironment(ctx context.Context, environment *typesDB.ProjectEnvironment) error {
+	environment.UpdatedAt = utils.CurrentTime()
+
+	projectEnvironmentQuery := `UPDATE project_environment
+		SET
+			name = :name,
+			branch_pattern = :branch_pattern,
+			updated_at = :updated_at
+		WHERE id = :id AND project_id = :project_id`
+
+	_, err := q.NamedExecContext(ctx, projectEnvironmentQuery, environment)
+
+	return err
+}
+
 func (q *ProjectEnvironmentQueries) CreateProjectEnvironment(ctx context.Context, environment *typesDB.ProjectEnvironment) error {
 	var err error
 	if environment.ID, err = nanoid.New(); err != nil {

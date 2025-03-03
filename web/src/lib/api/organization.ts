@@ -193,7 +193,7 @@ export interface LogStream {
 }
 
 type DELETE = Method<{
-	'/v1/orgs/{orgName}/projects/{projectName}/variables/{variableID}': object;
+	'/v1/orgs/{orgSlug}/projects/{projectSlug}/variables/{variableID}': object;
 	'/v1/orgs/{orgSlug}/projects/{projectSlug}/environments/{environmentID}': object;
 	'/v1/orgs/{orgName}/projects/{projectName}': object;
 	'/v1/orgs/{orgName}': object;
@@ -217,6 +217,22 @@ type PUT = Method<{
 			avatarURL?: string;
 		};
 		res: Organization;
+	};
+	'/v1/orgs/{orgSlug}/projects/{projectSlug}/variables/{variableID}': {
+		req: {
+			key: string;
+			value: string;
+			environmentIDs: string[];
+			sensitive: boolean;
+		};
+	};
+
+	'/v1/orgs/{orgSlug}/projects/{projectSlug}/environments/{environmentID}': {
+		req: {
+			name: string;
+			branchPattern: string;
+		};
+		res: ProjectEnvironment;
 	};
 }>;
 
