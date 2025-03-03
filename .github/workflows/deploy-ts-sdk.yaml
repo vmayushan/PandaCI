@@ -23,4 +23,4 @@ jobs:
 
       - name: Publish package
         run: deno publish
-        working-directory: ./proto/ts
+        working-directory: ./sdks/ts
