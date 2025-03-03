@@ -1,8 +1,8 @@
 package routes
 
 import (
-	handlersOry "github.com/alfiejones/panda-ci/app/api/handlers/ory"
-	"github.com/alfiejones/panda-ci/app/queries"
+	handlersOry "github.com/pandaci-com/pandaci/app/api/handlers/ory"
+	"github.com/pandaci-com/pandaci/app/queries"
 	"github.com/labstack/echo/v4"
 )
 

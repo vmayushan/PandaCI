@@ -3,8 +3,8 @@ package orgQueries
 import (
 	"context"
 
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 func (q *OrgQueries) GetOrgByURLNameAsUser(ctx context.Context, user types.User, slug string) (*typesDB.OrgDB, error) {

@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	gitShared "github.com/alfiejones/panda-ci/app/git/shared"
-	"github.com/alfiejones/panda-ci/types"
-	typesHTTP "github.com/alfiejones/panda-ci/types/http"
+	gitShared "github.com/pandaci-com/pandaci/app/git/shared"
+	"github.com/pandaci-com/pandaci/types"
+	typesHTTP "github.com/pandaci-com/pandaci/types/http"
 	"github.com/google/go-github/v68/github"
 )
 

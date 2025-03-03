@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
-	gitShared "github.com/alfiejones/panda-ci/app/git/shared"
+	gitShared "github.com/pandaci-com/pandaci/app/git/shared"
 )
 
 func TranslateErrors(next echo.HandlerFunc) echo.HandlerFunc {

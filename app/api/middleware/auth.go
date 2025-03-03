@@ -6,8 +6,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 	ory "github.com/ory/client-go"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 type oryMiddleware struct {

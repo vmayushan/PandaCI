@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 
-	middleware_loaders "github.com/alfiejones/panda-ci/app/api/middleware/loaders"
+	middleware_loaders "github.com/pandaci-com/pandaci/app/api/middleware/loaders"
 )
 
 func (h *Handler) HandlePortalRequest(c echo.Context) error {

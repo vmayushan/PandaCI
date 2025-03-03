@@ -2,9 +2,9 @@ package middlewareLoaders
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/alfiejones/panda-ci/app/api/middleware"
-	"github.com/alfiejones/panda-ci/app/queries"
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/app/api/middleware"
+	"github.com/pandaci-com/pandaci/app/queries"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 type middlewareHandler struct {

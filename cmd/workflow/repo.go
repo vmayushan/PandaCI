@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/alfiejones/panda-ci/pkg/git"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/pkg/git"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 func cloneRepo(ctx context.Context, repo *pb.GitRepo) error {

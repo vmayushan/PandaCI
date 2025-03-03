@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	middlewareLoaders "github.com/alfiejones/panda-ci/app/api/middleware/loaders"
+	middlewareLoaders "github.com/pandaci-com/pandaci/app/api/middleware/loaders"
 	"github.com/labstack/echo/v4"
 )
 

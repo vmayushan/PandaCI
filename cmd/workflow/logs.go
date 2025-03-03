@@ -8,10 +8,10 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/alfiejones/panda-ci/pkg/stream"
-	"github.com/alfiejones/panda-ci/pkg/uploads"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/pkg/stream"
+	"github.com/pandaci-com/pandaci/pkg/uploads"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 type ArrayWriter struct {

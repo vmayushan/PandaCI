@@ -3,7 +3,7 @@ package projectQueries
 import (
 	"context"
 
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 func (q *ProjectQueries) CountOrgProjects(ctx context.Context, org *typesDB.OrgDB) (int, error) {

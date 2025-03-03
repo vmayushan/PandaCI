@@ -5,7 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/rs/zerolog/log"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
 
 	_ "github.com/lib/pq"
 )

@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"errors"
 
-	typesDB "github.com/alfiejones/panda-ci/types/database"
-	typesHTTP "github.com/alfiejones/panda-ci/types/http"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
+	typesHTTP "github.com/pandaci-com/pandaci/types/http"
 )
 
 func (q *WorkflowQueries) Unsafe_GetWorkflowRunByID(ctx context.Context, runID string) (*typesDB.WorkflowRun, error) {

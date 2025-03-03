@@ -9,19 +9,13 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	grpcMiddleware "github.com/alfiejones/panda-ci/app/grpc/middleware"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	grpcMiddleware "github.com/pandaci-com/pandaci/app/grpc/middleware"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/rs/zerolog/log"
 )
-
-// TODO - we need to properly handle all these errors
-// We should avoid returning the full error to the client as it might contain sensitive information
-// We should probably just fail the whole workflow for now
-// But in the future we should look into how we can retry or handle certain errors
-// It would also make sense if we could only fail the job & still allow the workflow to continue. But this might add extra complexity to our workflow schemas
 
 func (h *Handler) CreateJob(ctx context.Context, req *connect.Request[pb.OrchestratorServiceCreateJobRequest]) (*connect.Response[pb.OrchestratorServiceCreateJobResponse], error) {
 	log.Info().Msg("orchestrator create job")
@@ -403,7 +397,7 @@ func (h *Handler) FinishWorkflow(ctx context.Context, req *connect.Request[pb.Or
 	if err != nil {
 		log.Error().Err(err).Msg("output from proto")
 
-		if err := h.queries.FailWorkflowRun(ctx, workflowRun, types.WorkflowRunAlert{
+		if err := h.queries.FailWorkflowRun(context.Background(), workflowRun, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish workflow",
 			Message: "Failed to get output from proto, please try again",
@@ -420,10 +414,10 @@ func (h *Handler) FinishWorkflow(ctx context.Context, req *connect.Request[pb.Or
 
 	workflowRun.BuildMinutes = int(math.Round(workflowRun.FinishedAt.Sub(workflowRun.CreatedAt).Minutes()+0.5)) * types.GetBuildMinutesScale(types.CloudRunner(workflowRun.Runner))
 
-	if err := h.queries.UpdateWorkflowRun(ctx, workflowRun); err != nil {
+	if err := h.queries.UpdateWorkflowRun(context.Background(), workflowRun); err != nil {
 		log.Error().Err(err).Msg("updating workflow status")
 
-		if err := h.queries.FailWorkflowRun(ctx, workflowRun, types.WorkflowRunAlert{
+		if err := h.queries.FailWorkflowRun(context.Background(), workflowRun, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish workflow",
 			Message: "Failed to update workflow status, please try again",
@@ -434,10 +428,10 @@ func (h *Handler) FinishWorkflow(ctx context.Context, req *connect.Request[pb.Or
 		return nil, err
 	}
 
-	if err := h.queries.FailStuckRuns(ctx, workflowRun.ID); err != nil {
+	if err := h.queries.FailStuckRuns(context.Background(), workflowRun.ID); err != nil {
 		log.Error().Err(err).Msg("failing stuck runs")
 
-		if err := h.queries.FailWorkflowRun(ctx, workflowRun, types.WorkflowRunAlert{
+		if err := h.queries.FailWorkflowRun(context.Background(), workflowRun, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish workflow",
 			Message: "Whilst finishing the workflow, we failed to fail any stuck runs",
@@ -446,22 +440,22 @@ func (h *Handler) FinishWorkflow(ctx context.Context, req *connect.Request[pb.Or
 		}
 	}
 
-	org, err := h.queries.Unsafe_GetOrgByID(ctx, claims.OrgID)
+	org, err := h.queries.Unsafe_GetOrgByID(context.Background(), claims.OrgID)
 	if err != nil {
 		log.Error().Err(err).Msg("getting org")
 	} else {
-		if err := h.chargeForMinutes(ctx, org); err != nil {
+		if err := h.chargeForMinutes(context.Background(), org); err != nil {
 			log.Error().Err(err).Msg("charging for minutes")
 		}
-		if err := h.chargeForCommitters(ctx, org); err != nil {
+		if err := h.chargeForCommitters(context.Background(), org); err != nil {
 			log.Error().Err(err).Msg("charging for committers")
 		}
 	}
 
-	if err := h.git.UpdateRunStatusInRepo(ctx, *workflowRun); err != nil {
+	if err := h.git.UpdateRunStatusInRepo(context.Background(), *workflowRun); err != nil {
 		log.Error().Err(err).Msg("updating run status in repo")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(context.Background(), workflowRun, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish workflow",
 			Message: "Failed to update status in git repo",

@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"net/http"
 
-	gitShared "github.com/alfiejones/panda-ci/app/git/shared"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	gitShared "github.com/pandaci-com/pandaci/app/git/shared"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 )

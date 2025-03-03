@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	grpcMiddleware "github.com/alfiejones/panda-ci/app/grpc/middleware"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	"github.com/alfiejones/panda-ci/types"
+	grpcMiddleware "github.com/pandaci-com/pandaci/app/grpc/middleware"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/types"
 	"github.com/rs/zerolog/log"
 )
 
@@ -92,7 +92,13 @@ func (h *Handler) StartJob(ctx context.Context, req *connect.Request[pb.RunnerSe
 	case <-ctx.Done():
 		{
 			h.addWorkflowRunAlert(context.Background(), req.Msg.WorkflowMeta, pb.WorkflowAlert_TYPE_ERROR, "Failed to start job", "context cancelled")
-			// TODO - we should probably stop the job here, it should take care of itself but we should be sure
+			if _, err := h.runner.StopJob(ctx, claims.WorkflowID, &pb.RunnerServiceStopJobRequest{
+				WorkflowMeta: req.Msg.WorkflowMeta,
+				JobMeta:      res.JobMeta,
+			}); err != nil {
+				log.Error().Err(err).Msg("runner failed to stop job")
+			}
+
 			return nil, fmt.Errorf("context cancelled")
 		}
 	case address := <-sub:
@@ -112,6 +118,15 @@ func (h *Handler) StartJob(ctx context.Context, req *connect.Request[pb.RunnerSe
 		JobMeta:      res.JobMeta,
 	})); err != nil {
 		log.Error().Err(err).Msg("error sending job started request to orchestrator")
+		h.addWorkflowRunAlert(ctx, req.Msg.WorkflowMeta, pb.WorkflowAlert_TYPE_ERROR, "Failed to start job", "something went wrong")
+
+		if _, err := h.runner.StopJob(ctx, claims.WorkflowID, &pb.RunnerServiceStopJobRequest{
+			WorkflowMeta: req.Msg.WorkflowMeta,
+			JobMeta:      res.JobMeta,
+		}); err != nil {
+			log.Error().Err(err).Msg("runner failed to stop job")
+		}
+
 		return nil, err
 	}
 

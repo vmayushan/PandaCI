@@ -10,10 +10,10 @@ import (
 	"github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"github.com/alfiejones/panda-ci/pkg/docker"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/pkg/docker"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 func (h *Handler) CleanUpJobs(ctx context.Context, workflowID string, workflowReq *pb.RunnerServiceCleanUpJobsRequest) (*pb.RunnerServiceCleanUpJobsResponse, error) {

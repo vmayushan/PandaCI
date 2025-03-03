@@ -6,7 +6,7 @@ import (
 	"os/exec"
 
 	"github.com/rs/zerolog/log"
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 // Attempts to log the current git version

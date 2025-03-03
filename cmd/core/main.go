@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/alfiejones/panda-ci/app/api/middleware"
-	"github.com/alfiejones/panda-ci/app/api/routes"
-	"github.com/alfiejones/panda-ci/app/git"
-	"github.com/alfiejones/panda-ci/app/grpc"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/app/api/middleware"
+	"github.com/pandaci-com/pandaci/app/api/routes"
+	"github.com/pandaci-com/pandaci/app/git"
+	"github.com/pandaci-com/pandaci/app/grpc"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"

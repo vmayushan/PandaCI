@@ -6,8 +6,8 @@ import (
 	"slices"
 
 	"github.com/PaddleHQ/paddle-go-sdk/v3"
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/rs/zerolog/log"
 )
 

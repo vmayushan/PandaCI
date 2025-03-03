@@ -7,16 +7,16 @@ import (
 	"os"
 
 	"connectrpc.com/connect"
-	grpcMiddleware "github.com/alfiejones/panda-ci/app/grpc/middleware"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
-	"github.com/alfiejones/panda-ci/pkg/retryClient"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	"github.com/alfiejones/panda-ci/types"
+	grpcMiddleware "github.com/pandaci-com/pandaci/app/grpc/middleware"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
+	"github.com/pandaci-com/pandaci/pkg/retryClient"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/types"
 	"github.com/phayes/freeport"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/proto"
 
-	pbConnect "github.com/alfiejones/panda-ci/proto/go/v1/v1connect"
+	pbConnect "github.com/pandaci-com/pandaci/proto/go/v1/v1connect"
 )
 
 func getConfig() (*pb.WorkflowRunnerInitConfig, error) {
@@ -38,7 +38,6 @@ func getConfig() (*pb.WorkflowRunnerInitConfig, error) {
 	return config, nil
 }
 
-// TODO: Heartbeat system, we want to know if this workflow has died
 func main() {
 	ctx := context.Background()
 	logWriter := initLogs()
@@ -83,7 +82,7 @@ func main() {
 			log.Error().Err(err).Msg("finishing workflow")
 		}
 
-		os.Exit(1)
+		log.Fatal().Msg("workflow failed")
 	}
 
 	workflowClaims, err := jwtHandler.ValidateWorkflowToken(config.WorkflowMeta.WorkflowJwt)

@@ -2,7 +2,7 @@ package handlersPaddle
 
 import (
 	"github.com/PaddleHQ/paddle-go-sdk/v3"
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 func getCommitters(plan types.CloudSubscriptionPlan, subscription *paddle.Subscription) int {

@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	"github.com/alfiejones/panda-ci/pkg/flyClient"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	pbConnect "github.com/alfiejones/panda-ci/proto/go/v1/v1connect"
+	"github.com/pandaci-com/pandaci/pkg/flyClient"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	pbConnect "github.com/pandaci-com/pandaci/proto/go/v1/v1connect"
 	"github.com/rs/zerolog/log"
 )
 

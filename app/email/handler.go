@@ -7,7 +7,7 @@ import (
 
 	nanoid "github.com/matoous/go-nanoid/v2"
 
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
 )
 
 type Handler struct {

@@ -1,16 +1,16 @@
 package routes
 
 import (
-	"github.com/alfiejones/panda-ci/app/api/handlers"
-	handlersProject "github.com/alfiejones/panda-ci/app/api/handlers/project"
-	"github.com/alfiejones/panda-ci/app/api/middleware"
-	middleware_loaders "github.com/alfiejones/panda-ci/app/api/middleware/loaders"
-	"github.com/alfiejones/panda-ci/app/git"
-	"github.com/alfiejones/panda-ci/app/orchestrator"
-	"github.com/alfiejones/panda-ci/app/queries"
-	"github.com/alfiejones/panda-ci/app/scanner"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
-	"github.com/alfiejones/panda-ci/platform/storage"
+	"github.com/pandaci-com/pandaci/app/api/handlers"
+	handlersProject "github.com/pandaci-com/pandaci/app/api/handlers/project"
+	"github.com/pandaci-com/pandaci/app/api/middleware"
+	middleware_loaders "github.com/pandaci-com/pandaci/app/api/middleware/loaders"
+	"github.com/pandaci-com/pandaci/app/git"
+	"github.com/pandaci-com/pandaci/app/orchestrator"
+	"github.com/pandaci-com/pandaci/app/queries"
+	"github.com/pandaci-com/pandaci/app/scanner"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
+	"github.com/pandaci-com/pandaci/platform/storage"
 	"github.com/labstack/echo/v4"
 )
 

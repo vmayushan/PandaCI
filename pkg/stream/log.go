@@ -3,8 +3,8 @@ package stream
 import (
 	"time"
 
-	utilsCSV "github.com/alfiejones/panda-ci/pkg/utils/csv"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	utilsCSV "github.com/pandaci-com/pandaci/pkg/utils/csv"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 type LogStream struct {

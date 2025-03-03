@@ -5,14 +5,14 @@ import (
 	"net/http"
 
 	"connectrpc.com/connect"
-	grpcMiddleware "github.com/alfiejones/panda-ci/app/grpc/middleware"
-	"github.com/alfiejones/panda-ci/pkg/flyClient"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
-	"github.com/alfiejones/panda-ci/pkg/stream"
+	grpcMiddleware "github.com/pandaci-com/pandaci/app/grpc/middleware"
+	"github.com/pandaci-com/pandaci/pkg/flyClient"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
+	"github.com/pandaci-com/pandaci/pkg/stream"
 	"github.com/rs/zerolog/log"
 
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	pbConnect "github.com/alfiejones/panda-ci/proto/go/v1/v1connect"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	pbConnect "github.com/pandaci-com/pandaci/proto/go/v1/v1connect"
 )
 
 func (h *Handler) addWorkflowRunAlert(ctx context.Context, alertType pb.WorkflowAlert_Type, title string, message string) {

@@ -8,9 +8,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/go-playground/webhooks/v6/github"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"

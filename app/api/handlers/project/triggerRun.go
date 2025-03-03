@@ -3,11 +3,11 @@ package handlersProject
 import (
 	"net/http"
 
-	"github.com/alfiejones/panda-ci/app/api/middleware"
-	middlewareLoaders "github.com/alfiejones/panda-ci/app/api/middleware/loaders"
-	"github.com/alfiejones/panda-ci/platform/analytics"
-	"github.com/alfiejones/panda-ci/types"
-	typesHTTP "github.com/alfiejones/panda-ci/types/http"
+	"github.com/pandaci-com/pandaci/app/api/middleware"
+	middlewareLoaders "github.com/pandaci-com/pandaci/app/api/middleware/loaders"
+	"github.com/pandaci-com/pandaci/platform/analytics"
+	"github.com/pandaci-com/pandaci/types"
+	typesHTTP "github.com/pandaci-com/pandaci/types/http"
 	"github.com/labstack/echo/v4"
 	"github.com/posthog/posthog-go"
 )

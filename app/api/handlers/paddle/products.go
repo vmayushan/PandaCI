@@ -9,9 +9,9 @@ import (
 	"github.com/PaddleHQ/paddle-go-sdk/v3"
 	"github.com/rs/zerolog/log"
 
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 func getProProductID() string {
@@ -21,7 +21,7 @@ func getProProductID() string {
 		return "pro_01jkwz26eqajmca4e5xthx70c6"
 	}
 
-	return ""
+	return "pro_01jhzxfy5m5f1rbfs5yx1nej1q"
 }
 
 func getBuildMinutesPriceID() string {
@@ -31,7 +31,7 @@ func getBuildMinutesPriceID() string {
 		return "pri_01jkwzam63n615aw0bhp46f2mf"
 	}
 
-	return ""
+	return "pri_01jjt5qw7m0pwjp0cx6scb2m3p"
 }
 
 func getBuildMinutesProductID() string {
@@ -41,7 +41,7 @@ func getBuildMinutesProductID() string {
 		return "pro_01jkwz3h1pzscxw4qqd7p0689g"
 	}
 
-	return ""
+	return "pro_01jjt4qzynkrgstad0q2b3vjez"
 }
 
 func getCommitterProductID() string {
@@ -51,7 +51,7 @@ func getCommitterProductID() string {
 		return "pro_01jmx3863hfq453vdy4rp8v7kn"
 	}
 
-	return ""
+	return "pro_01jndtr8mxb16e3mnsz2yny4d1"
 }
 
 func getCommitterPriceID() string {
@@ -61,7 +61,7 @@ func getCommitterPriceID() string {
 		return "pri_01jmx3cbwsztpvpwp16rf8nkje"
 	}
 
-	return ""
+	return "pri_01jndts9h69jhehywdd8805w5x"
 }
 
 func (h *Handler) isPausedLicense(ctx context.Context, org typesDB.OrgDB, subscription *paddle.Subscription) bool {

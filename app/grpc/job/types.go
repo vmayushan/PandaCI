@@ -1,8 +1,8 @@
 package grpcJob
 
 import (
-	"github.com/alfiejones/panda-ci/app/grpc/job/service"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
+	"github.com/pandaci-com/pandaci/app/grpc/job/service"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
 )
 
 type (

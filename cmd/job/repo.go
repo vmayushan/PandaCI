@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/alfiejones/panda-ci/pkg/git"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/pkg/git"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 func cloneRepo(ctx context.Context, repo *pb.GitRepo) error {
