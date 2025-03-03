@@ -8,7 +8,7 @@ import { logger } from "../logger.ts";
 
 function mergeUint8Array(
   ...arrays: Uint8Array[]
-): Uint8Array {
+): Uint8Array<ArrayBuffer> {
   const length = arrays.reduce((acc, arr) => acc + arr.length, 0);
   const result = new Uint8Array(length);
 
