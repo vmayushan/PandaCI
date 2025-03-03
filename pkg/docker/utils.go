@@ -16,8 +16,8 @@ import (
 	"github.com/docker/docker/client"
 	nanoid "github.com/matoous/go-nanoid/v2"
 	"github.com/rs/zerolog/log"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 type DeleteContainerFilter struct {

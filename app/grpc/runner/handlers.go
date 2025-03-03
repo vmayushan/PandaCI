@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	grpcMiddleware "github.com/alfiejones/panda-ci/app/grpc/middleware"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	"github.com/alfiejones/panda-ci/types"
+	grpcMiddleware "github.com/pandaci-com/pandaci/app/grpc/middleware"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/types"
 	"github.com/rs/zerolog/log"
 )
 

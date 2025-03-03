@@ -9,7 +9,7 @@ import (
 	context "context"
 	errors "errors"
 	http "net/http"
-	v1 "github.com/alfiejones/panda-ci/proto/go/v1"
+	v1 "github.com/pandaci-com/pandaci/proto/go/v1"
 	strings "strings"
 )
 

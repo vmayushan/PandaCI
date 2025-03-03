@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/labstack/echo/v4"
 )
 

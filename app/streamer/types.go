@@ -3,7 +3,7 @@ package streamer
 import (
 	"context"
 
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 type (

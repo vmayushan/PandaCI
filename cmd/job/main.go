@@ -9,17 +9,17 @@ import (
 	"os/exec"
 
 	"connectrpc.com/connect"
-	"github.com/alfiejones/panda-ci/app/grpc"
-	grpcMiddleware "github.com/alfiejones/panda-ci/app/grpc/middleware"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
-	"github.com/alfiejones/panda-ci/pkg/retryClient"
+	"github.com/pandaci-com/pandaci/app/grpc"
+	grpcMiddleware "github.com/pandaci-com/pandaci/app/grpc/middleware"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
+	"github.com/pandaci-com/pandaci/pkg/retryClient"
 	"github.com/phayes/freeport"
 	"github.com/rs/zerolog/log"
 
 	"google.golang.org/protobuf/proto"
 
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	pbConnect "github.com/alfiejones/panda-ci/proto/go/v1/v1connect"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	pbConnect "github.com/pandaci-com/pandaci/proto/go/v1/v1connect"
 )
 
 func startDocker(ctx context.Context) {

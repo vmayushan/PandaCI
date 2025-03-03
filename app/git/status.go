@@ -3,7 +3,7 @@ package git
 import (
 	"context"
 
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 func (h *Handler) UpdateRunStatusInRepo(ctx context.Context, run typesDB.WorkflowRun) error {

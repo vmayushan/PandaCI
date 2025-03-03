@@ -1,7 +1,7 @@
 package git
 
 import (
-	"github.com/alfiejones/panda-ci/app/queries"
+	"github.com/pandaci-com/pandaci/app/queries"
 )
 
 type Handler struct {

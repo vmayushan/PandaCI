@@ -4,10 +4,10 @@ import (
 	"context"
 	"math"
 
-	queries_utils "github.com/alfiejones/panda-ci/app/queries/utils"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	queries_utils "github.com/pandaci-com/pandaci/app/queries/utils"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 
 	nanoid "github.com/matoous/go-nanoid/v2"
 )

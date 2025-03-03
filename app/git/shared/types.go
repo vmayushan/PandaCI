@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
-	typesHTTP "github.com/alfiejones/panda-ci/types/http"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
+	typesHTTP "github.com/pandaci-com/pandaci/types/http"
 )
 
 type Client interface {

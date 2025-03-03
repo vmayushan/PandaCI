@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	utilsValidator "github.com/alfiejones/panda-ci/pkg/utils/validator"
-	"github.com/alfiejones/panda-ci/types"
+	utilsValidator "github.com/pandaci-com/pandaci/pkg/utils/validator"
+	"github.com/pandaci-com/pandaci/types"
 	sqlxTypes "github.com/jmoiron/sqlx/types"
 	"github.com/rs/zerolog/log"
 )

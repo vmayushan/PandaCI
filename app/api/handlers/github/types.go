@@ -2,12 +2,12 @@ package handlersGithub
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/alfiejones/panda-ci/app/api/middleware"
-	gitShared "github.com/alfiejones/panda-ci/app/git/shared"
-	"github.com/alfiejones/panda-ci/app/orchestrator"
-	"github.com/alfiejones/panda-ci/app/queries"
-	"github.com/alfiejones/panda-ci/app/scanner"
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/app/api/middleware"
+	gitShared "github.com/pandaci-com/pandaci/app/git/shared"
+	"github.com/pandaci-com/pandaci/app/orchestrator"
+	"github.com/pandaci-com/pandaci/app/queries"
+	"github.com/pandaci-com/pandaci/app/scanner"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 type Handler struct {

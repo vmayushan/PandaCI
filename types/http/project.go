@@ -3,7 +3,7 @@ package typesHTTP
 import (
 	"time"
 
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 type CreateProjectHTTP struct {

@@ -8,7 +8,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
 )
 
 func (c *graphqlClient) Query(ctx context.Context, dest any, query string, variables *map[string]interface{}) error {

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strconv"
 
-	gitShared "github.com/alfiejones/panda-ci/app/git/shared"
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
-	typesHTTP "github.com/alfiejones/panda-ci/types/http"
+	gitShared "github.com/pandaci-com/pandaci/app/git/shared"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
+	typesHTTP "github.com/pandaci-com/pandaci/types/http"
 	"github.com/google/go-github/v68/github"
 )
 

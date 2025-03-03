@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rs/zerolog"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
 )
 
 func Logger() echo.MiddlewareFunc {

@@ -1,10 +1,10 @@
 package routes
 
 import (
-	handlersPaddle "github.com/alfiejones/panda-ci/app/api/handlers/paddle"
-	"github.com/alfiejones/panda-ci/app/api/middleware"
-	middleware_loaders "github.com/alfiejones/panda-ci/app/api/middleware/loaders"
-	"github.com/alfiejones/panda-ci/app/queries"
+	handlersPaddle "github.com/pandaci-com/pandaci/app/api/handlers/paddle"
+	"github.com/pandaci-com/pandaci/app/api/middleware"
+	middleware_loaders "github.com/pandaci-com/pandaci/app/api/middleware/loaders"
+	"github.com/pandaci-com/pandaci/app/queries"
 	"github.com/labstack/echo/v4"
 )
 

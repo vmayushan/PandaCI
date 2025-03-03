@@ -1,10 +1,10 @@
 package scannerGit
 
 import (
-	"github.com/alfiejones/panda-ci/app/git"
-	"github.com/alfiejones/panda-ci/app/queries"
-	"github.com/alfiejones/panda-ci/app/scanner"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
+	"github.com/pandaci-com/pandaci/app/git"
+	"github.com/pandaci-com/pandaci/app/queries"
+	"github.com/pandaci-com/pandaci/app/scanner"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
 )
 
 type Handler struct {

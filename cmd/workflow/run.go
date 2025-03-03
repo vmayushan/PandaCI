@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/alfiejones/panda-ci/pkg/utils"
+	"github.com/pandaci-com/pandaci/pkg/utils"
 
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 func checkDenoFile(ctx context.Context, config *pb.WorkflowRunnerInitConfig) error {

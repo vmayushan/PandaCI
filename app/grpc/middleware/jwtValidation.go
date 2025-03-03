@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"connectrpc.com/connect"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 	"github.com/rs/zerolog/log"
 )
 

@@ -7,7 +7,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/types"
 	"github.com/rs/zerolog/log"
 )
 

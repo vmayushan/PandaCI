@@ -1,8 +1,8 @@
 package gitGithub
 
 import (
-	gitShared "github.com/alfiejones/panda-ci/app/git/shared"
-	"github.com/alfiejones/panda-ci/app/queries"
+	gitShared "github.com/pandaci-com/pandaci/app/git/shared"
+	"github.com/pandaci-com/pandaci/app/queries"
 	"github.com/bradleyfalzon/ghinstallation/v2"
 	"github.com/google/go-github/v68/github"
 )

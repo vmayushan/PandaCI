@@ -6,16 +6,16 @@ import (
 	"slices"
 	"time"
 
-	scannerShared "github.com/alfiejones/panda-ci/app/scanner/shared"
-	"github.com/alfiejones/panda-ci/pkg/encryption"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	scannerShared "github.com/pandaci-com/pandaci/app/scanner/shared"
+	"github.com/pandaci-com/pandaci/pkg/encryption"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/rs/zerolog/log"
 
 	"github.com/gobwas/glob"
 
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 func shouldRun(ctx context.Context, config types.WorkflowRawConfig, triggerEvent types.TriggerEvent) (bool, error) {

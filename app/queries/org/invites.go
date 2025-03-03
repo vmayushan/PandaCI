@@ -3,7 +3,7 @@ package orgQueries
 import (
 	"context"
 
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 func (h *OrgQueries) CreateOrgInvite(ctx context.Context, invite typesDB.PendingOrgInviteDB) error {

@@ -3,7 +3,7 @@ package flyClient
 import (
 	"net/http"
 
-	"github.com/alfiejones/panda-ci/pkg/retryClient"
+	"github.com/pandaci-com/pandaci/pkg/retryClient"
 )
 
 type FlyRoundTripper struct {

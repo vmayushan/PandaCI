@@ -1,9 +1,9 @@
 package runnerLocal
 
 import (
-	"github.com/alfiejones/panda-ci/app/runner"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/app/runner"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
+	"github.com/pandaci-com/pandaci/types"
 	"github.com/docker/docker/client"
 )
 

@@ -3,7 +3,7 @@ package typesDB
 import (
 	"encoding/json"
 
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/types"
 	sqlxTypes "github.com/jmoiron/sqlx/types"
 	"github.com/rs/zerolog/log"
 )
