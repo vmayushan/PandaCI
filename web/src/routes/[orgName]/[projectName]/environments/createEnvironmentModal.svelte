@@ -21,13 +21,13 @@
 	import { queries } from '$lib/queries';
 	import DialogCloseButton from '$lib/components/dialog/dialogCloseButton.svelte';
 
-	interface CreateVariableModal {
+	interface CreateEnvironmentModal {
 		open: boolean;
 		project: Project;
 		org: Organization;
 	}
 
-	let { open = $bindable(), org, project }: CreateVariableModal = $props();
+	let { open = $bindable(), org, project }: CreateEnvironmentModal = $props();
 
 	const queryClient = useQueryClient();
 

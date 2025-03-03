@@ -80,6 +80,10 @@ func (h *Handler) UpdateProjectVariable(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, utilsValidator.ValidatorErrors(err))
 	}
 
+	if strings.HasPrefix(variableReq.Key, "PANDACI_") {
+		return echo.NewHTTPError(http.StatusBadRequest, map[string]string{"message": "Variable key cannot start with 'PANDACI_' prefix"})
+	}
+
 	variable, err := h.queries.GetProjectVariableByID(c.Request().Context(), project, id)
 	if err != nil {
 		return err
@@ -109,6 +113,35 @@ func (h *Handler) UpdateProjectVariable(c echo.Context) error {
 	variable.InitialisationVector = iv
 	variable.EncryptionKeyID = *keyID
 	variable.Sensitive = variableReq.Sensitive
+
+	// Check for duplicate variables with same key in same environment
+	currentVariables, err := h.queries.GetProjectVariablesWithEnvironments(c.Request().Context(), project)
+	if err != nil {
+		return err
+	}
+
+	for _, currentVariable := range currentVariables {
+		// Skip the current variable being updated
+		if currentVariable.ID == variable.ID {
+			continue
+		}
+
+		if currentVariable.Key != variable.Key {
+			continue
+		}
+
+		if len(currentVariable.Environments) == 0 && len(variableReq.ProjectEnvironmentIDs) == 0 {
+			return echo.NewHTTPError(http.StatusBadRequest, map[string]string{"message": fmt.Sprintf("A variable with the same key has already been created for the default environment")})
+		}
+
+		for _, env := range currentVariable.Environments {
+			for _, reqEnvID := range variableReq.ProjectEnvironmentIDs {
+				if env.ID == reqEnvID {
+					return echo.NewHTTPError(http.StatusBadRequest, map[string]string{"message": fmt.Sprintf("A variable with the same key is already attached to the %s environment", env.Name)})
+				}
+			}
+		}
+	}
 
 	if err := h.queries.UpdateProjectVariable(c.Request().Context(), variable, variableReq.ProjectEnvironmentIDs); err != nil {
 		return err

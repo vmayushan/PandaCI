@@ -14,13 +14,13 @@
 	import DialogCloseButton from '$lib/components/dialog/dialogCloseButton.svelte';
 	import { untrack } from 'svelte';
 
-	interface CreateVariableModal {
+	interface DeleteVariableModal {
 		project: Project;
 		org: Organization;
 		variable?: ProjectVariable;
 	}
 
-	let { org, project, variable = $bindable() }: CreateVariableModal = $props();
+	let { org, project, variable = $bindable() }: DeleteVariableModal = $props();
 
 	const queryClient = useQueryClient();
 
