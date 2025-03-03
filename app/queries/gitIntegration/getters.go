@@ -3,8 +3,8 @@ package gitIntegrationQueries
 import (
 	"context"
 
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 func (q *GitIntegrationQueries) GetGitIntegration(ctx context.Context, id string) (*typesDB.GitIntegration, error) {

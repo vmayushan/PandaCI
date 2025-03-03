@@ -11,11 +11,11 @@ import (
 	"strconv"
 	"time"
 
-	gitShared "github.com/alfiejones/panda-ci/app/git/shared"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
-	"github.com/alfiejones/panda-ci/platform/identity"
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	gitShared "github.com/pandaci-com/pandaci/app/git/shared"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/platform/identity"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/google/go-github/v68/github"
 	"github.com/rs/zerolog/log"
 )

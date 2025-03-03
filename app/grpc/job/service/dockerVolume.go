@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
-	"github.com/alfiejones/panda-ci/pkg/docker"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/pkg/docker"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 func (h *Handler) CreateJobVolume(ctx context.Context, workflowID string, volumeReq *pb.JobServiceCreateJobVolumeRequest) (*pb.JobServiceCreateJobVolumeResponse, error) {

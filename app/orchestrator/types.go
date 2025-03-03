@@ -1,10 +1,10 @@
 package orchestrator
 
 import (
-	"github.com/alfiejones/panda-ci/app/git"
-	"github.com/alfiejones/panda-ci/app/queries"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
-	pbConnect "github.com/alfiejones/panda-ci/proto/go/v1/v1connect"
+	"github.com/pandaci-com/pandaci/app/git"
+	"github.com/pandaci-com/pandaci/app/queries"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
+	pbConnect "github.com/pandaci-com/pandaci/proto/go/v1/v1connect"
 )
 
 type Handler struct {

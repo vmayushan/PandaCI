@@ -2,13 +2,13 @@ package routes
 
 import (
 	"github.com/labstack/echo/v4"
-	handlersGithub "github.com/alfiejones/panda-ci/app/api/handlers/github"
-	"github.com/alfiejones/panda-ci/app/api/middleware"
-	"github.com/alfiejones/panda-ci/app/git"
-	"github.com/alfiejones/panda-ci/app/orchestrator"
-	"github.com/alfiejones/panda-ci/app/queries"
-	"github.com/alfiejones/panda-ci/app/scanner"
-	"github.com/alfiejones/panda-ci/types"
+	handlersGithub "github.com/pandaci-com/pandaci/app/api/handlers/github"
+	"github.com/pandaci-com/pandaci/app/api/middleware"
+	"github.com/pandaci-com/pandaci/app/git"
+	"github.com/pandaci-com/pandaci/app/orchestrator"
+	"github.com/pandaci-com/pandaci/app/queries"
+	"github.com/pandaci-com/pandaci/app/scanner"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 func RegisterGithubRoutes(e *echo.Echo, queries *queries.Queries, gitHandler *git.Handler, scanner scanner.Handler, orchestrator orchestrator.Handler) error {

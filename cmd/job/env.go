@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 func setEnv(workflowID string, config *pb.JobRunnerInitConfig, port int) error {

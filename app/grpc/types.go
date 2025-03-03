@@ -8,20 +8,20 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	"github.com/alfiejones/panda-ci/app/git"
-	grpcJob "github.com/alfiejones/panda-ci/app/grpc/job"
-	grpcMiddleware "github.com/alfiejones/panda-ci/app/grpc/middleware"
-	grpcOrchestrator "github.com/alfiejones/panda-ci/app/grpc/orchestrator"
-	grpcRunner "github.com/alfiejones/panda-ci/app/grpc/runner"
-	grpcWorkflow "github.com/alfiejones/panda-ci/app/grpc/workflow"
-	"github.com/alfiejones/panda-ci/app/queries"
-	"github.com/alfiejones/panda-ci/app/runner"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
-	"github.com/alfiejones/panda-ci/pkg/stream"
-	"github.com/alfiejones/panda-ci/platform/storage"
-	pbConnect "github.com/alfiejones/panda-ci/proto/go/v1/v1connect"
+	"github.com/pandaci-com/pandaci/app/git"
+	grpcJob "github.com/pandaci-com/pandaci/app/grpc/job"
+	grpcMiddleware "github.com/pandaci-com/pandaci/app/grpc/middleware"
+	grpcOrchestrator "github.com/pandaci-com/pandaci/app/grpc/orchestrator"
+	grpcRunner "github.com/pandaci-com/pandaci/app/grpc/runner"
+	grpcWorkflow "github.com/pandaci-com/pandaci/app/grpc/workflow"
+	"github.com/pandaci-com/pandaci/app/queries"
+	"github.com/pandaci-com/pandaci/app/runner"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
+	"github.com/pandaci-com/pandaci/pkg/stream"
+	"github.com/pandaci-com/pandaci/platform/storage"
+	pbConnect "github.com/pandaci-com/pandaci/proto/go/v1/v1connect"
 
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 type GRPCServer struct {

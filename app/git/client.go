@@ -3,9 +3,9 @@ package git
 import (
 	"fmt"
 
-	gitGithub "github.com/alfiejones/panda-ci/app/git/github"
-	gitShared "github.com/alfiejones/panda-ci/app/git/shared"
-	"github.com/alfiejones/panda-ci/types"
+	gitGithub "github.com/pandaci-com/pandaci/app/git/github"
+	gitShared "github.com/pandaci-com/pandaci/app/git/shared"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 func (h *Handler) GetClient(clientType types.GitProviderType) (gitShared.Client, error) {

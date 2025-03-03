@@ -9,8 +9,8 @@ import (
 
 	"github.com/PaddleHQ/paddle-go-sdk/v3"
 	"github.com/PaddleHQ/paddle-go-sdk/v3/pkg/paddlenotification"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
-	"github.com/alfiejones/panda-ci/types"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/types"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 )

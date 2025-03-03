@@ -1,6 +1,6 @@
 package typesDB
 
-import "github.com/alfiejones/panda-ci/types"
+import "github.com/pandaci-com/pandaci/types"
 
 type GitIntegration struct {
 	ID                string                `db:"id"`

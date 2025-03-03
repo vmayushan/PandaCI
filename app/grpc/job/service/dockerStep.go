@@ -10,9 +10,9 @@ import (
 	"github.com/rs/zerolog/log"
 	"golang.org/x/exp/rand"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"github.com/alfiejones/panda-ci/pkg/docker"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/pkg/docker"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")

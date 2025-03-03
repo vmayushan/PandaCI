@@ -7,11 +7,11 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"github.com/alfiejones/panda-ci/app/grpc"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
-	"github.com/alfiejones/panda-ci/pkg/stream"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	pbConnect "github.com/alfiejones/panda-ci/proto/go/v1/v1connect"
+	"github.com/pandaci-com/pandaci/app/grpc"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
+	"github.com/pandaci-com/pandaci/pkg/stream"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	pbConnect "github.com/pandaci-com/pandaci/proto/go/v1/v1connect"
 	"github.com/rs/zerolog/log"
 )
 

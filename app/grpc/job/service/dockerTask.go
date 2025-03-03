@@ -10,9 +10,9 @@ import (
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/rs/zerolog/log"
-	"github.com/alfiejones/panda-ci/pkg/docker"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/pkg/docker"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 func (h *Handler) StarDockerTask(ctx context.Context, workflowID string, req *pb.JobServiceStartTaskRequest) (*pb.JobServiceStartTaskResponse, error) {

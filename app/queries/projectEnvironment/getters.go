@@ -3,7 +3,7 @@ package queriesProjectEnvironment
 import (
 	"context"
 
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 func (q *ProjectEnvironmentQueries) GetProjectEnvironmentByID(ctx context.Context, project *typesDB.Project, id string) (*typesDB.ProjectEnvironment, error) {

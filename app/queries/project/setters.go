@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	nanoid "github.com/matoous/go-nanoid/v2"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 func (q *ProjectQueries) CreateProject(ctx context.Context, org *typesDB.OrgDB, project *typesDB.Project) error {

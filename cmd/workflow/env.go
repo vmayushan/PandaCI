@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
 )
 
 func setEnv(workflowID string, config *pb.WorkflowRunnerInitConfig, port int) error {

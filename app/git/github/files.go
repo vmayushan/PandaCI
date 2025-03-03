@@ -8,8 +8,8 @@ import (
 	"strconv"
 
 	"github.com/rs/zerolog/log"
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 type gitFile struct {

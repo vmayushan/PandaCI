@@ -3,8 +3,8 @@ package projectVariableQueries
 import (
 	"context"
 
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	nanoid "github.com/matoous/go-nanoid/v2"
 )
 

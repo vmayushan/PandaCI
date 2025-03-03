@@ -1,13 +1,13 @@
 package queries
 
 import (
-	gitIntegrationQueries "github.com/alfiejones/panda-ci/app/queries/gitIntegration"
-	orgQueries "github.com/alfiejones/panda-ci/app/queries/org"
-	projectQueries "github.com/alfiejones/panda-ci/app/queries/project"
-	queriesProjectEnvironment "github.com/alfiejones/panda-ci/app/queries/projectEnvironment"
-	projectVariableQueries "github.com/alfiejones/panda-ci/app/queries/projectVariable"
-	userAccountQueries "github.com/alfiejones/panda-ci/app/queries/userAccount"
-	queriesWorkflow "github.com/alfiejones/panda-ci/app/queries/workflow"
+	gitIntegrationQueries "github.com/pandaci-com/pandaci/app/queries/gitIntegration"
+	orgQueries "github.com/pandaci-com/pandaci/app/queries/org"
+	projectQueries "github.com/pandaci-com/pandaci/app/queries/project"
+	queriesProjectEnvironment "github.com/pandaci-com/pandaci/app/queries/projectEnvironment"
+	projectVariableQueries "github.com/pandaci-com/pandaci/app/queries/projectVariable"
+	userAccountQueries "github.com/pandaci-com/pandaci/app/queries/userAccount"
+	queriesWorkflow "github.com/pandaci-com/pandaci/app/queries/workflow"
 	"github.com/jmoiron/sqlx"
 )
 

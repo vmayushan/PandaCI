@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 func (q *ProjectVariableQueries) GetProjectVariableByID(ctx context.Context, project *typesDB.Project, id string) (*typesDB.ProjectVariable, error) {

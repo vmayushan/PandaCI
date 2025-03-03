@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jmoiron/sqlx"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 type GetStepRunsByJobRunIDsOptions struct {

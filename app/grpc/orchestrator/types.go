@@ -6,18 +6,18 @@ import (
 
 	"connectrpc.com/connect"
 	"github.com/PaddleHQ/paddle-go-sdk/v3"
-	"github.com/alfiejones/panda-ci/app/git"
-	grpcMiddleware "github.com/alfiejones/panda-ci/app/grpc/middleware"
-	"github.com/alfiejones/panda-ci/app/queries"
-	"github.com/alfiejones/panda-ci/pkg/jwt"
-	"github.com/alfiejones/panda-ci/pkg/retryClient"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
-	"github.com/alfiejones/panda-ci/platform/storage"
-	"github.com/alfiejones/panda-ci/types"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	"github.com/pandaci-com/pandaci/app/git"
+	grpcMiddleware "github.com/pandaci-com/pandaci/app/grpc/middleware"
+	"github.com/pandaci-com/pandaci/app/queries"
+	"github.com/pandaci-com/pandaci/pkg/jwt"
+	"github.com/pandaci-com/pandaci/pkg/retryClient"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/platform/storage"
+	"github.com/pandaci-com/pandaci/types"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/rs/zerolog/log"
 
-	pbConnect "github.com/alfiejones/panda-ci/proto/go/v1/v1connect"
+	pbConnect "github.com/pandaci-com/pandaci/proto/go/v1/v1connect"
 )
 
 type (

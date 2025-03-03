@@ -1,6 +1,6 @@
 package typesHTTP
 
-import "github.com/alfiejones/panda-ci/types"
+import "github.com/pandaci-com/pandaci/types"
 
 type UpdateOrgHTTP struct {
 	Name      string `json:"name"`

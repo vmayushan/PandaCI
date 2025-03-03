@@ -3,9 +3,9 @@ package queriesProjectEnvironment
 import (
 	"context"
 
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	typesDB "github.com/alfiejones/panda-ci/types/database"
 	nanoid "github.com/matoous/go-nanoid/v2"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 func (q *ProjectEnvironmentQueries) UpdateProjectEnvironment(ctx context.Context, environment *typesDB.ProjectEnvironment) error {

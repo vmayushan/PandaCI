@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	nanoid "github.com/matoous/go-nanoid/v2"
 )
 

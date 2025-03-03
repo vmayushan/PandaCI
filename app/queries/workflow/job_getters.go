@@ -3,7 +3,7 @@ package queriesWorkflow
 import (
 	"context"
 
-	typesDB "github.com/alfiejones/panda-ci/types/database"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 )
 
 type GetJobRunsByWorkflowIDOptions struct {

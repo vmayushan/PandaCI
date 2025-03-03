@@ -2,8 +2,8 @@ package handlersPaddle
 
 import (
 	"github.com/PaddleHQ/paddle-go-sdk/v3"
-	"github.com/alfiejones/panda-ci/app/queries"
-	"github.com/alfiejones/panda-ci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/app/queries"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
 	"github.com/rs/zerolog/log"
 )
 

@@ -10,11 +10,11 @@ import (
 	"connectrpc.com/connect"
 	"github.com/rs/zerolog/log"
 
-	logStream "github.com/alfiejones/panda-ci/pkg/stream"
-	"github.com/alfiejones/panda-ci/pkg/uploads"
-	"github.com/alfiejones/panda-ci/pkg/utils"
-	pb "github.com/alfiejones/panda-ci/proto/go/v1"
-	"github.com/alfiejones/panda-ci/types"
+	logStream "github.com/pandaci-com/pandaci/pkg/stream"
+	"github.com/pandaci-com/pandaci/pkg/uploads"
+	"github.com/pandaci-com/pandaci/pkg/utils"
+	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	"github.com/pandaci-com/pandaci/types"
 )
 
 func (h *Handler) StartJob(ctx context.Context, req *connect.Request[pb.WorkflowServiceStartJobRequest]) (*connect.Response[pb.WorkflowServiceStartJobResponse], error) {
