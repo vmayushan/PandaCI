@@ -21,5 +21,6 @@ func getMaxRunnerScale(plan types.CloudSubscriptionPlan, subscription *paddle.Su
 		return 16
 	}
 
+	// free plan
 	return 4
 }
