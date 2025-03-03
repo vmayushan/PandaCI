@@ -8,7 +8,7 @@ import { logger } from "../logger.ts";
 
 function mergeUint8Array(
   ...arrays: Uint8Array[]
-): Uint8Array<ArrayBuffer> {
+): Uint8Array {
   const length = arrays.reduce((acc, arr) => acc + arr.length, 0);
   const result = new Uint8Array(length);
 
@@ -77,9 +77,6 @@ export class ExecPromise extends Promise<ExecResult> {
   private async run(
     { workflowJwt, jobContext, taskContext, client }: ExecPromiseContext,
   ) {
-    let stdout = new Uint8Array();
-    let stderr = new Uint8Array();
-    let stdall = new Uint8Array();
     let exitCode = 0;
 
     if (!taskContext || !jobContext) {
@@ -142,9 +139,9 @@ export class ExecPromise extends Promise<ExecResult> {
       }
     }
 
-    stdout = mergeUint8Array(...stdoutChunks);
-    stderr = mergeUint8Array(...stderrChunks);
-    stdall = mergeUint8Array(...stdallChunks);
+    const stdout = mergeUint8Array(...stdoutChunks);
+    const stderr = mergeUint8Array(...stderrChunks);
+    const stdall = mergeUint8Array(...stdallChunks);
 
     const result = new ExecResult({
       stdout,
