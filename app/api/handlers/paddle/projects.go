@@ -18,6 +18,7 @@ func getMaxProjects(plan types.CloudSubscriptionPlan, subscription *paddle.Subsc
 	}
 
 	if plan == types.CloudSubscriptionPlanEnterprise {
+		// We probably won't ever see this many but we needed a number
 		return 999999
 	}
 
