@@ -78,7 +78,7 @@
 </script>
 
 <Dialog bind:open>
-	<DialogTitle>Edit variable</DialogTitle>
+	<DialogTitle>Create variable</DialogTitle>
 	{#if projectVariableMutation.error}
 		<Text variant="error">{projectVariableMutation.error.message}</Text>
 	{/if}
