@@ -197,7 +197,14 @@
 
 					<Field>
 						<Label>Name</Label>
-						<Input defaultValue={oldVariable?.key} type="text" name="key" />
+						<Input 
+						  defaultValue={oldVariable?.key} 
+						  type="text" 
+						  name="key" 
+						  required 
+						  pattern="^[A-Za-z_][A-Za-z0-9_]*$"
+						  title="Variable names must start with a letter or underscore and contain only letters, numbers, and underscores"
+						/>
 					</Field>
 
 					<Field>
