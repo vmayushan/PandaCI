@@ -38,7 +38,6 @@ func getConfig() (*pb.WorkflowRunnerInitConfig, error) {
 	return config, nil
 }
 
-// TODO: Heartbeat system, we want to know if this workflow has died
 func main() {
 	ctx := context.Background()
 	logWriter := initLogs()
@@ -83,7 +82,7 @@ func main() {
 			log.Error().Err(err).Msg("finishing workflow")
 		}
 
-		os.Exit(1)
+		log.Fatal().Msg("workflow failed")
 	}
 
 	workflowClaims, err := jwtHandler.ValidateWorkflowToken(config.WorkflowMeta.WorkflowJwt)
