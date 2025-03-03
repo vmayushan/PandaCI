@@ -73,6 +73,10 @@
 				onSuccess: () => {
 					(e.target as HTMLFormElement)?.reset();
 					open = false;
+				},
+				onError: (error) => {
+					console.error('Failed to delete environment:', error);
+					// Keep modal open to show the error message
 				}
 			});
 		}}
