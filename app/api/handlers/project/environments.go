@@ -57,6 +57,51 @@ func (h *Handler) CreateProjectEnvironment(c echo.Context) error {
 	})
 }
 
+func (h *Handler) UpdateProjectEnvironment(c echo.Context) error {
+	id := c.Param("environment_id")
+
+	environmentReq := typesHTTP.UpdateProjectEnvironmentBody{}
+
+	if err := c.Bind(&environmentReq); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	validate := utilsValidator.NewValidator()
+	if err := validate.Struct(environmentReq); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, utilsValidator.ValidatorErrors(err))
+	}
+
+	project, err := middlewareLoaders.GetProject(c)
+	if err != nil {
+		return err
+	}
+
+	environment, err := h.queries.GetProjectEnvironmentByID(c.Request().Context(), project, id)
+	if err != nil {
+		return err
+	}
+
+	environment.Name = environmentReq.Name
+	environment.BranchPattern = environmentReq.BranchPattern
+
+	if err := h.queries.UpdateProjectEnvironment(c.Request().Context(), environment); err != nil {
+		return err
+	}
+
+	analytics.TrackUserProjectEvent(middleware.GetUser(c), *project, posthog.Capture{
+		Event: "project_environment_updated",
+	})
+
+	return c.JSON(http.StatusOK, typesHTTP.ProjectEnvironment{
+		ID:            environment.ID,
+		ProjectID:     environment.ProjectID,
+		Name:          environment.Name,
+		BranchPattern: environment.BranchPattern,
+		UpdatedAt:     environment.UpdatedAt,
+		CreatedAt:     environment.CreatedAt,
+	})
+}
+
 func (h *Handler) DeleteProjectEnvironment(c echo.Context) error {
 	id := c.Param("environment_id")
 

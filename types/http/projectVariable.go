@@ -30,7 +30,19 @@ type CreateProjectVariableBody struct {
 	Sensitive             bool     `json:"sensitive"`
 }
 
+type EditProjectVariableBody struct {
+	Key                   string   `json:"key" validate:"required,min=1,max=255"`
+	Value                 string   `json:"value" validate:"required,min=1,max=65536"`
+	ProjectEnvironmentIDs []string `json:"environmentIDs,omitempty"`
+	Sensitive             bool     `json:"sensitive"`
+}
+
 type CreateProjectEnvironmentBody struct {
+	Name          string `json:"name" validate:"required,min=1,max=255"`
+	BranchPattern string `json:"branchPattern" validate:"required,min=1,max=255"`
+}
+
+type UpdateProjectEnvironmentBody struct {
 	Name          string `json:"name" validate:"required,min=1,max=255"`
 	BranchPattern string `json:"branchPattern" validate:"required,min=1,max=255"`
 }

@@ -12,9 +12,8 @@
 		TableBody
 	} from '$lib/components';
 	import { queries } from '$lib/queries';
-	import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
+	import { createQuery } from '@tanstack/svelte-query';
 	import { page } from '$app/state';
-	import { API } from '$lib/api';
 	import clsx from 'clsx';
 	import CreateVariableModal from './createVariableModal.svelte';
 	import dayjs from 'dayjs';
@@ -22,14 +21,16 @@
 	import Tooltip from '$lib/components/tooltip/tooltip.svelte';
 	import BadgeButton from '$lib/components/badgeButton.svelte';
 	import VariableValue from './variableValue.svelte';
+	import EditVariableModal from './editVariableModal.svelte';
+	import { type ProjectVariable } from '$lib/api/organization';
+	import { PencilSimple, TrashSimple } from 'phosphor-svelte';
+	import DeleteVariableModal from './deleteVariableModal.svelte';
 
 	dayjs.extend(relativeDate);
 
 	const variables = createQuery(() =>
 		queries.variables.projectVariables(page.params.orgName, page.params.projectName)._ctx.list()
 	);
-
-	const queryClient = useQueryClient();
 
 	const project = createQuery(() =>
 		queries.organization.getByName(page.params.orgName)._ctx.projectByName(page.params.projectName)
@@ -43,23 +44,11 @@
 
 	const org = createQuery(() => queries.organization.getByName(page.params.orgName));
 
-	const deleteProjectVariableMutation = createMutation(() => ({
-		mutationFn: (id: string) =>
-			API.delete('/v1/orgs/{orgName}/projects/{projectName}/variables/{variableID}', {
-				params: {
-					orgName: page.params.orgName,
-					projectName: page.params.projectName,
-					variableID: id
-				}
-			}),
-		onSettled: () => {
-			queryClient.invalidateQueries(
-				queries.variables.projectVariables(page.params.orgName, page.params.projectName)._ctx.list()
-			);
-		}
-	}));
-
 	let createModalOpen = $state(false);
+
+	let editVariable = $state<ProjectVariable | undefined>();
+
+	let deleteVariable = $state<ProjectVariable | undefined>();
 </script>
 
 <Title title="Variables">
@@ -69,12 +58,25 @@
 	<Button onclick={() => (createModalOpen = true)}>New Variable</Button>
 </Title>
 
-{#if org.data && project.data && environments.data}
+{#if org.data && project.data}
 	<CreateVariableModal
-		environments={environments.data}
+		environments={environments.data ?? []}
 		org={org.data}
 		project={project.data}
 		bind:open={createModalOpen}
+	/>
+{/if}
+
+{#if org.data && project.data}
+	<DeleteVariableModal org={org.data} project={project.data} bind:variable={deleteVariable} />
+{/if}
+
+{#if org.data && project.data}
+	<EditVariableModal
+		environments={environments.data ?? []}
+		org={org.data}
+		project={project.data}
+		bind:oldVariable={editVariable}
 	/>
 {/if}
 
@@ -129,12 +131,25 @@
 							</TableCell>
 							<TableCell>
 								<Button
-									outline
+									plain
+									tooltip="Delete"
 									onclick={() => {
-										deleteProjectVariableMutation.mutate(variable.id);
+										deleteVariable = variable;
 									}}
 								>
-									Delete
+									<span class="sr-only">Delete {variable.key}</span>
+									<TrashSimple weight="fill" data-slot="icon" />
+								</Button>
+
+								<Button
+									plain
+									tooltip="Edit"
+									onclick={() => {
+										editVariable = variable;
+									}}
+								>
+									<span class="sr-only">Edit {variable.key}</span>
+									<PencilSimple weight="fill" data-slot="icon" />
 								</Button>
 							</TableCell>
 						</TableRow>

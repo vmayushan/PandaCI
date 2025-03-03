@@ -59,6 +59,68 @@ func (h *Handler) GetProjectVariables(c echo.Context) error {
 	return c.JSON(http.StatusOK, variables)
 }
 
+func (h *Handler) UpdateProjectVariable(c echo.Context) error {
+	id := c.Param("variable_id")
+
+	user := middleware.GetUser(c)
+
+	project, err := middlewareLoaders.GetProject(c)
+	if err != nil {
+		return err
+	}
+
+	variableReq := typesHTTP.EditProjectVariableBody{}
+
+	if err := c.Bind(&variableReq); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	validate := utilsValidator.NewValidator()
+	if err := validate.Struct(variableReq); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, utilsValidator.ValidatorErrors(err))
+	}
+
+	variable, err := h.queries.GetProjectVariableByID(c.Request().Context(), project, id)
+	if err != nil {
+		return err
+	}
+
+	// Encrypt the variable value
+	keyID, err := env.GetCurrentEncryptionKeyID()
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get current encryption key ID")
+		return err
+	}
+
+	key, err := env.GetEncryptionKey(*keyID)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get encryption key")
+		return err
+	}
+
+	encrypted, iv, err := encryption.Encrypt(variableReq.Value, *key)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to encrypt variable")
+		return err
+	}
+
+	variable.Key = variableReq.Key
+	variable.Value = encrypted
+	variable.InitialisationVector = iv
+	variable.EncryptionKeyID = *keyID
+	variable.Sensitive = variableReq.Sensitive
+
+	if err := h.queries.UpdateProjectVariable(c.Request().Context(), variable, variableReq.ProjectEnvironmentIDs); err != nil {
+		return err
+	}
+
+	analytics.TrackUserProjectEvent(user, *project, posthog.Capture{
+		Event: "project_variable_updated",
+	})
+
+	return c.NoContent(http.StatusOK)
+}
+
 func (h *Handler) DeleteProjectVariable(c echo.Context) error {
 	id := c.Param("variable_id")
 

@@ -12,7 +12,12 @@
 		Input,
 		Button
 	} from '$lib/components';
-	import type { Project, Organization, ProjectEnvironment } from '$lib/api/organization';
+	import type {
+		Project,
+		Organization,
+		ProjectEnvironment,
+		ProjectVariable
+	} from '$lib/api/organization';
 	import { API, type apiDefs } from '$lib/api';
 	import { createMutation, useQueryClient } from '@tanstack/svelte-query';
 	import { handleForm } from '$lib/utils';
@@ -29,15 +34,16 @@
 	import DropdownItem from '$lib/components/dropdown/dropdownItem.svelte';
 	import InputGroup from '$lib/components/inputGroup.svelte';
 	import Switch from '$lib/components/switch.svelte';
+	import { untrack } from 'svelte';
 
 	interface CreateVariableModal {
-		open: boolean;
 		project: Project;
 		org: Organization;
 		environments: ProjectEnvironment[];
+		oldVariable?: ProjectVariable;
 	}
 
-	let { open = $bindable(), org, project, environments }: CreateVariableModal = $props();
+	let { org, project, environments, oldVariable = $bindable() }: CreateVariableModal = $props();
 
 	let showValue = $state(false);
 
@@ -45,15 +51,27 @@
 
 	const projectVariableMutation = createMutation(() => ({
 		mutationFn: (
-			data: apiDefs['POST']['/v1/orgs/{orgName}/projects/{projectName}/variables']['req']
+			data: apiDefs['PUT']['/v1/orgs/{orgSlug}/projects/{projectSlug}/variables/{variableID}']['req']
 		) =>
-			API.post('/v1/orgs/{orgName}/projects/{projectName}/variables', {
+			API.put('/v1/orgs/{orgSlug}/projects/{projectSlug}/variables/{variableID}', {
 				body: { ...data },
-				params: { orgName: org.slug, projectName: project.slug }
+				params: { orgSlug: org.slug, projectSlug: project.slug, variableID: oldVariable!.id }
 			}),
-		onSettled: () => {
+		onSettled: (_, __, newVariable) => {
+			queryClient.setQueryData(
+				queries.variables.projectVariables(org.slug, project.slug)._ctx.get(oldVariable!.id)
+					.queryKey,
+				{
+					...oldVariable,
+					...newVariable,
+					value: ''
+				}
+			);
 			queryClient.invalidateQueries(
 				queries.variables.projectVariables(org.slug, project.slug)._ctx.list()
+			);
+			queryClient.invalidateQueries(
+				queries.variables.projectVariables(org.slug, project.slug)._ctx.get(oldVariable!.id)
 			);
 		}
 	}));
@@ -69,15 +87,36 @@
 	>(
 		environments.reduce(
 			(acc, env) => {
-				acc[env.id] = { checked: false, name: env.name };
+				acc[env.id] = {
+					checked: oldVariable?.environments?.some((oldEnv) => oldEnv.id === env.id) ?? false,
+					name: env.name
+				};
 				return acc;
 			},
 			{} as Record<string, { checked: boolean; name: string }>
 		)
 	);
+
+	let open = $state(oldVariable !== undefined);
+
+	$effect(() => {
+		if (oldVariable) {
+			untrack(() => {
+				open = true;
+			});
+		}
+	});
+
+	$effect(() => {
+		if (!open) {
+			untrack(() => {
+				oldVariable = undefined;
+			});
+		}
+	});
 </script>
 
-<Dialog bind:open>
+<Dialog bind:open onclose={() => (oldVariable = undefined)}>
 	<DialogTitle>Edit variable</DialogTitle>
 	{#if projectVariableMutation.error}
 		<Text variant="error">{projectVariableMutation.error.message}</Text>
@@ -86,9 +125,9 @@
 		class="flex flex-col space-y-8"
 		onsubmit={(e) => {
 			const { data } =
-				handleForm<apiDefs['POST']['/v1/orgs/{orgName}/projects/{projectName}/variables']['req']>(
-					e
-				);
+				handleForm<
+					apiDefs['PUT']['/v1/orgs/{orgSlug}/projects/{projectSlug}/variables/{variableID}']['req']
+				>(e);
 
 			data.environmentIDs = Object.entries(checkedItems)
 				.filter(([, { checked }]) => checked)
@@ -152,19 +191,19 @@
 					</Field>
 
 					<Field>
-						<Switch label="Sensitive" name="sensitive" />
+						<Switch defaultChecked={oldVariable?.sensitive} label="Sensitive" name="sensitive" />
 						<Description>Sensitive values won't be accessible from our dashboard</Description>
 					</Field>
 
 					<Field>
 						<Label>Name</Label>
-						<Input type="text" name="key" />
+						<Input defaultValue={oldVariable?.key} type="text" name="key" />
 					</Field>
 
 					<Field>
-						<Label>Value</Label>
+						<Label>New Value</Label>
 						<InputGroup class="flex space-x-2">
-							<Input type={showValue ? 'text' : 'password'} name="value" />
+							<Input required type={showValue ? 'text' : 'password'} name="value" />
 							<Button
 								tooltip={showValue ? 'Hide value' : 'Show value'}
 								type="button"
