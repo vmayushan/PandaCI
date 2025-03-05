@@ -80,7 +80,7 @@ func (h *Handler) chargeForCommitters(ctx context.Context, org *typesDB.OrgDB) e
 
 	billingPeriod := license.GetBillingPeriod()
 
-	committersCount, err := h.queries.CountCommitters(ctx, org.ID, billingPeriod.StartsAt, billingPeriod.EndsAt)
+	committersCount, err := h.queries.CountCommitters(ctx, org.ID, billingPeriod.StartsAt, billingPeriod.EndsAt, nil)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to get committers")
 		return err

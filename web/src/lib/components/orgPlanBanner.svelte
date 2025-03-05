@@ -38,4 +38,17 @@
 			<ArrowRight class="shrink-0" data-slot="icon" />
 		</a>
 	</div>
+{:else if org.data?.license?.plan === 'free' && (usage.data?.usedCommitters ?? 0) >= org.data?.license.features.maxCommitters}
+	<div class={['flex w-full items-center justify-center gap-x-6 px-6 py-2.5', className]}>
+		<a
+			class="text-on-surface-variant hover:text-on-surface flex items-center justify-center space-x-1 text-sm"
+			href={`/${page.params.orgName}/~/billing`}
+		>
+			<span>
+				You've reached the maximum number of committers allowed on the free plan, please upgrade if
+				you need more</span
+			>
+			<ArrowRight class="shrink-0" data-slot="icon" />
+		</a>
+	</div>
 {/if}
