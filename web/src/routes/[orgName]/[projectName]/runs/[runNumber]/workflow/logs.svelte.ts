@@ -124,7 +124,7 @@ export class Logs {
 				return logs.slice(1);
 			});
 			this.#logs.push(...logs);
-			this.#renderLogs();
+			await this.#renderLogs();
 		};
 
 		this.#stream.onerror = (event) => {
