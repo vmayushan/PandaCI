@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	middlewareLoaders "github.com/pandaci-com/pandaci/app/api/middleware/loaders"
 	"github.com/labstack/echo/v4"
+	middlewareLoaders "github.com/pandaci-com/pandaci/app/api/middleware/loaders"
 )
 
 func (h *Handler) GetOrgUsage(c echo.Context) error {
@@ -31,7 +31,7 @@ func (h *Handler) GetOrgUsage(c echo.Context) error {
 
 	billingPeriod := license.GetBillingPeriod()
 
-	committersCount, err := h.queries.CountCommitters(c.Request().Context(), org.ID, billingPeriod.StartsAt, billingPeriod.EndsAt)
+	committersCount, err := h.queries.CountCommitters(c.Request().Context(), org.ID, billingPeriod.StartsAt, billingPeriod.EndsAt, nil)
 	if err != nil {
 		return err
 	}

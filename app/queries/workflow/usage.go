@@ -29,29 +29,29 @@ func (q *WorkflowQueries) GetBuildMinutes(ctx context.Context, orgID string, sta
 	return data.WorkflowMins + data.JobMins, nil
 }
 
-func (q *WorkflowQueries) CountCommitters(ctx context.Context, orgID string, startDate time.Time, endDate time.Time) (int, error) {
+type Committer struct {
+	UserID         *string `db:"user_id"`
+	CommitterEmail *string `db:"committer_email"`
+}
 
-	// Get all distinct user_id & committer_email pairs for a given org
-	// Get all emails not in the above
-	//
-	// add distinct user_ids and committer_emails
-
+func (q *WorkflowQueries) CountCommitters(ctx context.Context, orgID string, startDate time.Time, endDate time.Time, new *[]Committer) (int, error) {
 	query := `SELECT DISTINCT
 		user_id,
 		committer_email
 	FROM workflow_run
 	JOIN project ON project.id = workflow_run.project_id
-	WHERE workflow_run.created_at >= $1 AND workflow_run.created_at < $2 AND project.org_id = $3`
+	WHERE workflow_run.created_at >= $1 AND workflow_run.created_at < $2 AND project.org_id = $3 AND workflow_run.conclusion != 'failure'`
+	// TODO - we need to introduce a new workflow run conclusion called fatal where a system error has occured, not a workflow error.
+	// then we should updated the query above to exclude fatal errors from the count, not failures.
 
-	type Data struct {
-		UserID         *string `db:"user_id"`
-		CommitterEmail *string `db:"committer_email"`
-	}
-
-	var data []Data
+	var data []Committer
 	err := q.SelectContext(ctx, &data, query, startDate, endDate, orgID)
 	if err != nil {
 		return 0, err
+	}
+
+	if new != nil {
+		data = append(data, *new...)
 	}
 
 	count := 0

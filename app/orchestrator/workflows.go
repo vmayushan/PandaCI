@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"connectrpc.com/connect"
+	queriesWorkflow "github.com/pandaci-com/pandaci/app/queries/workflow"
 	"github.com/pandaci-com/pandaci/pkg/jwt"
 	"github.com/pandaci-com/pandaci/platform/storage"
 	"github.com/pandaci-com/pandaci/types"
@@ -13,13 +14,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (h *Handler) hasMinutesLeft(ctx context.Context, project *typesDB.Project) (bool, error) {
-
-	org, err := h.queries.Unsafe_GetOrgByID(ctx, project.OrgID)
-	if err != nil {
-		return false, err
-	}
-
+func (h *Handler) hasMinutesLeft(ctx context.Context, org *typesDB.OrgDB) (bool, error) {
 	license, err := org.GetLicense()
 	if err != nil {
 		return false, err
@@ -43,11 +38,56 @@ func (h *Handler) hasMinutesLeft(ctx context.Context, project *typesDB.Project) 
 	return true, nil
 }
 
+func (h *Handler) hasCommittersLeft(ctx context.Context, org *typesDB.OrgDB, workflowDefs []types.WorkflowDefintion) (bool, error) {
+	license, err := org.GetLicense()
+	if err != nil {
+		return false, err
+	}
+
+	if license.Plan == types.CloudSubscriptionPlanPaused {
+		return false, nil
+	}
+
+	billingPeriod := license.GetBillingPeriod()
+
+	if license.Plan == types.CloudSubscriptionPlanFree {
+
+		newCommitters := make([]queriesWorkflow.Committer, len(workflowDefs))
+
+		for i, def := range workflowDefs {
+			newCommitters[i] = queriesWorkflow.Committer{
+				UserID:         def.Committer.UserID,
+				CommitterEmail: def.Committer.Email,
+			}
+		}
+
+		committersCount, err := h.queries.CountCommitters(ctx, org.ID, billingPeriod.StartsAt, billingPeriod.EndsAt, &newCommitters)
+		if err != nil {
+			return false, err
+		}
+
+		return committersCount <= license.Features.MaxCommitters, nil
+	}
+
+	return true, nil
+}
+
 func (h *Handler) StartWorkflows(ctx context.Context, project *typesDB.Project, workflowDefs []types.WorkflowDefintion) ([]typesDB.WorkflowRun, error) {
 
-	hasMinutesLeft, err := h.hasMinutesLeft(ctx, project)
+	org, err := h.queries.Unsafe_GetOrgByID(ctx, project.OrgID)
+	if err != nil {
+		return nil, err
+	}
+
+	hasMinutesLeft, err := h.hasMinutesLeft(ctx, org)
 	if err != nil {
 		log.Err(err).Msg("Failed to check if we have minutes left")
+		return nil, err
+	}
+
+	hasCommittersLeft, err := h.hasCommittersLeft(ctx, org, workflowDefs)
+	if err != nil {
+		log.Err(err).Msg("Failed to check if we have committers left")
 		return nil, err
 	}
 
@@ -80,6 +120,32 @@ func (h *Handler) StartWorkflows(ctx context.Context, project *typesDB.Project, 
 			workflow.AppendAlert(types.WorkflowRunAlert{
 				Title:   "Out of build minutes",
 				Message: "Please upgrade your plan for more minutes",
+				Type:    types.WorkflowRunAlertTypeError,
+			})
+
+			if err := h.queries.CreateFailedWorkflowRun(ctx, &workflow); err != nil {
+				log.Err(err).Msg("Failed to create failed workflow run")
+			}
+
+			continue
+		} else if !hasCommittersLeft {
+			// add an error to the workflow run
+			workflow := typesDB.WorkflowRun{
+				ProjectID:      project.ID,
+				Name:           def.RunWorkflowRequest.Name,
+				CommitterEmail: def.Committer.Email,
+				UserID:         def.Committer.UserID,
+				GitTitle:       &def.GitTitle,
+				GitSha:         def.RunWorkflowRequest.GitInfo.Sha,
+				GitBranch:      def.RunWorkflowRequest.GitInfo.Branch,
+				Trigger:        types.RunTriggerFromProto(def.RunWorkflowRequest.GetTrigger()),
+				PrNumber:       def.RunWorkflowRequest.PrNumber,
+				Runner:         "ubuntu-2x", // TODO - we need an unknown runner maybe
+			}
+
+			workflow.AppendAlert(types.WorkflowRunAlert{
+				Title:   "Out of committers",
+				Message: "Please upgrade your plan for more committers",
 				Type:    types.WorkflowRunAlertTypeError,
 			})
 
