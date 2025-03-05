@@ -14,7 +14,7 @@ async function initFly() {
 export const runBackendStage = (stage: "dev" | "prod") =>
   job.nothrow(`Backend - ${stage}`, async () => {
     await docker.if(stage === "dev")(
-      "golang:1.24.0",
+      "golang:1.24.1",
       { name: "Test" },
       async () => {
         await initGo();
