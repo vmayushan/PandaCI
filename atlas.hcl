@@ -2,7 +2,6 @@ data "template_dir" "schema" {
   path = "./schema/templates"
   vars = {
     key = "value"
-    // Pass the --env value as a template variable.
     env  = atlas.env
   }
 }

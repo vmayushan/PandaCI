@@ -1,6 +1,5 @@
 node_modules
 .env
-
 *.env
 
 dist
@@ -9,6 +8,5 @@ cache
 *.db
 
 *.pem
-
 
 *.conf
