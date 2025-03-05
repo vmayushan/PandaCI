@@ -160,6 +160,11 @@ export class Logs {
 				this.#stream = null;
 			}
 		}
+
+		if (this.#renderDebounceTimeout) {
+			clearTimeout(this.#renderDebounceTimeout);
+			this.#renderDebounceTimeout = null;
+		}
 	}
 
 	async #renderLogs() {
@@ -221,6 +226,10 @@ export class Logs {
 
 	$destroy() {
 		this.#stopStream();
+		if (this.#renderDebounceTimeout) {
+			clearTimeout(this.#renderDebounceTimeout);
+			this.#renderDebounceTimeout = null;
+		}
 	}
 
 	get logs() {
