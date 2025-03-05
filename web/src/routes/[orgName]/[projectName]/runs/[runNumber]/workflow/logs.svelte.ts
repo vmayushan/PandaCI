@@ -48,6 +48,8 @@ export class Logs {
 	#logs = $state<string[][]>([]);
 	#htmlLogs = $state<string>();
 
+	#renderDebounceTimeout: NodeJS.Timeout | null = null;
+
 	constructor(
 		orgSlug: string,
 		projectSlug: string,
@@ -124,7 +126,11 @@ export class Logs {
 				return logs.slice(1);
 			});
 			this.#logs.push(...logs);
-			await this.#renderLogs();
+			if (this.#renderDebounceTimeout) clearTimeout(this.#renderDebounceTimeout);
+			this.#renderDebounceTimeout = setTimeout(async () => {
+				this.#renderDebounceTimeout = null;
+				await this.#renderLogs();
+			}, 150);
 		};
 
 		this.#stream.onerror = (event) => {
@@ -153,6 +159,11 @@ export class Logs {
 				this.#stream.close();
 				this.#stream = null;
 			}
+		}
+
+		if (this.#renderDebounceTimeout) {
+			clearTimeout(this.#renderDebounceTimeout);
+			this.#renderDebounceTimeout = null;
 		}
 	}
 
@@ -215,6 +226,10 @@ export class Logs {
 
 	$destroy() {
 		this.#stopStream();
+		if (this.#renderDebounceTimeout) {
+			clearTimeout(this.#renderDebounceTimeout);
+			this.#renderDebounceTimeout = null;
+		}
 	}
 
 	get logs() {
