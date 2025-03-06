@@ -29,7 +29,7 @@ frontend. The highlights of the project structure are:
 ## Contributing
 
 We welcome all contributions! Be it fixing a bug, helping with a feature,
-suggesting ideas or even writing about us in your blog.
+suggesting ideas or even writing about us on your blog.
 
 If you're looking to contribute to a more significant feature, please reach out
 to us first and we'll help you get started.
