@@ -15,7 +15,7 @@ export const config: Config = {
   },
 };
 
-await docker("ubuntu:24.04", { name: "Cleanup fly" }, async () => {
+await docker("node:22", { name: "Cleanup fly" }, async () => {
   await initFly();
 
   const flyEnv = {
