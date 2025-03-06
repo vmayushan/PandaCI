@@ -24,6 +24,7 @@ func (h *Handler) StartTask(ctx context.Context, req *connect.Request[pb.JobServ
 	res, err := h.service.StarDockerTask(ctx, claims.WorkflowID, req.Msg)
 	if err != nil {
 		log.Error().Err(err).Msg("starting docker task")
+		h.addWorkflowRunAlert(ctx, pb.WorkflowAlert_TYPE_ERROR, "Failed to start task", err.Error())
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 

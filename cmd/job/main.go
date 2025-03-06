@@ -85,7 +85,13 @@ func main() {
 
 	log.Info().Msg("starting grpc server")
 
-	grpcServer, err := grpc.NewJobServer(jwtHandler, fmt.Sprintf("%s:%d", config.Host, port), config.WorkflowMeta)
+	orchestratorClient := pbConnect.NewOrchestratorServiceClient(&http.Client{
+		Transport: &retryClient.RetryRoundTripper{
+			Base: http.DefaultTransport,
+		},
+	}, config.OrchestratorAddress, connect.WithInterceptors(grpcMiddleware.NewWorkflowJWTInerceptor(jwtHandler, nil)))
+
+	grpcServer, err := grpc.NewJobServer(orchestratorClient, jwtHandler, fmt.Sprintf("%s:%d", config.Host, port), config.WorkflowMeta)
 	if err != nil {
 		log.Fatal().Err(err).Msg("starting grpc server")
 	}

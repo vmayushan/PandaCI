@@ -192,7 +192,7 @@ func (h *Handler) GetWorkflowDefinitions(ctx context.Context, project typesDB.Pr
 		config, err := scannerShared.ExtractWorkflowConfig([]byte(file.Content))
 		if err != nil {
 			log.Error().Err(err).Msg("Failed to extract workflow config")
-			if err := tempWorkflow.AppendAlert(types.WorkflowRunAlert{
+			if err := typesDB.AppendAlert(&tempWorkflow, types.WorkflowRunAlert{
 				Type:    types.WorkflowRunAlertTypeError,
 				Title:   "Failed to parse workflow config",
 				Message: err.Error(),
@@ -210,7 +210,7 @@ func (h *Handler) GetWorkflowDefinitions(ctx context.Context, project typesDB.Pr
 		if shouldRun, err := shouldRun(ctx, config.Config, triggerEvent); err != nil {
 			log.Error().Err(err).Msg("Failed to check if we should run")
 
-			if err := tempWorkflow.AppendAlert(types.WorkflowRunAlert{
+			if err := typesDB.AppendAlert(&tempWorkflow, types.WorkflowRunAlert{
 				Type:    types.WorkflowRunAlertTypeError,
 				Title:   "Failed to check if we should run",
 				Message: err.Error(),
