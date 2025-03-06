@@ -212,7 +212,11 @@ export class DockerTaskPromise extends Promise<DockerTaskResult> {
         async () => {
           try {
             await Promise.resolve(fn());
-            await Promise.allSettled(promises);
+            const res = await Promise.allSettled(promises);
+            if (res.some((r) => r.status === "rejected")) {
+              logger.error(`Task ${this.name} failed`);
+              return Conclusion.FAILURE;
+            }
           } catch (err) {
             // TODO - we should check the error and throw if it's not due to a non-zero exit code
             logger.error(`Task ${this.name} failed`, err);
