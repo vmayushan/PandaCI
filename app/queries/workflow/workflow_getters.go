@@ -13,22 +13,23 @@ func (q *WorkflowQueries) Unsafe_GetWorkflowRunByID(ctx context.Context, runID s
 	var workflowRun typesDB.WorkflowRun
 
 	query := `SELECT
-	  id,
-	  project_id,
-	  name,
-	  status,
-	  conclusion,
-	  created_at,
-	  finished_at,
-	  number,
-	  git_sha,
-	  git_branch,
-	  committer_email,
+      id,
+      project_id,
+      name,
+      status,
+      conclusion,
+      created_at,
+      finished_at,
+      number,
+      git_sha,
+      git_branch,
+      runner,
+   	  committer_email,
 	  user_id,
-	  alerts,
-	  pr_number,
-	  trigger,
-  	  runner
+      alerts,
+      pr_number,
+      trigger,
+      git_title
 	FROM workflow_run
 	WHERE id = $1`
 
