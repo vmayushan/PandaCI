@@ -3,7 +3,7 @@ import { $, docker } from "@pandaci/workflow";
 import { env, initFly } from "../utils.ts";
 
 export function testGoTask() {
-  return docker("go:1.24.1", { name: "Testing Go code" }, async () => {
+  return docker("golang:1.24.1", { name: "Testing Go code" }, async () => {
     await $`go mod download`;
     await $`go mod verify`;
     await $`go test ./...`;
