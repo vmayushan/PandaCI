@@ -24,7 +24,7 @@ func (h *Handler) StartTask(ctx context.Context, req *connect.Request[pb.JobServ
 	res, err := h.service.StarDockerTask(ctx, claims.WorkflowID, req.Msg)
 	if err != nil {
 		log.Error().Err(err).Msg("starting docker task")
-		return nil, err
+		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
 	return connect.NewResponse(res), nil
@@ -38,7 +38,7 @@ func (h *Handler) StopTask(ctx context.Context, req *connect.Request[pb.JobServi
 	res, err := h.service.StopDockerTask(ctx, claims.WorkflowID, req.Msg)
 	if err != nil {
 		log.Error().Err(err).Msg("stopping docker task")
-		return nil, err
+		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
 	return connect.NewResponse(res), nil
