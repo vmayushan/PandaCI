@@ -36,7 +36,7 @@ func (q *WorkflowQueries) CreateWorkflowRun(ctx context.Context, workflowRun *ty
 		return nil
 	}
 
-	return nil
+	return fmt.Errorf("failed to create workflow run after 5 attempts due to duplicate project ID constraints")
 }
 
 func (q *WorkflowQueries) createWorkflowRun(ctx context.Context, workflowRun *typesDB.WorkflowRun) error {
