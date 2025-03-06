@@ -1,4 +1,6 @@
-import { $, Config, docker, env } from "@pandaci/workflow";
+// Note: This is normally "jsr:@pandaci/workflow", but we're just using the local source here.
+import { $, Config, docker } from "@pandaci/workflow";
+import { env, initFly } from "./utils.ts";
 
 export const config: Config = {
   name: "Cleanup",
@@ -14,24 +16,24 @@ export const config: Config = {
 };
 
 await docker("ubuntu:24.04", { name: "Cleanup fly" }, async () => {
-  await $`apt-get update && apt-get install -y curl`;
-
-  await $`curl -L https://fly.io/install.sh | sh`;
-
-  // make fly cli available from 'flyctl' command
-  await $`ln -s /root/.fly/bin/flyctl /usr/local/bin/flyctl`;
+  await initFly();
 
   const flyEnv = {
     FLY_ACCESS_TOKEN: env.FLY_ACCESS_TOKEN_DEV,
     FLY_APP: `pandaci-core-prev-${env.PANDACI_BRANCH}-${env.PANDACI_PR_NUMBER}`,
   };
 
-  if (
-    (await $`flyctl status`.env(flyEnv)
-      .nothrow()).exitCode === 0
-  ) {
-    await $`flyctl apps delete ${flyEnv.FLY_APP} --yes`.env(flyEnv);
-  }
+  $`flyctl apps delete ${flyEnv.FLY_APP} --yes`.env(flyEnv);
 
-  // TODO - cleanup frontend
+  $`npx wrangler kv:key delete ${env.PANDACI_BRANCH} --namespace-id=${env.CLOUDFLARE_KV_NAMESPACE_ID}`
+    .env({
+      CLOUDFLARE_API_TOKEN: env.CLOUDFLARE_API_TOKEN,
+      CLOUDFLARE_ACCOUNT_ID: env.CLOUDFLARE_ACCOUNT_ID,
+    });
+
+  $`npx wrangler kv:key delete ${env.PANDACI_BRANCH} --namespace-id=${env.CLOUDFLARE_API_KV_ID}`
+    .env({
+      CLOUDFLARE_API_TOKEN: env.CLOUDFLARE_API_TOKEN,
+      CLOUDFLARE_ACCOUNT_ID: env.CLOUDFLARE_ACCOUNT_ID,
+    });
 });
