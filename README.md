@@ -15,7 +15,8 @@
 
 ## Project structure
 
-Aside from the TypeScript sdk, the project is written in Go with Svelte for the frontend. The highlights of the project structure are:
+Aside from the TypeScript sdk, the project is written in Go with Svelte for the
+frontend. The highlights of the project structure are:
 
 - `web` - The Svelte frontend
 - `schema` - Our sql schema
@@ -27,10 +28,15 @@ Aside from the TypeScript sdk, the project is written in Go with Svelte for the 
 
 ## Contributing
 
-We welcome all contributions! Be it fixing a bug, helping with a feature, suggesting ideas or even writing about us in your blog.
+We welcome all contributions! Be it fixing a bug, helping with a feature,
+suggesting ideas or even writing about us in your blog.
 
-If you're looking to contribute to a more significant feature, please reach out to us first and we'll help you get started.
+If you're looking to contribute to a more significant feature, please reach out
+to us first and we'll help you get started.
 
 ## Disclosing security issues
 
-If you think you've found a security vulnerability, please refrain from posting it publicly on the forums, the chat, or GitHub. You can find all the info for responsible disclosure in our [SECURITY.md](https://github.com/pandaci-com/pandaci/blob/main/SECURITY.md)
+If you think you've found a security vulnerability, please refrain from posting
+it publicly on the forums, the chat, or GitHub. You can find all the info for
+responsible disclosure in our
+[SECURITY.md](https://github.com/pandaci-com/pandaci/blob/main/SECURITY.md)

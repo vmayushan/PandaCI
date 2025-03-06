@@ -117,8 +117,6 @@ selfservice:
                     value: Basic PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
                     in: header
 
-
-
 log:
   level: info
   format: text
