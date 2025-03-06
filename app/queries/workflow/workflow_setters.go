@@ -8,6 +8,7 @@ import (
 	"github.com/pandaci-com/pandaci/pkg/utils"
 	"github.com/pandaci-com/pandaci/types"
 	typesDB "github.com/pandaci-com/pandaci/types/database"
+	"github.com/rs/zerolog/log"
 
 	nanoid "github.com/matoous/go-nanoid/v2"
 )
@@ -21,6 +22,24 @@ func (q *WorkflowQueries) CreateFailedWorkflowRun(ctx context.Context, workflowR
 }
 
 func (q *WorkflowQueries) CreateWorkflowRun(ctx context.Context, workflowRun *typesDB.WorkflowRun) error {
+
+	for i := 0; i < 5; i++ {
+		if err := q.createWorkflowRun(ctx, workflowRun); err != nil {
+			// We can't lock the rows to count if we don't have any rows yet
+			if utils.CheckConstraintError(err, "workflow_run_project_id_number_key") {
+				log.Error().Str("project_id", workflowRun.ProjectID).Msg("Failed to create workflow run due to duplicate number")
+				continue
+			}
+			return err
+		}
+
+		return nil
+	}
+
+	return nil
+}
+
+func (q *WorkflowQueries) createWorkflowRun(ctx context.Context, workflowRun *typesDB.WorkflowRun) error {
 	var err error
 	if workflowRun.ID, err = nanoid.New(); err != nil {
 		return err
@@ -36,18 +55,18 @@ func (q *WorkflowQueries) CreateWorkflowRun(ctx context.Context, workflowRun *ty
 	workflowRun.CreatedAt = utils.CurrentTime()
 
 	workflowRunQuery := `WITH locked_rows AS (
-		    SELECT number
-		    FROM workflow_run
-		    WHERE project_id = :project_id
-		    FOR UPDATE
+			SELECT number
+			FROM workflow_run
+			WHERE project_id = :project_id
+			FOR UPDATE
 		),
 		next_number AS (
-		    SELECT COALESCE(MAX(number), 0) + 1 AS number FROM locked_rows
+			SELECT COALESCE(MAX(number), 0) + 1 AS number FROM locked_rows
 		)
 		INSERT INTO workflow_run
-		    (id, project_id, name, status, conclusion, number, created_at, finished_at, git_title, git_sha, git_branch, pr_number, trigger, committer_email, user_id, alerts)
+			(id, project_id, name, status, conclusion, number, created_at, finished_at, git_title, git_sha, git_branch, pr_number, trigger, committer_email, user_id, alerts)
 		VALUES
-		    (:id, :project_id, :name, :status, :conclusion, (SELECT number FROM next_number), :created_at, :finished_at, :git_title, :git_sha, :git_branch, :pr_number, :trigger, :committer_email, :user_id, :alerts)
+			(:id, :project_id, :name, :status, :conclusion, (SELECT number FROM next_number), :created_at, :finished_at, :git_title, :git_sha, :git_branch, :pr_number, :trigger, :committer_email, :user_id, :alerts)
 		RETURNING number;`
 
 	tx, err := q.BeginTxx(ctx, nil)
