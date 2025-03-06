@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"time"
 
+	sqlxTypes "github.com/jmoiron/sqlx/types"
 	utilsValidator "github.com/pandaci-com/pandaci/pkg/utils/validator"
 	"github.com/pandaci-com/pandaci/types"
-	sqlxTypes "github.com/jmoiron/sqlx/types"
 	"github.com/rs/zerolog/log"
 )
 
@@ -41,7 +41,7 @@ type WorkflowRun struct {
 	Alerts sqlxTypes.JSONText `db:"alerts"`
 }
 
-func (wr WorkflowRun) GetAlerts() []types.WorkflowRunAlert {
+func (wr *WorkflowRun) GetAlerts() []types.WorkflowRunAlert {
 	var alerts []types.WorkflowRunAlert
 
 	if err := wr.Alerts.Unmarshal(&alerts); err != nil {
@@ -52,15 +52,10 @@ func (wr WorkflowRun) GetAlerts() []types.WorkflowRunAlert {
 	return alerts
 }
 
-func (wr *WorkflowRun) AppendAlert(alert types.WorkflowRunAlert) error {
-	alerts := wr.GetAlerts()
+func AppendAlert(workflowRun *WorkflowRun, alert types.WorkflowRunAlert) error {
+	alerts := workflowRun.GetAlerts()
 
 	alerts = append(alerts, alert)
-
-	return wr.SetAlerts(alerts)
-}
-
-func (wr *WorkflowRun) SetAlerts(alerts []types.WorkflowRunAlert) error {
 
 	validator := utilsValidator.NewValidator()
 
@@ -94,7 +89,7 @@ func (wr *WorkflowRun) SetAlerts(alerts []types.WorkflowRunAlert) error {
 		return err
 	}
 
-	return wr.Alerts.Scan(rawBytes)
+	return workflowRun.Alerts.Scan(rawBytes)
 }
 
 type JobRun struct {

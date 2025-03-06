@@ -23,12 +23,6 @@ func (h *Handler) CreateJob(ctx context.Context, req *connect.Request[pb.Orchest
 
 	claims := grpcMiddleware.GetWorkflowClaims(ctx)
 
-	workflowRun, err := h.queries.Unsafe_GetWorkflowRunByID(ctx, claims.WorkflowID)
-	if err != nil {
-		log.Error().Err(err).Msg("getting workflow run")
-		return nil, err
-	}
-
 	runner := "ubuntu-4x"
 	if req.Msg.Runner != nil {
 		runner = req.Msg.GetRunner()
@@ -36,7 +30,7 @@ func (h *Handler) CreateJob(ctx context.Context, req *connect.Request[pb.Orchest
 
 	if !slices.Contains([]string{"ubuntu-1x", "ubuntu-2x", "ubuntu-4x", "ubuntu-8x", "ubuntu-16x"}, runner) {
 		log.Error().Msg("invalid runner")
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Invalid runner",
 			Message: fmt.Sprintf("Invalid runner: %s", runner),
@@ -58,7 +52,7 @@ func (h *Handler) CreateJob(ctx context.Context, req *connect.Request[pb.Orchest
 
 	if license.Features.MaxCloudRunnerScale < types.GetBuildMinutesScale(types.CloudRunner(runner)) {
 		log.Error().Msg("runner scale is too high for license")
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Please upgrade your license",
 			Message: fmt.Sprintf("Your plan limits you to ubuntu-%dx but you are trying to use %s", license.Features.MaxCloudRunnerScale, runner),
@@ -81,7 +75,7 @@ func (h *Handler) CreateJob(ctx context.Context, req *connect.Request[pb.Orchest
 	if err := h.queries.CreateJobRun(ctx, &job); err != nil {
 		log.Error().Err(err).Interface("job", job).Msg("creating job in db")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to create job",
 			Message: "Failed to create job in db",
@@ -111,7 +105,7 @@ func (h *Handler) CreateJob(ctx context.Context, req *connect.Request[pb.Orchest
 	if err != nil {
 		log.Error().Err(err).Msg("calling runner client to start job")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to create job",
 			Message: "Failed to start job in runner",
@@ -134,12 +128,6 @@ func (h *Handler) FinishJob(ctx context.Context, req *connect.Request[pb.Orchest
 
 	claims := grpcMiddleware.GetWorkflowClaims(ctx)
 
-	workflowRun, err := h.queries.Unsafe_GetWorkflowRunByID(ctx, claims.WorkflowID)
-	if err != nil {
-		log.Error().Err(err).Msg("getting workflow run")
-		return nil, err
-	}
-
 	conclusion, err := types.RunOutputFromProto(req.Msg.Conclusion)
 	if err != nil {
 		log.Error().Err(err).Msg("getting output from proto")
@@ -147,7 +135,7 @@ func (h *Handler) FinishJob(ctx context.Context, req *connect.Request[pb.Orchest
 			log.Error().Err(err).Msg("finishing job in db")
 		}
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish job",
 			Message: "Failed to get output from proto, please try again",
@@ -159,7 +147,7 @@ func (h *Handler) FinishJob(ctx context.Context, req *connect.Request[pb.Orchest
 	if err := h.queries.FinishJobRun(ctx, claims.WorkflowID, req.Msg.GetJobMeta().Id, conclusion); err != nil {
 		log.Error().Err(err).Msg("finishing job in db")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish job",
 			Message: "Failed to finish job in db, please try again",
@@ -174,15 +162,11 @@ func (h *Handler) FinishJob(ctx context.Context, req *connect.Request[pb.Orchest
 	})); err != nil {
 		log.Error().Err(err).Msg("calling runner client to stop job")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish job",
 			Message: "Failed to stop job in runner",
 		})
-
-		if err := h.queries.UpdateWorkflowRun(ctx, workflowRun); err != nil {
-			log.Error().Err(err).Msg("updating workflow run")
-		}
 
 		return nil, err
 	}
@@ -194,12 +178,6 @@ func (h *Handler) CreateTask(ctx context.Context, req *connect.Request[pb.Orches
 	defer utils.MeasureTime(time.Now(), "orchestrator service create task")
 
 	claims := grpcMiddleware.GetWorkflowClaims(ctx)
-
-	workflowRun, err := h.queries.Unsafe_GetWorkflowRunByID(ctx, claims.WorkflowID)
-	if err != nil {
-		log.Error().Err(err).Msg("getting workflow run")
-		return nil, err
-	}
 
 	task := typesDB.TaskRun{
 		JobRunID:      req.Msg.JobMeta.Id,
@@ -217,7 +195,7 @@ func (h *Handler) CreateTask(ctx context.Context, req *connect.Request[pb.Orches
 	if err := h.queries.CreateTaskRun(ctx, &task); err != nil {
 		log.Error().Err(err).Msg("creating task in db")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to create task",
 			Message: "Failed to create task in db",
@@ -237,17 +215,11 @@ func (h *Handler) FinishTask(ctx context.Context, req *connect.Request[pb.Orches
 
 	claims := grpcMiddleware.GetWorkflowClaims(ctx)
 
-	workflowRun, err := h.queries.Unsafe_GetWorkflowRunByID(ctx, claims.WorkflowID)
-	if err != nil {
-		log.Error().Err(err).Msg("getting workflow run")
-		return nil, err
-	}
-
 	conclusion, err := types.RunOutputFromProto(req.Msg.Conclusion)
 	if err != nil {
 		log.Error().Err(err).Msg("getting output from proto")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish task",
 			Message: "Failed to get output from proto, please try again",
@@ -259,7 +231,7 @@ func (h *Handler) FinishTask(ctx context.Context, req *connect.Request[pb.Orches
 	if err := h.queries.FinishTaskRun(ctx, claims.WorkflowID, req.Msg.TaskMeta.Id, conclusion); err != nil {
 		log.Error().Err(err).Msg("updating task status in db")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish task",
 			Message: "Failed to update task status in db, please try again",
@@ -276,12 +248,6 @@ func (h *Handler) CreateStep(ctx context.Context, req *connect.Request[pb.Orches
 
 	claims := grpcMiddleware.GetWorkflowClaims(ctx)
 
-	workflowRun, err := h.queries.Unsafe_GetWorkflowRunByID(ctx, claims.WorkflowID)
-	if err != nil {
-		log.Error().Err(err).Msg("getting workflow run")
-		return nil, err
-	}
-
 	step := typesDB.StepRun{
 		Status:        types.RunStatusRunning,
 		Type:          types.StepRunTypeExec,
@@ -297,7 +263,7 @@ func (h *Handler) CreateStep(ctx context.Context, req *connect.Request[pb.Orches
 	if err := h.queries.CreateStepRun(ctx, &step); err != nil {
 		log.Error().Err(err).Msg("creating step in db")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to create step",
 			Message: "Failed to create step in db",
@@ -311,7 +277,7 @@ func (h *Handler) CreateStep(ctx context.Context, req *connect.Request[pb.Orches
 	if err != nil {
 		log.Error().Err(err).Msg("getting step presigned url")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to create step",
 			Message: "Failed to create presigned workflow logs url, please try again",
@@ -331,17 +297,11 @@ func (h *Handler) FinishStep(ctx context.Context, req *connect.Request[pb.Orches
 
 	claims := grpcMiddleware.GetWorkflowClaims(ctx)
 
-	workflowRun, err := h.queries.Unsafe_GetWorkflowRunByID(ctx, claims.WorkflowID)
-	if err != nil {
-		log.Error().Err(err).Msg("getting workflow run")
-		return nil, err
-	}
-
 	conclusion, err := types.RunOutputFromProto(req.Msg.Conclusion)
 	if err != nil {
 		log.Error().Err(err).Msg("getting output from proto")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish step",
 			Message: "Failed to get output from proto, please try again",
@@ -353,7 +313,7 @@ func (h *Handler) FinishStep(ctx context.Context, req *connect.Request[pb.Orches
 	if err := h.queries.FinishStepRun(ctx, claims.WorkflowID, req.Msg.Id, conclusion); err != nil {
 		log.Error().Err(err).Msg("updating step status in db")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish step",
 			Message: "Failed to update step status in db, please try again",
@@ -384,7 +344,7 @@ func (h *Handler) FinishWorkflow(ctx context.Context, req *connect.Request[pb.Or
 			})); err != nil {
 				log.Error().Err(err).Msg("calling runner client to clean up jobs")
 
-				h.addWorkflowRunAlert(context.Background(), workflowRun, types.WorkflowRunAlert{
+				h.addWorkflowRunAlert(context.Background(), claims.WorkflowID, types.WorkflowRunAlert{
 					Type:    types.WorkflowRunAlertTypeError,
 					Title:   "Failed to finish workflow",
 					Message: "Failed to clean up jobs in runner",
@@ -455,7 +415,7 @@ func (h *Handler) FinishWorkflow(ctx context.Context, req *connect.Request[pb.Or
 	if err := h.git.UpdateRunStatusInRepo(context.Background(), *workflowRun); err != nil {
 		log.Error().Err(err).Msg("updating run status in repo")
 
-		h.addWorkflowRunAlert(context.Background(), workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(context.Background(), claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to finish workflow",
 			Message: "Failed to update status in git repo",
@@ -503,16 +463,10 @@ func (h *Handler) JobStarted(ctx context.Context, req *connect.Request[pb.Orches
 
 	claims := grpcMiddleware.GetWorkflowClaims(ctx)
 
-	workflowRun, err := h.queries.Unsafe_GetWorkflowRunByID(ctx, claims.WorkflowID)
-	if err != nil {
-		log.Error().Err(err).Msg("getting workflow run")
-		return nil, err
-	}
-
 	if err := h.queries.UpdateJobRunStatus(ctx, claims.WorkflowID, req.Msg.JobMeta.Id, types.RunStatusRunning); err != nil {
 		log.Error().Err(err).Msg("updating job status")
 
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
+		h.addWorkflowRunAlert(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 			Type:    types.WorkflowRunAlertTypeError,
 			Title:   "Failed to start job",
 			Message: "Failed to update job status, please try again",
@@ -530,12 +484,6 @@ func (h *Handler) CreateWorkflowAlert(ctx context.Context, req *connect.Request[
 
 	claims := grpcMiddleware.GetWorkflowClaims(ctx)
 
-	workflowRun, err := h.queries.Unsafe_GetWorkflowRunByID(ctx, claims.WorkflowID)
-	if err != nil {
-		log.Error().Err(err).Msg("getting workflow run")
-		return nil, err
-	}
-
 	alertType := types.WorkflowRunAlertTypeError
 	switch req.Msg.Alert.Type {
 	case *pb.WorkflowAlert_TYPE_INFO.Enum():
@@ -544,29 +492,13 @@ func (h *Handler) CreateWorkflowAlert(ctx context.Context, req *connect.Request[
 		alertType = types.WorkflowRunAlertTypeWarning
 	}
 
-	if err := workflowRun.AppendAlert(types.WorkflowRunAlert{
+	if err := h.queries.AppendAlertToWorkflowRun(ctx, claims.WorkflowID, types.WorkflowRunAlert{
 		Type:    alertType,
-		Message: req.Msg.Alert.Message,
 		Title:   req.Msg.Alert.Title,
+		Message: req.Msg.Alert.Message,
 	}); err != nil {
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
-			Type:    types.WorkflowRunAlertTypeError,
-			Title:   "Failed to create alert",
-			Message: err.Error(), // This error shouldn't contain any sensitive information
-		})
-
-		return nil, err
-	}
-
-	if err := h.queries.UpdateWorkflowRun(ctx, workflowRun); err != nil {
-		log.Error().Err(err).Msg("updating workflow run")
-
-		h.addWorkflowRunAlert(ctx, workflowRun, types.WorkflowRunAlert{
-			Type:    types.WorkflowRunAlertTypeError,
-			Title:   "Failed to create alert",
-			Message: "Failed to update workflow run",
-		})
-
+		log.Error().Err(err).Msg("appending alert to workflow run")
+		// Not really any point trying to add an alert to the workflow run given we just failed to do so
 		return nil, err
 	}
 

@@ -15,9 +15,9 @@ import (
 	"github.com/docker/docker/api/types/volume"
 	"github.com/docker/docker/client"
 	nanoid "github.com/matoous/go-nanoid/v2"
-	"github.com/rs/zerolog/log"
 	"github.com/pandaci-com/pandaci/pkg/utils"
 	pb "github.com/pandaci-com/pandaci/proto/go/v1"
+	"github.com/rs/zerolog/log"
 )
 
 type DeleteContainerFilter struct {
@@ -113,8 +113,6 @@ func GenerateSafeDockerName(workflowID string, tag string) (string, error) {
 	regex := regexp.MustCompile(`[^a-zA-Z0-9_.-]+`)
 
 	safeTag := regex.ReplaceAllString(tag, "")
-
-	// TODO - avoid using banned characters and length restrictions
 
 	prefix := fmt.Sprintf("panda-ci-%s-%s", workflowID, safeTag)
 

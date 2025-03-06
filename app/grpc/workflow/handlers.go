@@ -117,7 +117,7 @@ func (h *Handler) StartTask(ctx context.Context, req *connect.Request[pb.Workflo
 	}))
 	if err != nil {
 		log.Error().Err(err).Msg("starting task")
-		h.addWorkflowRunAlert(ctx, pb.WorkflowAlert_TYPE_ERROR, "Failed to start task", err.Error())
+		h.addWorkflowRunAlert(context.Background(), pb.WorkflowAlert_TYPE_ERROR, "Failed to start task", err.Error())
 		return nil, err
 	}
 

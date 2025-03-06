@@ -11,7 +11,7 @@ let workflowClient: Client<typeof WorkflowService> | undefined;
 
 const auth: Interceptor = (next) => (req) => {
   req.header.set("Authorization", `Bearer ${extendedEnv.PANDACI_WORKFLOW_JWT}`);
-  return  next(req);
+  return next(req);
 };
 
 export function getWorkflowClient(): Client<typeof WorkflowService> {

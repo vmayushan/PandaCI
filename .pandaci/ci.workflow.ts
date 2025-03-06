@@ -1,6 +1,16 @@
-import { Config, env } from "@pandaci/workflow";
-import { runBackendStage } from "./backend/stage.ts";
-import { runFrontendStage } from "./frontend/stage.ts";
+// Note: This is normally "jsr:@pandaci/workflow", but we're just using the local source here.
+import { Config, job } from "@pandaci/workflow";
+import {
+  deployDevCoreBackendTask,
+  deployProdCoreBackendTask,
+  testGoTask,
+} from "./ci/backend.ts";
+import {
+  deployDevFrontendTask,
+  deployProdFrontendTask,
+  testFrontendTask,
+} from "./ci/frontend.ts";
+import { env } from "./utils.ts";
 
 export const config: Config = {
   name: "CI",
@@ -15,14 +25,28 @@ export const config: Config = {
   },
 };
 
-const devJobs = await Promise.all([
-  runFrontendStage("dev"),
-  runBackendStage("dev"),
+const devRes = await Promise.allSettled([
+  job("Backend dev", async () => {
+    await testGoTask();
+    await deployDevCoreBackendTask();
+  }),
+  job("Frontend dev", async () => {
+    await testFrontendTask();
+    await deployDevFrontendTask();
+  }),
 ]);
 
-if (env.PANDACI_BRANCH === "main" && devJobs.every((job) => !job.isFailure)) {
-  await Promise.all([
-    runFrontendStage("prod"),
-    runBackendStage("prod"),
+if (devRes.some((result) => result.status === "rejected")) {
+  throw new Error("One or more jobs failed");
+}
+
+if (env.PANDACI_BRANCH === "main") {
+  const prodRes = await Promise.allSettled([
+    deployProdCoreBackendTask(),
+    deployProdFrontendTask(),
   ]);
+
+  if (prodRes.some((result) => result.status === "rejected")) {
+    throw new Error("One or more jobs failed");
+  }
 }

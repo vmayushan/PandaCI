@@ -82,10 +82,10 @@ func NewRunnerServer(jwt jwt.JWTHandler, orchestratorClient pbConnect.Orchestrat
 	return &GRPCServer{server: mux}, nil
 }
 
-func NewJobServer(jwt jwt.JWTHandler, address string, workflowMeta *pb.WorkflowMeta) (*GRPCServer, error) {
+func NewJobServer(orchestratorClient pbConnect.OrchestratorServiceClient, jwt jwt.JWTHandler, address string, workflowMeta *pb.WorkflowMeta) (*GRPCServer, error) {
 	grpc := http.NewServeMux()
 
-	jobService, err := grpcJob.NewHandler(jwt, address)
+	jobService, err := grpcJob.NewHandler(orchestratorClient, workflowMeta, jwt, address)
 	if err != nil {
 		return nil, err
 	}

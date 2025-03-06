@@ -117,7 +117,7 @@ func (h *Handler) StartWorkflows(ctx context.Context, project *typesDB.Project, 
 				Runner:         "ubuntu-2x", // TODO - we need an unknown runner maybe
 			}
 
-			workflow.AppendAlert(types.WorkflowRunAlert{
+			typesDB.AppendAlert(&workflow, types.WorkflowRunAlert{
 				Title:   "Out of build minutes",
 				Message: "Please upgrade your plan for more minutes",
 				Type:    types.WorkflowRunAlertTypeError,
@@ -143,7 +143,7 @@ func (h *Handler) StartWorkflows(ctx context.Context, project *typesDB.Project, 
 				Runner:         "ubuntu-2x", // TODO - we need an unknown runner maybe
 			}
 
-			workflow.AppendAlert(types.WorkflowRunAlert{
+			typesDB.AppendAlert(&workflow, types.WorkflowRunAlert{
 				Title:   "Out of committers",
 				Message: "Please upgrade your plan for more committers",
 				Type:    types.WorkflowRunAlertTypeError,

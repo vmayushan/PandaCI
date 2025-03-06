@@ -79,17 +79,6 @@ func (q *WorkflowQueries) CreateWorkflowRun(ctx context.Context, workflowRun *ty
 	return nil
 }
 
-func (q *WorkflowQueries) UpdateWorkflowAlerts(ctx context.Context, workflowRun typesDB.WorkflowRun) error {
-
-	workflowRunQuery := `UPDATE workflow_run SET
-		alerts = $1
-	WHERE id = $2`
-
-	_, err := q.ExecContext(ctx, workflowRunQuery, workflowRun.Alerts, workflowRun.ID)
-
-	return err
-}
-
 func (q *WorkflowQueries) UpdateWorkflowRunStatus(ctx context.Context, workflowID string, status types.RunStatus) error {
 	workflowRunQuery := `UPDATE workflow_run SET
 		status = $1
@@ -142,7 +131,6 @@ func (q *WorkflowQueries) UpdateWorkflowRun(ctx context.Context, workflowRun *ty
 		status = :status,
 		conclusion = :conclusion,
 		finished_at = :finished_at,
-		alerts = :alerts,
 		build_minutes = :build_minutes
 	WHERE id = :id`
 
@@ -151,15 +139,73 @@ func (q *WorkflowQueries) UpdateWorkflowRun(ctx context.Context, workflowRun *ty
 	return err
 }
 
+func (q *WorkflowQueries) AppendAlertToWorkflowRun(ctx context.Context, workflowRunID string, alert types.WorkflowRunAlert) error {
+	tx, err := q.BeginTxx(ctx, nil)
+	if err != nil {
+		return err
+	}
+
+	completed := false
+	defer queries_utils.Rollback(&completed, tx)
+
+	getWorkflowQuery := `SELECT
+      id,
+      project_id,
+      name,
+      status,
+      conclusion,
+      created_at,
+      finished_at,
+      number,
+      git_sha,
+      git_branch,
+      runner,
+   	  committer_email,
+	  user_id,
+      alerts,
+      pr_number,
+      trigger,
+      git_title
+	FROM workflow_run
+	WHERE id = $1
+	FOR UPDATE`
+
+	var workflowRun typesDB.WorkflowRun
+	if err := tx.GetContext(ctx, &workflowRun, getWorkflowQuery, workflowRunID); err != nil {
+		return err
+	}
+
+	if err := typesDB.AppendAlert(&workflowRun, alert); err != nil {
+		return err
+	}
+
+	updateQuery := `UPDATE workflow_run SET
+		alerts = $1
+	WHERE id = $2`
+
+	if _, err := tx.ExecContext(ctx, updateQuery, workflowRun.Alerts, workflowRunID); err != nil {
+		return err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+
+	completed = true
+
+	return nil
+}
+
 func (q *WorkflowQueries) FailWorkflowRun(ctx context.Context, workflowRun *typesDB.WorkflowRun, alert types.WorkflowRunAlert) error {
+
+	// TOOD - we should do this in one transaction
+	if err := q.AppendAlertToWorkflowRun(ctx, workflowRun.ID, alert); err != nil {
+		return err
+	}
 
 	workflowRun.Status = types.RunStatusCompleted
 	workflowRun.Conclusion = types.Pointer(types.RunConclusionFailure)
-	if err := workflowRun.AppendAlert(alert); err != nil {
-		return err
-	}
 	workflowRun.FinishedAt = types.Pointer(utils.CurrentTime())
-
 	workflowRun.BuildMinutes = int(math.Round(workflowRun.FinishedAt.Sub(workflowRun.CreatedAt).Minutes()+0.5)) * types.GetBuildMinutesScale(types.CloudRunner(workflowRun.Runner))
 
 	return q.UpdateWorkflowRun(ctx, workflowRun)
