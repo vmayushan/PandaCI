@@ -114,7 +114,7 @@
 		<div class="border-outline-variant bg-surface h-min w-full overflow-auto rounded-lg border p-4">
 			<SubHeading>Alerts</SubHeading>
 			<ul class="mt-4 flex flex-col space-y-2">
-				{#each run.data?.alerts ?? [] as alert (alert.id)}
+				{#each run.data?.alerts ?? [] as alert (alert)}
 					<li>
 						<Alert title={alert.title} message={alert.message} type={alert.type} />
 					</li>
