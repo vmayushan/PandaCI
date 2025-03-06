@@ -3,7 +3,6 @@ package grpcWorkflow
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -117,17 +116,8 @@ func (h *Handler) StartTask(ctx context.Context, req *connect.Request[pb.Workflo
 		Id:           createdTask.Msg.Id,
 	}))
 	if err != nil {
-
-		msg := ""
-		if connectErr := new(connect.Error); errors.As(err, &connectErr) {
-			msg = connectErr.Message()
-			log.Error().Err(err).Str("msg", msg).Any("connectErr", connectErr).Msg("starting task connect error")
-		} else {
-			msg = err.Error()
-			log.Error().Err(err).Msg("starting task")
-		}
-
-		h.addWorkflowRunAlert(ctx, pb.WorkflowAlert_TYPE_ERROR, "Failed to start task", msg)
+		log.Error().Err(err).Msg("starting task")
+		h.addWorkflowRunAlert(context.Background(), pb.WorkflowAlert_TYPE_ERROR, "Failed to start task", err.Error())
 		return nil, err
 	}
 
