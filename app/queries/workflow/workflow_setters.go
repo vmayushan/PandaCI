@@ -79,17 +79,6 @@ func (q *WorkflowQueries) CreateWorkflowRun(ctx context.Context, workflowRun *ty
 	return nil
 }
 
-func (q *WorkflowQueries) UpdateWorkflowAlerts(ctx context.Context, workflowRun typesDB.WorkflowRun) error {
-
-	workflowRunQuery := `UPDATE workflow_run SET
-		alerts = $1
-	WHERE id = $2`
-
-	_, err := q.ExecContext(ctx, workflowRunQuery, workflowRun.Alerts, workflowRun.ID)
-
-	return err
-}
-
 func (q *WorkflowQueries) UpdateWorkflowRunStatus(ctx context.Context, workflowID string, status types.RunStatus) error {
 	workflowRunQuery := `UPDATE workflow_run SET
 		status = $1
@@ -186,7 +175,7 @@ func (q *WorkflowQueries) AppendAlertToWorkflowRun(ctx context.Context, workflow
 		return err
 	}
 
-	if err := workflowRun.AppendAlert(alert); err != nil {
+	if err := typesDB.AppendAlert(&workflowRun, alert); err != nil {
 		return err
 	}
 
