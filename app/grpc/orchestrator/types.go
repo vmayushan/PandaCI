@@ -14,7 +14,6 @@ import (
 	"github.com/pandaci-com/pandaci/pkg/utils/env"
 	"github.com/pandaci-com/pandaci/platform/storage"
 	"github.com/pandaci-com/pandaci/types"
-	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/rs/zerolog/log"
 
 	pbConnect "github.com/pandaci-com/pandaci/proto/go/v1/v1connect"
@@ -34,13 +33,9 @@ type (
 	}
 )
 
-func (h *Handler) addWorkflowRunAlert(ctx context.Context, workflowRun *typesDB.WorkflowRun, alert types.WorkflowRunAlert) {
-	if err := workflowRun.AppendAlert(alert); err != nil {
-		log.Error().Err(err).Msg("setting alerts")
-	}
-
-	if err := h.queries.UpdateWorkflowRun(ctx, workflowRun); err != nil {
-		log.Error().Err(err).Msg("updating workflow run")
+func (h *Handler) addWorkflowRunAlert(ctx context.Context, workflowRunID string, alert types.WorkflowRunAlert) {
+	if err := h.queries.AppendAlertToWorkflowRun(ctx, workflowRunID, alert); err != nil {
+		log.Error().Err(err).Msg("appending alert to workflow run")
 	}
 }
 
