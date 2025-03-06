@@ -29,9 +29,9 @@ func NewSanitiseErrorsInerceptor() connect.UnaryInterceptorFunc {
 						connect.CodeInternal,
 						errors.New("internal server error"),
 					)
-				} else {
-					log.Error().Err(err).Msg("error occured during rpc call")
 				}
+
+				log.Error().Err(err).Msg("error occured during rpc call")
 			}
 
 			return res, err
