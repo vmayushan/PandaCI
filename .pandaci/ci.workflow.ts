@@ -10,6 +10,7 @@ import {
   deployProdFrontendTask,
   testFrontendTask,
 } from "./ci/frontend.ts";
+import { env } from "./utils.ts";
 
 export const config: Config = {
   name: "CI",
@@ -24,7 +25,7 @@ export const config: Config = {
   },
 };
 
-await Promise.all([
+const devRes = await Promise.allSettled([
   job("Backend dev", async () => {
     await testGoTask();
     await deployDevCoreBackendTask();
@@ -35,7 +36,17 @@ await Promise.all([
   }),
 ]);
 
-await Promise.all([
-  deployProdCoreBackendTask(),
-  deployProdFrontendTask(),
-]);
+if (devRes.some((result) => result.status === "rejected")) {
+  throw new Error("One or more jobs failed");
+}
+
+if (env.PANDACI_BRANCH === "main") {
+  const prodRes = await Promise.allSettled([
+    deployProdCoreBackendTask(),
+    deployProdFrontendTask(),
+  ]);
+
+  if (prodRes.some((result) => result.status === "rejected")) {
+    throw new Error("One or more jobs failed");
+  }
+}
