@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"time"
 
+	sqlxTypes "github.com/jmoiron/sqlx/types"
 	utilsValidator "github.com/pandaci-com/pandaci/pkg/utils/validator"
 	"github.com/pandaci-com/pandaci/types"
-	sqlxTypes "github.com/jmoiron/sqlx/types"
 	"github.com/rs/zerolog/log"
 )
 
@@ -57,10 +57,10 @@ func (wr *WorkflowRun) AppendAlert(alert types.WorkflowRunAlert) error {
 
 	alerts = append(alerts, alert)
 
-	return wr.SetAlerts(alerts)
+	return wr.setAlerts(alerts)
 }
 
-func (wr *WorkflowRun) SetAlerts(alerts []types.WorkflowRunAlert) error {
+func (wr *WorkflowRun) setAlerts(alerts []types.WorkflowRunAlert) error {
 
 	validator := utilsValidator.NewValidator()
 
