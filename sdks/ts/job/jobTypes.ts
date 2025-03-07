@@ -1,4 +1,4 @@
-import type { Conclusion } from "@pandaci/proto";
+import type { Conclusion } from "../types.ts";
 import type { JobPromise } from "./jobPromise.ts";
 
 export type JobFn = (() => void) | (() => Promise<void>);

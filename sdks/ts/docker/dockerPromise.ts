@@ -1,5 +1,5 @@
 import {
-  Conclusion,
+  Conclusion as ProtoConclusion,
   StartTaskData_Docker_DockerVolume_Type,
   type TaskMeta,
   WorkflowAlert_Type,
@@ -16,6 +16,7 @@ import { jobContext, taskContext } from "../context.ts";
 import { extendedEnv } from "../env.ts";
 import { JobPromise } from "../job/jobPromise.ts";
 import type { Volume } from "../volume.ts";
+import { type Conclusion, protoConclusionToConclusion } from "../types.ts";
 
 export class DockerTaskError extends Error {
   conclusion: Conclusion;
@@ -160,7 +161,7 @@ export class DockerTaskPromise extends Promise<DockerTaskResult> {
     if (this.skip) {
       logger.info(`Task ${this.name} skipped`);
       return this.resolve({
-        conclusion: Conclusion.SKIPPED,
+        conclusion: protoConclusionToConclusion(ProtoConclusion.SKIPPED),
         isFailure: false,
         id: startTaskResult.taskMeta!.id,
         taskName: this.name,
@@ -215,14 +216,14 @@ export class DockerTaskPromise extends Promise<DockerTaskResult> {
             const res = await Promise.allSettled(promises);
             if (res.some((r) => r.status === "rejected")) {
               logger.error(`Task ${this.name} failed`);
-              return Conclusion.FAILURE;
+              return ProtoConclusion.FAILURE;
             }
           } catch (err) {
             // TODO - we should check the error and throw if it's not due to a non-zero exit code
             logger.error(`Task ${this.name} failed`, err);
-            return Conclusion.FAILURE;
+            return ProtoConclusion.FAILURE;
           }
-          return Conclusion.SUCCESS;
+          return ProtoConclusion.SUCCESS;
         },
       );
 
@@ -239,15 +240,15 @@ export class DockerTaskPromise extends Promise<DockerTaskResult> {
     logger.info(`Job ${this.name} completed`);
 
     const result: DockerTaskResult = {
-      conclusion,
-      isFailure: conclusion === Conclusion.FAILURE,
+      conclusion: protoConclusionToConclusion(conclusion),
+      isFailure: conclusion === ProtoConclusion.FAILURE,
       id: taskMeta.id,
       taskName: this.name,
       isSkipped: false,
-      isSuccess: conclusion === Conclusion.SUCCESS,
+      isSuccess: conclusion === ProtoConclusion.SUCCESS,
     };
 
-    if (this.throws && conclusion === Conclusion.FAILURE) {
+    if (this.throws && conclusion === ProtoConclusion.FAILURE) {
       this.reject(new DockerTaskError(result));
     }
 
