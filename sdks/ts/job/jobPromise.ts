@@ -1,4 +1,4 @@
-import { Conclusion, WorkflowAlert_Type } from "@pandaci/proto";
+import { WorkflowAlert_Type, Conclusion as ProtoConclusion } from "@pandaci/proto";
 import type { JobOptions, JobResult } from "./jobTypes.ts";
 import { setImmediate } from "node:timers";
 import { jobContext } from "../context.ts";
@@ -6,6 +6,7 @@ import { extendedEnv } from "../env.ts";
 import { logger } from "../logger.ts";
 import type { JobFn } from "./mod.ts";
 import type { getWorkflowClient } from "../api.ts";
+import { type Conclusion, protoConclusionToConclusion } from "../types.ts";
 
 export class JobError extends Error {
   conclusion: Conclusion;
@@ -105,7 +106,7 @@ export class JobPromise extends Promise<JobResult> {
     if (this.skip) {
       logger.info(`Job ${this.name} skipped`);
       return this.resolve({
-        conclusion: Conclusion.SKIPPED,
+        conclusion: "skipped",
         id: createJobResult.jobMeta!.id,
         name: createJobResult.jobMeta!.name,
         isFailure: false,
@@ -131,9 +132,9 @@ export class JobPromise extends Promise<JobResult> {
             await Promise.allSettled(taskPromises);
           } catch (err) {
             logger.error(`Job ${this.name} failed`, err);
-            return Conclusion.FAILURE;
+            return ProtoConclusion.FAILURE;
           }
-          return Conclusion.UNSPECIFIED;
+          return ProtoConclusion.UNSPECIFIED;
         },
       );
 
@@ -147,13 +148,13 @@ export class JobPromise extends Promise<JobResult> {
     logger.info(`Job ${this.name} completed`);
 
     const res: JobResult = {
-      conclusion: jobRes.conclusion,
+      conclusion: protoConclusionToConclusion(jobRes.conclusion),
       id: createJobResult.jobMeta!.id,
       name: this.name,
       runner: createJobResult.jobMeta!.runner,
-      isFailure: jobRes.conclusion === Conclusion.FAILURE,
-      isSkipped: jobRes.conclusion === Conclusion.SKIPPED,
-      isSuccess: jobRes.conclusion === Conclusion.FAILURE,
+      isFailure: jobRes.conclusion === ProtoConclusion.FAILURE,
+      isSkipped: jobRes.conclusion === ProtoConclusion.SKIPPED,
+      isSuccess: jobRes.conclusion === ProtoConclusion.FAILURE,
     };
 
     if (this.throws && res.isFailure) {

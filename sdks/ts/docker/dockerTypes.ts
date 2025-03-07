@@ -1,4 +1,4 @@
-import type { Conclusion } from "@pandaci/proto";
+import type { Conclusion } from "../types.ts";
 import type { Volume } from "../volume.ts";
 
 export interface DockerTaskOptions {
