@@ -154,7 +154,7 @@ export class JobPromise extends Promise<JobResult> {
       runner: createJobResult.jobMeta!.runner,
       isFailure: jobRes.conclusion === ProtoConclusion.FAILURE,
       isSkipped: jobRes.conclusion === ProtoConclusion.SKIPPED,
-      isSuccess: jobRes.conclusion === ProtoConclusion.FAILURE,
+      isSuccess: jobRes.conclusion === ProtoConclusion.SUCCESS,
     };
 
     if (this.throws && res.isFailure) {
