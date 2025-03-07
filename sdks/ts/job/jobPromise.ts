@@ -8,6 +8,22 @@ import type { JobFn } from "./mod.ts";
 import type { getWorkflowClient } from "../api.ts";
 import { type Conclusion, protoConclusionToConclusion } from "../types.ts";
 
+/**
+ * Represents an error that occurred during job execution.
+ * Extends the standard Error class with additional job-related properties.
+ * 
+ * @extends Error
+ * 
+ * @property {Conclusion} conclusion - The conclusion status of the job
+ * @property {boolean} isFailure - Indicates if the job failed
+ * @property {boolean} isSkipped - Indicates if the job was skipped
+ * @property {boolean} isSuccess - Indicates if the job completed successfully
+ * @property {string} id - The unique identifier of the job
+ * @property {string} jobName - The name of the job
+ * @property {string} [runner] - The runner that executed the job, if available
+ * 
+ * @param {JobResult} result - The result object containing job execution details
+ */
 export class JobError extends Error {
   conclusion: Conclusion;
   isFailure: boolean;
@@ -33,6 +49,17 @@ interface JobFunctionContext {
   getWorkflowClient: () => ReturnType<typeof getWorkflowClient>;
 }
 
+
+/**
+ * A Promise-based representation of a job that can be executed in a workflow.
+ * 
+ * JobPromise extends the native Promise class and provides additional functionality
+ * for tracking and controlling job execution within a workflow context. It handles
+ * job creation, execution, and completion while maintaining the standard Promise interface.
+ * 
+ * @extends Promise<JobResult>
+ * 
+ */
 export class JobPromise extends Promise<JobResult> {
   private reject: (reason?: JobResult) => void;
   private resolve: (value: JobResult) => void;
