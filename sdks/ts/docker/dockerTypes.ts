@@ -1,6 +1,10 @@
 import type { Conclusion } from "../types.ts";
 import type { Volume } from "../volume.ts";
 
+
+/**
+ * Options for a Docker task
+ */
 export interface DockerTaskOptions {
   /**
    * Override the derived name from the image
@@ -38,6 +42,9 @@ export interface DockerTaskResult {
   taskName: string;
 }
 
+/**
+ * The function our Docker task will run 
+ */
 export type DockerTaskFn = (() => void) | (() => Promise<void>);
 
 type DockerTaskBase =
@@ -48,6 +55,9 @@ type DockerTaskBase =
   ) => Promise<DockerTaskResult>)
   & ((image: string, fn: DockerTaskFn) => Promise<DockerTaskResult>);
 
+/**
+ * The methods available on a Docker task
+ */
 export type DockerMethod = "if" | "nothrow" | "skip";
 
 type OmmitedDockerTask<T extends DockerMethod, K extends DockerMethod> =
@@ -57,6 +67,9 @@ type OmmitedDockerTask<T extends DockerMethod, K extends DockerMethod> =
   >
   & DockerTaskBase;
 
+/**
+ * The methods available on a Docker task
+ */
 export interface DockerMethods<T extends DockerMethod = never>
   extends Record<DockerMethod, unknown> {
   if: (condition: boolean) => OmmitedDockerTask<T, "if">;
@@ -64,4 +77,7 @@ export interface DockerMethods<T extends DockerMethod = never>
   skip: OmmitedDockerTask<T, "skip">;
 }
 
+/**
+ * Create a new Docker task 
+ */
 export type DockerTask = DockerTaskBase & DockerMethods;
