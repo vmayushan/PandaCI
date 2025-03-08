@@ -1,5 +1,5 @@
 // Note: This is normally "jsr:@pandaci/workflow", but we're just using the local source here.
-import { $, docker  } from "@pandaci/workflow";
+import { $, docker } from "@pandaci/workflow";
 import { env, initPnpm } from "../utils.ts";
 
 export function testFrontendTask() {
