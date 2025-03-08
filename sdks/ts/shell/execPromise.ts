@@ -23,7 +23,7 @@ function mergeUint8Array(
 
 
 /**
- * Represents the result of an execution of a command.
+ * Configuration options for command execution.
  */
 export interface ExecOptions {
   /**
