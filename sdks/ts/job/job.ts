@@ -71,7 +71,7 @@ const getJob = (
  * 
  * @example ```
  * // With options
- * job.nothrow("my-job", { runner: 'ubuntu-2x' } () => {
+ * job.nothrow("my-job", { runner: 'ubuntu-2x' }, () => {
  *    // your job code here
  * });
  * ```
