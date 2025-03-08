@@ -29,6 +29,14 @@ export interface ShellContext {
 
 export const shellContext = new AsyncLocalStorage<ShellContext>();
 
+/**
+ * Execute a command. This must be used within a task.
+ * 
+ * @example
+ * ```typescript
+ * await $`echo "Hello, world!"`;
+ * ```
+ */
 export const $: Exec = ((
   firstArg: TemplateStringsArray | ExecOptions,
   ...args: unknown[]

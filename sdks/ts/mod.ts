@@ -1,7 +1,7 @@
 export * from "./docker/mod.ts";
 export * from "./job/mod.ts";
 export { type Env, env } from "./env.ts";
-export { $ } from "./shell/mod.ts";
+export * from "./shell/mod.ts";
 export { type Volume, volume } from "./volume.ts";
 export type { ExecOptions, ExecResult } from "./shell/mod.ts";
 export type {Conclusion} from "./types.ts";
