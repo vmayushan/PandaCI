@@ -157,7 +157,7 @@ func (h *Handler) handlePullRequestEvent(ctx context.Context, payload github.Pul
 
 		if _, _, err := installClient.Client.Repositories.CreateStatus(ctx, payload.Repository.Owner.Login, payload.Repository.Name, payload.PullRequest.Head.Sha, &ghAPI.RepoStatus{
 			State:       types.Pointer("failure"),
-			Description: types.Pointer("PandaCI does not currently support pull requests from forks"),
+			Description: types.Pointer("Pull requests from forks are not currently supported"),
 			Context:     types.Pointer("PandaCI"),
 			TargetURL:   types.Pointer("https://pandaci.com/docs/platform/workflows/env#git-fork-protection"),
 		}); err != nil {
