@@ -1,12 +1,20 @@
 export * from "./docker/mod.ts";
 export * from "./job/mod.ts";
 export { type Env, env } from "./env.ts";
-export { $ } from "./shell/mod.ts";
+export * from "./shell/mod.ts";
 export { type Volume, volume } from "./volume.ts";
 export type { ExecOptions, ExecResult } from "./shell/mod.ts";
+export type {Conclusion} from "./types.ts";
 
+/**
+* Pull request event type
+*/
 export type PullRequestEvent = "opened" | "closed" | "reopened" | "synchronize";
 
+/**
+* Workflow config
+* @example export const config: Config = { name: "My Job", on: { push: { branches: ["main"] } } }
+*/
 export interface Config {
   /**
    * Job name, defaults to the filename and path.

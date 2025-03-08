@@ -21,9 +21,22 @@ function mergeUint8Array(
   return result;
 }
 
+
+/**
+ * Configuration options for command execution.
+ */
 export interface ExecOptions {
+  /**
+   * If set to true, the command will not throw an error if the exit code is not 0.
+   */
   nothrow?: boolean;
+  /**
+   * The current working directory of the command.
+   */
   cwd?: string;
+  /**
+   * Environment variables to be set for the command.
+   */
   env?: Record<string, string | number>;
 }
 
@@ -34,6 +47,10 @@ export interface ExecPromiseContext {
   client: ReturnType<typeof getWorkflowClient>;
 }
 
+/**
+ * A promise that represents the execution of a command.
+ * @extends Promise<ExecResult>
+ */
 export class ExecPromise extends Promise<ExecResult> {
   private _reject: (reason?: ExecResult) => void;
   private _resolve: (value: ExecResult) => void;

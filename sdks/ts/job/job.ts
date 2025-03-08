@@ -53,4 +53,28 @@ const getJob = (
   ) as Job & JobMethods;
 };
 
+/**
+ * Create a new job
+ * 
+ * @returns {JobPromise} JobPromise (extends Promise<JobResult>) 
+ * 
+ * @method if - Skip this job if the condition is false
+ * @method nothrow - Do not throw an error if this job fails
+ * @method skip - Skip this job
+ * 
+ * 
+ * @example ```
+ * job("my-job", () => {
+ *    // your job code here
+ * });
+ * ```
+ * 
+ * @example ```
+ * // With options
+ * job.nothrow("my-job", { runner: 'ubuntu-2x' }, () => {
+ *    // your job code here
+ * });
+ * ```
+ *  
+ */
 export const job: Job = getJob([]);

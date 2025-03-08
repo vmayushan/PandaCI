@@ -18,6 +18,18 @@ import { JobPromise } from "../job/jobPromise.ts";
 import type { Volume } from "../volume.ts";
 import { type Conclusion, protoConclusionToConclusion } from "../types.ts";
 
+/**
+ * Error class representing a failed Docker task.
+ * 
+ * @extends Error
+ * 
+ * @property {Conclusion} conclusion - The conclusion status of the Docker task
+ * @property {boolean} isFailure - Indicates if the task resulted in a failure
+ * @property {string} id - Unique identifier for the task
+ * @property {string} taskName - The name of the Docker task
+ * @property {boolean} isSuccess - Indicates if the task was successful
+ * @property {DockerTaskResult} data - The complete task result data
+ */
 export class DockerTaskError extends Error {
   conclusion: Conclusion;
   isFailure: boolean;
@@ -39,6 +51,15 @@ interface DockerTaskFunctionContext {
   getWorkflowClient: () => ReturnType<typeof getWorkflowClient>;
 }
 
+
+/**
+ * Represents a running docker task within a workflow.
+ * 
+ * DockerTaskPromise extends the native Promise class and provides additional functionality
+ * 
+ * @extends Promise<DockerTaskResult>
+ * 
+ */
 export class DockerTaskPromise extends Promise<DockerTaskResult> {
   private reject: (reason?: DockerTaskError) => void;
   private resolve: (value: DockerTaskResult) => void;

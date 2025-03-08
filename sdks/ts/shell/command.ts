@@ -11,7 +11,6 @@ const substitute = (arg: Arg) =>
     ? new TextDecoder().decode(arg.stdout)
     : `${arg}`;
 
-export type EscapeFn = (input: string) => string;
 export const buildCmd = (
   pieces: TemplateStringsArray,
   args: unknown[],
