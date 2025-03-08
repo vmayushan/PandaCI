@@ -16,9 +16,9 @@ type InternalEnvVariables = {
 };
 
 /**
-* PandaCI environment variables type. Add a generic to have typesafe envs
-* @example const safeEnv = env as Env<{test: string}>
-*/
+ * PandaCI environment variables type. Add a generic to have typesafe envs
+ * @example const safeEnv = env as Env<{test: string}>
+ */
 export type Env<
   T extends Record<string | number | symbol, string> = Record<
     string | number | symbol,
@@ -39,8 +39,8 @@ const combinedEnvVariables: ExtendedEnv = {
 } as ExtendedEnv;
 
 /**
-* PandaCI env variables. These are a combination of predefined variables and
-* ones you have declared in the secrets tab in the dashboard
-*/
+ * PandaCI env variables. These are a combination of predefined variables and
+ * ones you have declared in the secrets tab in the dashboard
+ */
 export const env: Env = combinedEnvVariables;
 export const extendedEnv = combinedEnvVariables;

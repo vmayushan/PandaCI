@@ -20,9 +20,9 @@ import { type Conclusion, protoConclusionToConclusion } from "../types.ts";
 
 /**
  * Error class representing a failed Docker task.
- * 
+ *
  * @extends Error
- * 
+ *
  * @property {Conclusion} conclusion - The conclusion status of the Docker task
  * @property {boolean} isFailure - Indicates if the task resulted in a failure
  * @property {string} id - Unique identifier for the task
@@ -51,14 +51,12 @@ interface DockerTaskFunctionContext {
   getWorkflowClient: () => ReturnType<typeof getWorkflowClient>;
 }
 
-
 /**
  * Represents a running docker task within a workflow.
- * 
+ *
  * DockerTaskPromise extends the native Promise class and provides additional functionality
- * 
+ *
  * @extends Promise<DockerTaskResult>
- * 
  */
 export class DockerTaskPromise extends Promise<DockerTaskResult> {
   private reject: (reason?: DockerTaskError) => void;

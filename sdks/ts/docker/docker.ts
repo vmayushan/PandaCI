@@ -59,16 +59,16 @@ const getDocker = (
 
 /**
  * Create a new docker task
- * 
+ *
  * You can nest multiple tasks inside a job or run them without one. If using without a job,
  * a job will be created automatically using the default runner (ubuntu-4x).
- * 
+ *
  * @param {string} image - The docker image to use
  * @param {DockerTaskFn} fn - The function to run inside the docker container
  * @param {DockerTaskOptions} options - The options for the task
- * 
- * @returns {DockerTask} DockerTask (extends Promise<DockerTaskResult>) 
- * 
+ *
+ * @returns {DockerTask} DockerTask (extends Promise<DockerTaskResult>)
+ *
  * @method if - Skip this task if the condition is false
  * @method nothrow - Do not throw an error if the task fails
  * @method skip - Skip this task
@@ -76,8 +76,8 @@ const getDocker = (
  * @example
  * ```ts
  * docker("node:22", () => {
- *   // Your steps here 
- * }); 
+ *   // Your steps here
+ * });
  * ```
  */
 export const docker: DockerTask = getDocker([]);

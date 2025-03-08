@@ -43,7 +43,7 @@ export class ExecResult {
   /**
    * Returns the text of the stdall, which is the combination of stdout and stderr.
    * @param encoding The encoding to use. Default is "utf-8".
-   * @returns The text of the stdall. 
+   * @returns The text of the stdall.
    */
   text(encoding: string = "utf-8"): string {
     return new TextDecoder(encoding).decode(this._stdall);
@@ -52,15 +52,15 @@ export class ExecResult {
   /**
    * Returns the text of the stdall, which is the combination of stdout and stderr.
    * If you need to change the encoding, use the `text` method.
-   * @returns The text of the stdall. 
+   * @returns The text of the stdall.
    */
   toString(): string {
     return this.text();
   }
 
   /**
-   * Returns the JSON object of stdall, which is the combination of stdout and stderr. 
-   * @returns The JSON object of the stdall. 
+   * Returns the JSON object of stdall, which is the combination of stdout and stderr.
+   * @returns The JSON object of the stdall.
    */
   json<T = unknown>(): T {
     return JSON.parse(this.text());
