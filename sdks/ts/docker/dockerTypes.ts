@@ -1,7 +1,6 @@
 import type { Conclusion } from "../types.ts";
 import type { Volume } from "../volume.ts";
 
-
 /**
  * Options for a Docker task
  */
@@ -43,7 +42,7 @@ export interface DockerTaskResult {
 }
 
 /**
- * The function our Docker task will run 
+ * The function our Docker task will run
  */
 export type DockerTaskFn = (() => void) | (() => Promise<void>);
 
@@ -78,6 +77,6 @@ export interface DockerMethods<T extends DockerMethod = never>
 }
 
 /**
- * Create a new Docker task 
+ * Create a new Docker task
  */
 export type DockerTask = DockerTaskBase & DockerMethods;

@@ -10,6 +10,9 @@ export type Runner =
   | "ubuntu-8x"
   | "ubuntu-16x";
 
+/**
+ * Options for a job
+ */
 export interface JobOptions {
   /**
    * The Runner to use for this job.
@@ -29,6 +32,10 @@ export interface JobOptions {
   throws?: boolean;
 }
 
+/**
+ * The result of a job. This is what is returned when a job is finished executing
+ * 
+ */
 export interface JobResult {
   conclusion: Conclusion;
   isFailure: boolean;
@@ -56,6 +63,9 @@ type OmmitedJob<T extends JobMethod, K extends JobMethod> =
   >
   & JobBase;
 
+/**
+ * The methods available on a job
+*/ 
 export interface JobMethods<T extends JobMethod = never>
   extends Record<JobMethod, unknown> {
   if: (condition: boolean) => OmmitedJob<T, "if">;
@@ -63,4 +73,17 @@ export interface JobMethods<T extends JobMethod = never>
   skip: OmmitedJob<T, "skip">;
 }
 
+/**
+ * Create a new job
+ * @returns {JobPromise} JobPromise (extends Promise<JobResult>)
+ * @method if - Skip this job if the condition is false
+ * @method nothrow - Do not throw an error if this job fails
+ * @method skip - Skip this job
+ * 
+ * @example
+ * ```
+ * job("my-job", () => {
+ * // ...
+ * });
+ */
 export type Job = JobBase & JobMethods;

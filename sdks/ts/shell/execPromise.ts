@@ -21,7 +21,6 @@ function mergeUint8Array(
   return result;
 }
 
-
 /**
  * Configuration options for command execution.
  */
