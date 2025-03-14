@@ -39,7 +39,7 @@ export function deployDevCoreBackendTask() {
         CLOUDFLARE_ACCOUNT_ID: env.CLOUDFLARE_ACCOUNT_ID,
       };
 
-      await $`npx wrangler kv:key put ${env.PANDACI_BRANCH} ${flyEnv.FLY_APP} --namespace-id=${env.CLOUDFLARE_API_KV_ID}`
+      await $`npx wrangler kv:key put ${env.PANDACI_BRANCH} ${flyEnv.FLY_APP} --remote --namespace-id=${env.CLOUDFLARE_API_KV_ID}`
         .env(cloudflareEnv);
     }
 
