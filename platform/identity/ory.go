@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	client "github.com/ory/client-go"
 	"github.com/pandaci-com/pandaci/pkg/utils/env"
 	"github.com/pandaci-com/pandaci/types"
 	typesDB "github.com/pandaci-com/pandaci/types/database"
-	client "github.com/ory/client-go"
 	"github.com/rs/zerolog/log"
 )
 
@@ -207,4 +207,23 @@ func GetUserByEmail(ctx context.Context, email string) (*types.User, error) {
 	}
 
 	return user, nil
+}
+
+func UpdateUserTraits(ctx context.Context, id string, traits any) error {
+	ory, err := getOryAdminClient()
+	if err != nil {
+		return err
+	}
+
+	authed := context.WithValue(ctx, client.ContextAccessToken, env.GetOryAdminToken())
+
+	_, _, err = ory.IdentityAPI.PatchIdentity(authed, id).JsonPatch([]client.JsonPatch{
+		{
+			Path:  "traits",
+			Op:    "replace",
+			Value: traits,
+		},
+	}).Execute()
+
+	return err
 }
