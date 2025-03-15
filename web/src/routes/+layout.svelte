@@ -8,6 +8,7 @@
 	import ThemeProvider from '$lib/components/themeProvider.svelte';
 	import posthog from 'posthog-js';
 	import { PUBLIC_STAGE } from '$env/static/public';
+	import HideUntilAuthed from './hideUntilAuthed.svelte';
 
 	const posthogToken =
 		PUBLIC_STAGE === 'prod'
@@ -55,6 +56,7 @@
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>
+	<HideUntilAuthed />
 	<ThemeProvider>
 		{@render children()}
 	</ThemeProvider>
