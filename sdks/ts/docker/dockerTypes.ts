@@ -32,6 +32,9 @@ export interface DockerTaskOptions {
   throws?: boolean;
 }
 
+/**
+ * The result of a Docker task. This is what is returned when a Docker task is finished executing
+ */
 export interface DockerTaskResult {
   conclusion: Conclusion;
   isFailure: boolean;
