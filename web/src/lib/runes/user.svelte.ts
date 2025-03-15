@@ -1,6 +1,7 @@
 import { queries } from '$lib/queries';
 import { createQuery } from '@tanstack/svelte-query';
 import { goto } from '$app/navigation';
+import { page } from '$app/state';
 
 export interface User {
 	id: string;
@@ -19,6 +20,7 @@ export function getUser({
 		select: ({ data }) => ({ id: data.identity?.id, ...data.identity?.traits }) as User,
 		retry(failureCount, error: any) {
 			if (error?.response?.status === 401) {
+				if (page.route.id?.startsWith('/(auth)')) return false;
 				if (globalThis.location.pathname === '/') goto('/login');
 				else goto(`/login?return_to=${encodeURIComponent(globalThis.location.toString())}`);
 				return false;
