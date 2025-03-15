@@ -23,15 +23,15 @@ await docker("node:22", { name: "Cleanup fly" }, async () => {
     FLY_APP: `pandaci-core-prev-${env.PANDACI_BRANCH}-${env.PANDACI_PR_NUMBER}`,
   };
 
-  $`flyctl apps delete ${flyEnv.FLY_APP} --yes`.env(flyEnv);
+  await $`flyctl apps delete ${flyEnv.FLY_APP} --yes`.env(flyEnv);
 
-  $`npx wrangler kv key delete --remote --namespace-id=${env.CLOUDFLARE_KV_NAMESPACE_ID} ${env.PANDACI_BRANCH}`
+  await $`npx wrangler kv key delete --remote --namespace-id=${env.CLOUDFLARE_KV_NAMESPACE_ID} ${env.PANDACI_BRANCH}`
     .env({
       CLOUDFLARE_API_TOKEN: env.CLOUDFLARE_API_TOKEN,
       CLOUDFLARE_ACCOUNT_ID: env.CLOUDFLARE_ACCOUNT_ID,
     });
 
-  $`npx wrangler kv key delete --remote --namespace-id=${env.CLOUDFLARE_API_KV_ID} ${env.PANDACI_BRANCH}`
+  await $`npx wrangler kv key delete --remote --namespace-id=${env.CLOUDFLARE_API_KV_ID} ${env.PANDACI_BRANCH}`
     .env({
       CLOUDFLARE_API_TOKEN: env.CLOUDFLARE_API_TOKEN,
       CLOUDFLARE_ACCOUNT_ID: env.CLOUDFLARE_ACCOUNT_ID,
