@@ -14,6 +14,7 @@
 	import { queries } from '$lib/queries';
 	import Button from '$lib/components/button.svelte';
 	import { ArrowLeft } from 'phosphor-svelte';
+	import Skeleton from '$lib/components/skeleton.svelte';
 
 	const flowId = page.url.searchParams.get('flow');
 	const returnTo = decodeURIComponent(page.url.searchParams.get('return_to') || '') || undefined;
@@ -37,10 +38,24 @@
 	const queryClient = useQueryClient();
 </script>
 
-{#await session then sessionData}
-	{#if sessionData}
-		{@const data = sessionData.data}
-		<div class="flex flex-1 grow flex-col justify-center px-2">
+<div class="flex flex-1 grow flex-col justify-center px-2">
+	{#await session}
+		<Card class="mx-auto my-14 flex w-full max-w-md flex-col">
+			<div>
+				<Heading size="sm" level={2}>Login</Heading>
+				<Skeleton class="mt-2 h-6 w-full" />
+			</div>
+			<Skeleton class="mt-12 h-9 w-full" />
+
+			<Text class="mt-8">
+				By signing in, you agree to our <TextLink href="https://pandaci.com/legal" target="_blank">
+					Terms and Conditions
+				</TextLink>
+			</Text>
+		</Card>
+	{:then sessionData}
+		{#if sessionData}
+			{@const data = sessionData.data}
 			{#if !sessionData.data.refresh}
 				<Button
 					href="https://pandaci.com"
@@ -102,6 +117,6 @@
 					</Text>
 				</form>
 			</Card>
-		</div>
-	{/if}
-{/await}
+		{/if}
+	{/await}
+</div>

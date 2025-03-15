@@ -8,6 +8,7 @@
 	import PaddleContext from '$lib/components/paddle/paddleContext.svelte';
 	import posthog from 'posthog-js';
 	import { getUser } from '$lib/runes/user.svelte';
+	import HideUntilAuthed from '../hideUntilAuthed.svelte';
 
 	const { children }: { children: Snippet } = $props();
 
@@ -23,6 +24,7 @@
 	});
 </script>
 
+<HideUntilAuthed />
 <PaddleContext>
 	{#if org.isError && (org.error as APIError).status === 404}
 		<NotFound itemName="Org" />

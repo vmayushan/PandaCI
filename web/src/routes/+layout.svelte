@@ -5,7 +5,6 @@
 	import { browser } from '$app/environment';
 	import { onNavigate } from '$app/navigation';
 	import type { APIError } from '$lib/api';
-	import HideUntilAuthed from './hideUntilAuthed.svelte';
 	import ThemeProvider from '$lib/components/themeProvider.svelte';
 	import posthog from 'posthog-js';
 	import { PUBLIC_STAGE } from '$env/static/public';
@@ -57,7 +56,6 @@
 
 <QueryClientProvider client={queryClient}>
 	<ThemeProvider>
-		<HideUntilAuthed />
 		{@render children()}
 	</ThemeProvider>
 </QueryClientProvider>

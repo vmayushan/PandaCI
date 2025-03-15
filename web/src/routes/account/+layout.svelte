@@ -8,6 +8,7 @@
 	import clsx from 'clsx';
 	import { getUser } from '$lib/runes/user.svelte';
 	import posthog from 'posthog-js';
+	import HideUntilAuthed from '../hideUntilAuthed.svelte';
 
 	const { children } = $props();
 
@@ -24,6 +25,7 @@
 	});
 </script>
 
+<HideUntilAuthed />
 <SidebarLayout>
 	{#snippet sidebarBody(collapsed)}
 		<SidebarHeading class="pb-0.5">Account</SidebarHeading>
