@@ -1,8 +1,16 @@
 import type { Conclusion } from "../types.ts";
 import type { JobPromise } from "./jobPromise.ts";
 
+/**
+* A function that can be executed as a job
+* It can be a synchronous function that returns void
+* Or an asynchronous function that returns Promise<void>
+*/
 export type JobFn = (() => void) | (() => Promise<void>);
 
+/**
+ * The runner to use for a job
+ */
 export type Runner =
   | "ubuntu-1x"
   | "ubuntu-2x"
@@ -34,7 +42,7 @@ export interface JobOptions {
 
 /**
  * The result of a job. This is what is returned when a job is finished executing
- * 
+ *
  */
 export interface JobResult {
   conclusion: Conclusion;
@@ -65,7 +73,7 @@ type OmmitedJob<T extends JobMethod, K extends JobMethod> =
 
 /**
  * The methods available on a job
-*/ 
+*/
 export interface JobMethods<T extends JobMethod = never>
   extends Record<JobMethod, unknown> {
   if: (condition: boolean) => OmmitedJob<T, "if">;
@@ -79,7 +87,7 @@ export interface JobMethods<T extends JobMethod = never>
  * @method if - Skip this job if the condition is false
  * @method nothrow - Do not throw an error if this job fails
  * @method skip - Skip this job
- * 
+ *
  * @example
  * ```
  * job("my-job", () => {
