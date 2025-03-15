@@ -5,9 +5,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/pandaci-com/pandaci/pkg/utils/env"
-	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/labstack/echo/v4"
+	"github.com/pandaci-com/pandaci/pkg/gravatar"
+	"github.com/pandaci-com/pandaci/pkg/utils/env"
+	"github.com/pandaci-com/pandaci/platform/identity"
+	typesDB "github.com/pandaci-com/pandaci/types/database"
 	"github.com/rs/zerolog/log"
 )
 
@@ -37,6 +39,15 @@ func (h *Handler) HandleAfterRegistration(c echo.Context) error {
 	var payload Payload
 	if err := c.Bind(&payload); err != nil {
 		return err
+	}
+
+	if payload.Traits.Avatar == "" {
+		gravatar := gravatar.NewGravatarFromEmail(payload.Traits.Email)
+		payload.Traits.Avatar = gravatar.GetURL()
+
+		if err := identity.UpdateUserTraits(ctx, payload.ID, payload.Traits); err != nil {
+			log.Error().Err(err).Msg("failed to update user traits")
+		}
 	}
 
 	invites, err := h.queries.GetOrgInvitesByEmail(ctx, payload.Traits.Email)
