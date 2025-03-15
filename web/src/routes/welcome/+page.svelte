@@ -48,8 +48,12 @@
 
 		<Divider class="mb-12 mt-8" />
 
-		<Text class="mb- text-center">
-			Want to join an organization? <TextLink>Ask your admin for an invite</TextLink>
+		<Text class="text-center">
+			Want to join an organization? <TextLink
+				href="https://pandaci.com/docs/platform/other/org-members"
+			>
+				Ask your admin for an invite
+			</TextLink>
 		</Text>
 	</Card>
 </div>
