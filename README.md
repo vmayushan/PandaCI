@@ -4,7 +4,7 @@
 <p>PandaCI is a modern CI/CD platform with a simple but extremely powerful styntax learnable in minutes. Avoid hours of documentation and just use a language your team already knows.</p>
 </p>
 <div align="center">
-  <a href="https://pandaci.com/home">Homepage</a>
+  <a href="https://pandaci.com">Homepage</a>
   .
   <a href="https://pandaci.com/docs">Documentation</a>
 </div>
