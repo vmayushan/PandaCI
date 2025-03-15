@@ -41,14 +41,14 @@ func (h *Handler) HandleAfterRegistration(c echo.Context) error {
 		return err
 	}
 
-	// if payload.Traits.Avatar == "" {
-	gravatar := gravatar.NewGravatarFromEmail(payload.Traits.Email)
-	payload.Traits.Avatar = gravatar.GetURL()
+	if payload.Traits.Avatar == "" {
+		gravatar := gravatar.NewGravatarFromEmail(payload.Traits.Email)
+		payload.Traits.Avatar = gravatar.GetURL()
 
-	if err := identity.UpdateUserTraits(ctx, payload.ID, payload.Traits); err != nil {
-		log.Error().Err(err).Msg("failed to update user traits")
+		if err := identity.UpdateUserTraits(ctx, payload.ID, payload.Traits); err != nil {
+			log.Error().Err(err).Msg("failed to update user traits")
+		}
 	}
-	// }
 
 	invites, err := h.queries.GetOrgInvitesByEmail(ctx, payload.Traits.Email)
 	if err != nil {
