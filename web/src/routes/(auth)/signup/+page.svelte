@@ -68,7 +68,7 @@
 			</Button>
 			<Card class="mx-auto my-14 flex w-full max-w-md flex-col space-y-12 ">
 				<div>
-					<Heading>Sign up</Heading>
+					<Heading size="sm" level={2}>Sign up</Heading>
 					<Text class="mt-2">
 						Already have an account? <TextLink
 							href={`/login${data.return_to ? `?return_to=${encodeURIComponent(data.return_to)}` : ''}`}
