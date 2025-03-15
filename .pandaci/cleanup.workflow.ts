@@ -31,7 +31,7 @@ await docker("node:22", { name: "Cleanup fly" }, async () => {
       CLOUDFLARE_ACCOUNT_ID: env.CLOUDFLARE_ACCOUNT_ID,
     });
 
-  $`npx wrangler kv:key delete --remote --namespace-id=${env.CLOUDFLARE_API_KV_ID} ${env.PANDACI_BRANCH}`
+  $`npx wrangler kv key delete --remote --namespace-id=${env.CLOUDFLARE_API_KV_ID} ${env.PANDACI_BRANCH}`
     .env({
       CLOUDFLARE_API_TOKEN: env.CLOUDFLARE_API_TOKEN,
       CLOUDFLARE_ACCOUNT_ID: env.CLOUDFLARE_ACCOUNT_ID,
