@@ -17,7 +17,7 @@
 	const flowId = page.url.searchParams.get('flow');
 	const returnTo = decodeURIComponent(page.url.searchParams.get('return_to') || '') || undefined;
 
-	let session = flowId
+	const session = flowId
 		? (authAPI
 				.getRegistrationFlow({
 					id: flowId
@@ -36,8 +36,6 @@
 					return res;
 				})
 				.catch(handleError) as ReturnType<typeof authAPI.createBrowserRegistrationFlow>);
-
-	session = new Promise(() => {});
 </script>
 
 <div class="flex flex-1 grow flex-col justify-center px-2">
