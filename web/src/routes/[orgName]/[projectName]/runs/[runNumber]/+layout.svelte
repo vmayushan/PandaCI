@@ -79,7 +79,6 @@
 </script>
 
 <Title
-	class="h-28"
 	titleLoading={run.isLoading}
 	state={{
 		status: run.data?.status,
@@ -89,7 +88,7 @@
 >
 	{#snippet description()}
 		{#if run.isLoading}
-			<Skeleton class="ml-10 mt-4 h-3.5 w-56" />
+			<Skeleton class="ml-10 mt-3.5 h-3.5 w-56" />
 		{:else}
 			<span class="ml-10 text-xs">{run.data?.name}</span>
 		{/if}
@@ -139,11 +138,11 @@
 				<DropdownHeading>Jobs</DropdownHeading>
 				{#each sortedJobs as job (job.id)}
 					<DropdownItem href={`${baseHref}/jobs/${job.number}`} value={`job-${job.id}`}>
-						<RunStatus class="size-5" status={job.status} conclusion={job.conclusion} />
+						<RunStatus class="mr-1 size-5" status={job.status} conclusion={job.conclusion} />
 						<DropdownLabel>
 							{job.name}
 						</DropdownLabel>
-						<span class="text-on-surface-variant ml-auto whitespace-nowrap text-xs">
+						<span class="text-on-surface-variant ml-1 whitespace-nowrap text-xs">
 							<LiveDate finishedAt={job.finishedAt} startedAt={job.createdAt} />
 						</span>
 					</DropdownItem>
@@ -228,5 +227,6 @@
 			</SidebarSection>
 		</SidebarBody>
 	</Sidebar>
+
 	{@render children()}
 </div>

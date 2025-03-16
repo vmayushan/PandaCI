@@ -40,16 +40,20 @@
 		className
 	]}
 >
-	<div class="flex flex-col">
+	<div class="flex min-w-0 grow flex-col">
 		{@render action?.()}
-		<Heading class={['flex items-center space-x-4', action && 'mt-4']}>
+		<Heading class={['flex max-w-full items-center space-x-4', action && 'mt-4']}>
 			{#if state}
-				<RunStatus class="size-6" status={state.status} conclusion={state.conclusion} />
+				<RunStatus
+					class="mb-auto mt-1 size-6"
+					status={state.status}
+					conclusion={state.conclusion}
+				/>
 			{/if}
 			{#if titleLoading}
 				<Skeleton class="h-6 w-32" />
 			{:else}
-				<span>
+				<span class="min-w-0 grow hyphens-auto break-words">
 					{title}
 				</span>
 			{/if}
