@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/labstack/echo/v4"
 	middleware_loaders "github.com/pandaci-com/pandaci/app/api/middleware/loaders"
 	"github.com/pandaci-com/pandaci/app/email"
 	"github.com/pandaci-com/pandaci/pkg/utils"
@@ -15,7 +16,6 @@ import (
 	"github.com/pandaci-com/pandaci/types"
 	typesDB "github.com/pandaci-com/pandaci/types/database"
 	typesHTTP "github.com/pandaci-com/pandaci/types/http"
-	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 )
 
