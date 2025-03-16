@@ -138,11 +138,11 @@
 				<DropdownHeading>Jobs</DropdownHeading>
 				{#each sortedJobs as job (job.id)}
 					<DropdownItem href={`${baseHref}/jobs/${job.number}`} value={`job-${job.id}`}>
-						<RunStatus class="mr-1 size-5" status={job.status} conclusion={job.conclusion} />
+						<RunStatus class="mr-2 size-5" status={job.status} conclusion={job.conclusion} />
 						<DropdownLabel>
 							{job.name}
 						</DropdownLabel>
-						<span class="text-on-surface-variant ml-1 whitespace-nowrap text-xs">
+						<span class="text-on-surface-variant ml-2 whitespace-nowrap text-xs">
 							<LiveDate finishedAt={job.finishedAt} startedAt={job.createdAt} />
 						</span>
 					</DropdownItem>
