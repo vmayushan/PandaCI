@@ -1,21 +1,32 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { Title, Text } from '$lib/components';
+	import {
+		Title,
+		Text,
+		Dropdown,
+		DropdownButton,
+		DropdownItem,
+		DropdownLabel,
+		DropdownMenu,
+		SidebarBody,
+		SidebarItem,
+		SidebarLabel,
+		SidebarDivider,
+		SidebarSection,
+		SidebarHeading
+	} from '$lib/components';
 	import { queries } from '$lib/queries';
 	import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-	import { CaretLeft, House, Notepad } from 'phosphor-svelte';
+	import { CaretLeft, House, Notepad, CaretDown } from 'phosphor-svelte';
 	import RunStatus from '$lib/components/runStatus.svelte';
 	import type { WorkflowRun } from '$lib/api/organization';
-	import SidebarItem from '$lib/components/sidebar/sidebarItem.svelte';
-	import SidebarBody from '$lib/components/sidebar/sidebarBody.svelte';
-	import SidebarDivider from '$lib/components/sidebar/SidebarDivider.svelte';
-	import SidebarSection from '$lib/components/sidebar/sidebarSection.svelte';
-	import SidebarHeading from '$lib/components/sidebar/sidebarHeading.svelte';
-	import SidebarLabel from '$lib/components/sidebar/sidebarLabel.svelte';
 	import type { Snippet } from 'svelte';
 	import Sidebar from '$lib/components/sidebar/sidebar.svelte';
 	import Skeleton from '$lib/components/skeleton.svelte';
 	import LiveDate from './liveDate.svelte';
+	import DropdownSection from '$lib/components/dropdown/dropdownSection.svelte';
+	import DropdownDivider from '$lib/components/dropdown/dropdownDivider.svelte';
+	import DropdownHeading from '$lib/components/dropdown/dropdownHeading.svelte';
 
 	const queryClient = useQueryClient();
 
@@ -43,6 +54,28 @@
 	);
 
 	const baseHref = `/${page.params.orgName}/${page.params.projectName}/runs/${page.params.runNumber}`;
+
+	const currentNav = $derived.by(() => {
+		if (page.route.id === '/[orgName]/[projectName]/runs/[runNumber]/workflow')
+			return {
+				label: 'Workflow logs',
+				icon: Notepad
+			};
+
+		if (page.route.id === '/[orgName]/[projectName]/runs/[runNumber]/jobs/[jobNumber]') {
+			const job = run.data?.jobs?.find((job) => job.number.toString() === page.params.jobNumber);
+			return {
+				label: job?.name ?? 'Unknown job',
+				conclusion: job?.conclusion,
+				status: job?.status
+			};
+		}
+
+		return {
+			label: 'Summary',
+			icon: House
+		};
+	});
 </script>
 
 <Title
@@ -75,8 +108,71 @@
 	{/snippet}
 </Title>
 
-<div class="mt-4 flex h-fit space-x-4">
-	<Sidebar class="sticky top-0 flex w-full max-w-60 shrink-0 grow flex-col 2xl:max-w-xs">
+<div class="mt-4 flex h-fit flex-col space-x-4 lg:flex-row">
+	<Dropdown>
+		<DropdownButton outline class="mb-4 w-min whitespace-nowrap lg:hidden">
+			{#snippet indicator(props)}
+				<CaretDown data-slot="icon" {...props} />
+			{/snippet}
+			{#if currentNav?.icon}
+				<currentNav.icon class="size-4" data-slot="icon" />
+			{/if}
+			{#if currentNav.status}
+				<RunStatus class="size-4" status={currentNav.status} conclusion={currentNav.conclusion} />
+			{/if}
+			{currentNav?.label}
+		</DropdownButton>
+		<DropdownMenu>
+			<DropdownSection>
+				<DropdownItem
+					href={`/${page.params.orgName}/${page.params.projectName}/runs/${page.params.runNumber}`}
+					value="summary"
+				>
+					<House data-slot="icon" />
+					<DropdownLabel>Summary</DropdownLabel>
+				</DropdownItem>
+			</DropdownSection>
+
+			<DropdownDivider />
+
+			<DropdownSection>
+				<DropdownHeading>Jobs</DropdownHeading>
+				{#each sortedJobs as job (job.id)}
+					<DropdownItem href={`${baseHref}/jobs/${job.number}`} value={`job-${job.id}`}>
+						<RunStatus class="size-5" status={job.status} conclusion={job.conclusion} />
+						<DropdownLabel>
+							{job.name}
+						</DropdownLabel>
+						<span class="text-on-surface-variant ml-auto whitespace-nowrap text-xs">
+							<LiveDate finishedAt={job.finishedAt} startedAt={job.createdAt} />
+						</span>
+					</DropdownItem>
+				{/each}
+				{#if run.data && !run.data.jobs?.length}
+					<Text class="pl-3">{run.data.conclusion ? 'No jobs' : 'Waiting for jobs'}</Text>
+				{/if}
+
+				{#if run.isLoading}
+					<Skeleton class="my-1 h-7" />
+					<Skeleton class="my-1 h-7" />
+				{/if}
+			</DropdownSection>
+
+			<DropdownDivider />
+
+			<DropdownSection>
+				<DropdownItem
+					href={`/${page.params.orgName}/${page.params.projectName}/runs/${page.params.runNumber}/workflow`}
+					value="workflow-logs"
+				>
+					<Notepad data-slot="icon" />
+					<DropdownLabel>Workflow logs</DropdownLabel>
+				</DropdownItem>
+			</DropdownSection>
+		</DropdownMenu>
+	</Dropdown>
+
+	<Sidebar class="sticky top-0 hidden w-full max-w-56 shrink-0 grow flex-col lg:flex 2xl:max-w-xs">
 		<SidebarBody>
 			<SidebarItem
 				href={baseHref}
@@ -132,6 +228,5 @@
 			</SidebarSection>
 		</SidebarBody>
 	</Sidebar>
-
 	{@render children()}
 </div>

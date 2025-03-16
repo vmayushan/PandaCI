@@ -173,7 +173,7 @@
 			<OrgPlanBanner />
 		</div>
 		<div
-			class="lg:shadow-xs grow p-6 lg:rounded-lg lg:bg-white lg:px-10 lg:py-6 lg:ring-1 lg:ring-zinc-950/5 dark:lg:bg-zinc-900 dark:lg:ring-white/10"
+			class="lg:shadow-xs grow px-6 pb-6 lg:rounded-lg lg:bg-white lg:px-10 lg:py-6 lg:pt-6 lg:ring-1 lg:ring-zinc-950/5 dark:lg:bg-zinc-900 dark:lg:ring-white/10"
 		>
 			{@render children()}
 		</div>
