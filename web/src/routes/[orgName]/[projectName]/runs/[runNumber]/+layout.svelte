@@ -138,11 +138,19 @@
 				<DropdownHeading>Jobs</DropdownHeading>
 				{#each sortedJobs as job (job.id)}
 					<DropdownItem href={`${baseHref}/jobs/${job.number}`} value={`job-${job.id}`}>
-						<RunStatus class="mr-2 size-5" status={job.status} conclusion={job.conclusion} />
+						<RunStatus
+							data-slot="icon"
+							class="size-5"
+							status={job.status}
+							conclusion={job.conclusion}
+						/>
 						<DropdownLabel>
 							{job.name}
 						</DropdownLabel>
-						<span class="text-on-surface-variant mx-2 whitespace-nowrap text-xs">
+
+						<span
+							class="text-on-surface-variant col-start-5 row-start-1 flex justify-self-end whitespace-nowrap text-xs"
+						>
 							<LiveDate finishedAt={job.finishedAt} startedAt={job.createdAt} />
 						</span>
 					</DropdownItem>
@@ -152,8 +160,10 @@
 				{/if}
 
 				{#if run.isLoading}
-					<Skeleton class="my-1 h-7" />
-					<Skeleton class="my-1 h-7" />
+					<div class="col-span-4 px-3.5">
+						<Skeleton class="my-1 h-7 w-full" />
+						<Skeleton class="my-1 h-7 w-full" />
+					</div>
 				{/if}
 			</DropdownSection>
 
