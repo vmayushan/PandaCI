@@ -142,7 +142,7 @@
 						<DropdownLabel>
 							{job.name}
 						</DropdownLabel>
-						<span class="text-on-surface-variant ml-2 whitespace-nowrap text-xs">
+						<span class="text-on-surface-variant mx-2 whitespace-nowrap text-xs">
 							<LiveDate finishedAt={job.finishedAt} startedAt={job.createdAt} />
 						</span>
 					</DropdownItem>
