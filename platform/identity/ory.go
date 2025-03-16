@@ -219,7 +219,7 @@ func UpdateUserTraits(ctx context.Context, id string, traits any) error {
 
 	_, _, err = ory.IdentityAPI.PatchIdentity(authed, id).JsonPatch([]client.JsonPatch{
 		{
-			Path:  "traits",
+			Path:  "#/traits",
 			Op:    "replace",
 			Value: traits,
 		},
