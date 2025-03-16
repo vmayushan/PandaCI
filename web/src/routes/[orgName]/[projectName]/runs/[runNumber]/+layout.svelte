@@ -138,12 +138,7 @@
 				<DropdownHeading>Jobs</DropdownHeading>
 				{#each sortedJobs as job (job.id)}
 					<DropdownItem href={`${baseHref}/jobs/${job.number}`} value={`job-${job.id}`}>
-						<RunStatus
-							data-slot="icon"
-							class="size-5"
-							status={job.status}
-							conclusion={job.conclusion}
-						/>
+						<RunStatus class="mr-2.5 size-5" status={job.status} conclusion={job.conclusion} />
 						<DropdownLabel>
 							{job.name}
 						</DropdownLabel>
