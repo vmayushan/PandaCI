@@ -49,6 +49,6 @@
 		</form>
 		<Divider class="my-4" />
 
-		<Button full plain>Skip</Button>
+		<Button full plain href="/account">Skip</Button>
 	</Card>
 </div>
