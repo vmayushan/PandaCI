@@ -38,14 +38,14 @@
 	const queryClient = useQueryClient();
 </script>
 
-<div class="flex flex-1 grow flex-col justify-center px-2">
+<div class=" flex flex-1 grow flex-col justify-center px-2">
 	{#await session}
 		<Card class="mx-auto my-14 flex w-full max-w-md flex-col">
 			<div>
 				<Heading size="sm" level={2}>Login</Heading>
 				<Skeleton class="mt-2 h-6 w-3/4" />
 			</div>
-			<Skeleton class="mt-12 h-9 w-full" />
+			<Skeleton class="mt-12 h-11 w-full sm:h-9" />
 
 			<Text class="mt-8">
 				By signing in, you agree to our <TextLink href="https://pandaci.com/legal" target="_blank">

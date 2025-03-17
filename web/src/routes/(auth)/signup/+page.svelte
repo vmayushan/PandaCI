@@ -46,7 +46,7 @@
 					<Heading size="sm" level={2}>Sign up</Heading>
 					<Skeleton class="mt-2 h-6 w-3/5" />
 				</div>
-				<Skeleton class="mt-12 h-9 w-full" />
+				<Skeleton class="mt-12 h-11 w-full sm:h-9" />
 
 				<Text class="mt-8">
 					By signing up, you agree to our <TextLink
