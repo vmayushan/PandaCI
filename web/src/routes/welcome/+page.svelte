@@ -37,18 +37,20 @@
 			class="mt-12 space-y-12"
 		>
 			<CreateOrgForm />
-			<Button loading={createOrgMutation.isPending} color="dark/white" full type="submit">
-				Create organization
-			</Button>
+			<div class="flex flex-col items-center justify-end gap-3 sm:flex-row">
+				<Button loading={createOrgMutation.isPending} color="dark/white" full type="submit">
+					Create organization
+				</Button>
 
-			<Text class="text-center">
-				Want to join an org? <TextLink href="https://pandaci.com/docs/platform/other/org-members">
-					Get an invite
-				</TextLink>
-			</Text>
+				<Button class="w-full sm:w-auto" plain href="/account">Skip</Button>
+			</div>
 		</form>
-		<Divider class="my-4" />
 
-		<Button full plain href="/account">Skip</Button>
+		<Divider class="my-8" />
+		<Text>
+			Want to join an org? <TextLink href="https://pandaci.com/docs/platform/other/org-members">
+				Get an invite
+			</TextLink>
+		</Text>
 	</Card>
 </div>
