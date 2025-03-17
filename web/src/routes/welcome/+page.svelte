@@ -2,8 +2,7 @@
 	import { queries } from '$lib/queries';
 	import { createQuery } from '@tanstack/svelte-query';
 	import CreateOrgForm, { type CreateOrgFormData } from './createOrgForm.svelte';
-	import { Button, Card, Heading, Text, Divider, TextLink, DialogActions } from '$lib/components';
-	import { SkipBack, X } from 'phosphor-svelte';
+	import { Button, Card, Heading, Text, Divider, TextLink } from '$lib/components';
 	import { goto } from '$app/navigation';
 	import { useCreateOrgMutation } from '../account/useCreateOrg';
 	import { handleForm } from '$lib/utils';
@@ -12,7 +11,7 @@
 
 	$effect(() => {
 		if (orgs.data && orgs.data.length) {
-			// goto('/');
+			goto('/');
 		}
 	});
 
