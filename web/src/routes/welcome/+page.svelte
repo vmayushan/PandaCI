@@ -9,9 +9,13 @@
 
 	const orgs = createQuery(() => queries.organization.list());
 
+	let loaded = $state(false);
+
 	$effect(() => {
-		if (orgs.data && orgs.data.length) {
-			goto('/');
+		if (!loaded && orgs.data && orgs.data.length) {
+			// goto('/');
+		} else if (orgs.isFetched) {
+			loaded = true;
 		}
 	});
 

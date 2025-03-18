@@ -26,7 +26,7 @@
 {#snippet emptyProjects()}
 	<a
 		href={`/${page.params.orgName}/new`}
-		class="border-outline-variant hover:border-outline ring-offset-surface focus:outline-hidden relative mx-auto mt-12 block w-full max-w-2xl rounded-lg border-2 border-dashed p-12 text-center focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+		class="border-outline-variant hover:border-outline ring-offset-surface focus:outline-hidden relative mx-auto mt-12 block w-full max-w-2xl rounded-lg border-2 border-dashed p-12 text-center focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
 	>
 		<FolderPlus class="mx-auto size-12 text-zinc-400 dark:text-zinc-500" />
 		<span class="mt-2 block text-sm font-semibold text-zinc-900 dark:text-white">

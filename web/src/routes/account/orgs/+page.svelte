@@ -16,7 +16,8 @@
 		DialogBody,
 		DialogCloseButton,
 		DialogDescription,
-		DialogTitle
+		DialogTitle,
+		TextLink
 	} from '$lib/components';
 	import { queries } from '$lib/queries';
 	import { createQuery } from '@tanstack/svelte-query';
@@ -25,6 +26,7 @@
 	import { useCreateOrgMutation } from '../useCreateOrg';
 	import clsx from 'clsx';
 	import { getUser } from '$lib/runes/user.svelte';
+	import { BuildingOffice } from 'phosphor-svelte';
 
 	const orgs = createQuery(() => queries.organization.list());
 
@@ -43,7 +45,17 @@
 </Title>
 
 {#if !orgs.data?.length && !orgs.isLoading}
-	<div class="mt-12 flex h-full flex-col text-center">
+	<button
+		onclick={() => (open = true)}
+		class="border-outline-variant hover:border-outline ring-offset-surface focus:outline-hidden relative mx-auto mt-12 block w-full max-w-2xl cursor-pointer rounded-lg border-2 border-dashed p-12 text-center focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+	>
+		<BuildingOffice class="mx-auto size-12 text-zinc-400 dark:text-zinc-500" />
+		<Heading level={2} class="mt-2 block text-sm font-semibold text-zinc-900 dark:text-white">
+			Create a free org to get started.
+		</Heading>
+		<Text>Or you can ask an admin to invite you to one.</Text>
+	</button>
+	<!-- <div class="mt-12 flex h-full flex-col text-center">
 		<div class="my-auto">
 			<Heading class="mb-2" level={3}>No Organizations</Heading>
 			<Text>
@@ -54,7 +66,7 @@
 				Create Organization
 			</Button>
 		</div>
-	</div>
+	</div> -->
 {/if}
 
 {#if orgs.data?.length || orgs.isLoading}
@@ -117,7 +129,9 @@
 
 		<DialogActions>
 			<DialogCloseButton plain>Cancel</DialogCloseButton>
-			<Button loading={createOrgMutation.isPending} type="submit">Create organization</Button>
+			<Button color="dark/white" loading={createOrgMutation.isPending} type="submit">
+				Create organization
+			</Button>
 		</DialogActions>
 	</form>
 </Dialog>

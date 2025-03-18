@@ -7,7 +7,7 @@ export const organizationQueries = createQueryKeys('organization', {
 		queryKey: ['list']
 	}),
 	getByName: (orgSlug: string) => ({
-		queryKey: ['name', orgSlug],
+		queryKey: [orgSlug],
 		queryFn: () => API.get('/v1/orgs/{orgSlug}', { params: { orgSlug } }),
 		contextQueries: {
 			usage: () => ({

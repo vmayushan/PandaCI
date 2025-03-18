@@ -49,6 +49,8 @@ export function getCurrentOrg({
 	$effect(() => {
 		if (
 			orgs.isFetched &&
+			// TODO - we should be able to remove this one svelte query properly works with runes
+			!orgs.isFetching &&
 			!orgs.data?.length &&
 			(page.route.id?.startsWith('/[orgName]') || page.route.id === '/')
 		) {
@@ -56,10 +58,11 @@ export function getCurrentOrg({
 				goto('/welcome', {
 					replaceState: true
 				});
-			else
+			else {
 				goto('/account/orgs', {
 					replaceState: true
 				});
+			}
 		}
 	});
 

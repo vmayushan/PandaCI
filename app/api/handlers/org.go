@@ -60,12 +60,13 @@ func (h *Handler) CreateOrg(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, typesHTTP.OrgHTTP{
-		ID:        orgDB.ID,
-		Name:      orgDB.Name,
-		Slug:      orgDB.Slug,
-		License:   license,
-		OwnerID:   orgDB.OwnerID,
-		AvatarURL: orgDB.AvatarURL,
+		ID:               orgDB.ID,
+		Name:             orgDB.Name,
+		Slug:             orgDB.Slug,
+		License:          license,
+		OwnerID:          orgDB.OwnerID,
+		AvatarURL:        orgDB.AvatarURL,
+		CurrentUsersRole: types.Pointer(types.ORG_USERS_ROLE_ADMIN),
 	})
 }
 
