@@ -65,7 +65,7 @@
 						href={`/${page.params.orgName ?? (orgs.data?.length === 1 ? orgs.data?.[0]?.slug : 'account/orgs')}`}
 						class="focus:outline-hidden ml-2 w-full rounded-lg text-2xl/8 font-semibold text-zinc-950 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 sm:text-xl/8 dark:text-white dark:focus-visible:ring-offset-zinc-950"
 					>
-						Panda CI
+						PandaCI
 					</a>
 				{/if}
 				{#if mobile}
