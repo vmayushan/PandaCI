@@ -164,7 +164,7 @@
 			<Text class="text-center">Please add our Github app to your account to get started.</Text>
 			<Button
 				color="dark/white"
-				onClick={() => {
+				onclick={() => {
 					window.open(
 						`https://github.com/apps/${PUBLIC_GITHUB_APP_NAME}/installations/new`,
 						'popup',
