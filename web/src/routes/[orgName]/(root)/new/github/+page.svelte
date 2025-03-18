@@ -55,20 +55,9 @@
 		})) ?? [])
 	]);
 
-	let popupOpened = $state(false);
-
-	$effect(() => {
-		if (!installations.data?.installations.length && !installations.isLoading && !popupOpened) {
-			window.open(
-				`https://github.com/apps/${PUBLIC_GITHUB_APP_NAME}/installations/new`,
-				'popup',
-				'width=600,height=600'
-			);
-			popupOpened = true;
-		}
-	});
-
 	if (window.opener && window.opener !== window) {
+		// github will redirect the popup back to this page, so we want to close it
+		// TODO - we should be able to refresh the parent without reloading the page
 		window.opener.location.reload();
 		window.close();
 	}
@@ -119,10 +108,13 @@
 								label: 'Add Github account',
 								value: 'Add Github account',
 								icon: Plus,
-								onClick: () =>
-									window.location.assign(
-										`https://github.com/apps/${PUBLIC_GITHUB_APP_NAME}/installations/new`
-									)
+								onClick: () => {
+									window.open(
+										`https://github.com/apps/${PUBLIC_GITHUB_APP_NAME}/installations/new`,
+										'popup',
+										'width=600,height=600'
+									);
+								}
 							}
 						]}
 					>
@@ -158,7 +150,13 @@
 			<Text class="text-center">Please add our Github app to your account to get started.</Text>
 			<Button
 				color="dark/white"
-				href={`https://github.com/apps/${PUBLIC_GITHUB_APP_NAME}/installations/new`}
+				onClick={() => {
+					window.open(
+						`https://github.com/apps/${PUBLIC_GITHUB_APP_NAME}/installations/new`,
+						'popup',
+						'width=600,height=600'
+					);
+				}}
 				class="mx-auto mt-4"
 			>
 				Connect Github
