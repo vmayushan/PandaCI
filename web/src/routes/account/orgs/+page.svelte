@@ -54,18 +54,6 @@
 		</Heading>
 		<Text>Or you can ask an admin to invite you to one.</Text>
 	</button>
-	<!-- <div class="mt-12 flex h-full flex-col text-center">
-		<div class="my-auto">
-			<Heading class="mb-2" level={3}>No Organizations</Heading>
-			<Text>
-				Get started by creating a new organization or asking an admin to invite you to one.
-			</Text>
-
-			<Button color="dark/white" class="mt-6" onclick={() => (open = true)}>
-				Create Organization
-			</Button>
-		</div>
-	</div> -->
 {/if}
 
 {#if orgs.data?.length || orgs.isLoading}
