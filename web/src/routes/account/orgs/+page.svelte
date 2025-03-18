@@ -16,8 +16,7 @@
 		DialogBody,
 		DialogCloseButton,
 		DialogDescription,
-		DialogTitle,
-		TextLink
+		DialogTitle
 	} from '$lib/components';
 	import { queries } from '$lib/queries';
 	import { createQuery } from '@tanstack/svelte-query';

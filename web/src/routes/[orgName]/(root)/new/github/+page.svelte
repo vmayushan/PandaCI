@@ -19,7 +19,6 @@
 	import { PUBLIC_GITHUB_APP_NAME } from '$env/static/public';
 	import ListGithubRepos from './listGithubRepos.svelte';
 	import Skeleton from '$lib/components/skeleton.svelte';
-	import { goto } from '$app/navigation';
 
 	let search = $state('');
 
