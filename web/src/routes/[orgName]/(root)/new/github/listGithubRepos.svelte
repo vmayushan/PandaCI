@@ -85,11 +85,16 @@
 
 {#if repos.length === 0 && !allRepos.isLoading && !searchedRepos.isLoading && !namedRepo.isLoading}
 	<div class="flex flex-col justify-center">
-		<Heading class="text-center">No installations found</Heading>
+		<Heading class="text-center">No repos found</Heading>
 		<Text class="text-center">Make sure you've allowed our app to access your repositories</Text>
 		<Button
 			color="dark/white"
-			href={`https://github.com/apps/${PUBLIC_GITHUB_APP_NAME}/installations/new`}
+			onclick={() =>
+				window.open(
+					`https://github.com/apps/${PUBLIC_GITHUB_APP_NAME}/installations/new`,
+					'popup',
+					'width=600,height=600'
+				)}
 			class="mx-auto mt-4"
 		>
 			Update permissions

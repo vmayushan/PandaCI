@@ -5,7 +5,7 @@
 	import { useMachine, normalizeProps, portal } from '@zag-js/svelte';
 	import { nanoid } from 'nanoid';
 	import * as dialog from '@zag-js/dialog';
-	import { List, X, Newspaper, TextOutdent, TextIndent } from 'phosphor-svelte';
+	import { List, X, Newspaper, TextOutdent, TextIndent, Bug } from 'phosphor-svelte';
 	import Button from './button.svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { page } from '$app/state';
@@ -65,7 +65,7 @@
 						href={`/${page.params.orgName ?? (orgs.data?.length === 1 ? orgs.data?.[0]?.slug : 'account/orgs')}`}
 						class="focus:outline-hidden ml-2 w-full rounded-lg text-2xl/8 font-semibold text-zinc-950 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 sm:text-xl/8 dark:text-white dark:focus-visible:ring-offset-zinc-950"
 					>
-						Panda CI
+						PandaCI
 					</a>
 				{/if}
 				{#if mobile}
@@ -102,6 +102,14 @@
 					target="_blank"
 				>
 					<Newspaper data-slot="icon" /><SidebarLabel>Docs</SidebarLabel>
+				</SidebarItem>
+
+				<SidebarItem
+					tooltip="Report and issue"
+					href="https://github.com/pandaci-com/pandaci/issues"
+					target="_blank"
+				>
+					<Bug data-slot="icon" /><SidebarLabel>Report an issue</SidebarLabel>
 				</SidebarItem>
 			</SidebarSection>
 		</SidebarBody>

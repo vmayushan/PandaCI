@@ -17,6 +17,7 @@
 	import { queries } from '$lib/queries';
 	import { handleForm } from '$lib/utils';
 	import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
+	import DeleteOrgModal from './deleteOrgModal.svelte';
 
 	const org = createQuery(() => queries.organization.getByName(page.params.orgName));
 
@@ -56,18 +57,12 @@
 		}
 	}));
 
-	const deleteOrgMutation = createMutation(() => ({
-		mutationFn: () =>
-			API.delete('/v1/orgs/{orgName}', {
-				params: { orgName: page.params.orgName }
-			}),
-		onSuccess: () => {
-			queryClient.invalidateQueries(queries.organization.getByName(page.params.orgName));
-			queryClient.invalidateQueries(queries.organization.list());
-			goto(`/account/orgs`);
-		}
-	}));
+	let deleteOrgModalOpen = $state(false);
 </script>
+
+{#if org.data}
+	<DeleteOrgModal org={org.data} bind:open={deleteOrgModalOpen} />
+{/if}
 
 <Title title="Organization settings">
 	{#snippet description()}
@@ -78,12 +73,6 @@
 {#if updateOrgMutation.isError}
 	<Text class="mx-auto max-w-3xl py-2" variant="error">
 		{updateOrgMutation.error.message}
-	</Text>
-{/if}
-
-{#if deleteOrgMutation.isError}
-	<Text class="mx-auto max-w-3xl py-2" variant="error">
-		{deleteOrgMutation.error.message}
 	</Text>
 {/if}
 
@@ -142,8 +131,9 @@
 
 <div class="flex max-w-5xl">
 	<Button
-		loading={deleteOrgMutation.isPending}
-		onclick={() => deleteOrgMutation.mutate()}
+		onclick={() => {
+			deleteOrgModalOpen = true;
+		}}
 		color="red"
 		class="ml-auto"
 	>

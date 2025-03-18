@@ -2,16 +2,20 @@
 	import { queries } from '$lib/queries';
 	import { createQuery } from '@tanstack/svelte-query';
 	import CreateOrgForm, { type CreateOrgFormData } from './createOrgForm.svelte';
-	import { Button, Card, Heading, Text, Divider, TextLink } from '$lib/components';
-	import { goto } from '$app/navigation';
+	import { Button, Card, Heading, Text, TextLink } from '$lib/components';
 	import { useCreateOrgMutation } from '../account/useCreateOrg';
 	import { handleForm } from '$lib/utils';
+	import { goto } from '$app/navigation';
 
 	const orgs = createQuery(() => queries.organization.list());
 
+	let loaded = $state(false);
+
 	$effect(() => {
-		if (orgs.data && orgs.data.length) {
+		if (!loaded && orgs.data && orgs.data.length) {
 			goto('/');
+		} else if (orgs.isFetched) {
+			loaded = true;
 		}
 	});
 
@@ -46,8 +50,7 @@
 			</div>
 		</form>
 
-		<Divider class="my-8" />
-		<Text>
+		<Text class="mt-8">
 			Want to join an org? <TextLink href="https://pandaci.com/docs/platform/other/org-members">
 				Get an invite
 			</TextLink>

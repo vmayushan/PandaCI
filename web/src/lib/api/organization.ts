@@ -196,7 +196,7 @@ type DELETE = Method<{
 	'/v1/orgs/{orgSlug}/projects/{projectSlug}/variables/{variableID}': object;
 	'/v1/orgs/{orgSlug}/projects/{projectSlug}/environments/{environmentID}': object;
 	'/v1/orgs/{orgName}/projects/{projectName}': object;
-	'/v1/orgs/{orgName}': object;
+	'/v1/orgs/{orgSlug}': object;
 	'/v1/orgs/{orgName}/users/{userID}': object;
 }>;
 

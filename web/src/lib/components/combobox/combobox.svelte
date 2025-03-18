@@ -5,22 +5,31 @@
 	};
 </script>
 
-<script lang="ts" generics="T extends {label: string; onClick?: any; }">
+<script lang="ts" generics="T extends {label: string; onClick?: any; value: string; icon?: any;}">
 	import * as combobox from '@zag-js/combobox';
 	import { useMachine, normalizeProps } from '@zag-js/svelte';
 	import { nanoid } from 'nanoid';
 	import { setContext } from 'svelte';
 	import type { SvelteHTMLElements } from 'svelte/elements';
+	import Divider from '../divider.svelte';
 
 	type ComboboxProps = SvelteHTMLElements['div'] & {
 		items: T[];
+		actions?: T[];
 		itemOptions?: Omit<combobox.CollectionOptions<T>, 'items'>;
 		selected?: T;
 	};
 
-	let { children, items, selected = $bindable(), itemOptions, ...props }: ComboboxProps = $props();
+	let {
+		children,
+		items,
+		actions = [],
+		selected = $bindable(),
+		itemOptions,
+		...props
+	}: ComboboxProps = $props();
 
-	let filtered = $state.raw(items);
+	let filtered = $state.raw([...items, ...actions]);
 
 	const collection = $derived(
 		combobox.collection({
@@ -42,8 +51,8 @@
 			multiple: false,
 			openOnClick: true,
 			onOpenChange() {
-				collection.setItems(items);
-				filtered = items;
+				collection.setItems([...items, ...actions]);
+				filtered = [...items, ...actions];
 				api.setInputValue((api.selectedItems[0] as any).label);
 			},
 			onInputValueChange({ inputValue }) {
@@ -53,8 +62,8 @@
 							collection.stringifyItem(item)?.toLowerCase().includes(inputValue.toLowerCase()) ||
 							Boolean(item.onClick)
 					) || items;
-				filtered = newOptions;
-				collection.setItems(newOptions);
+				filtered = [...newOptions, ...actions];
+				collection.setItems([...newOptions, ...actions]);
 			},
 			onValueChange({ items }: { items: T[] }) {
 				const item: T = items[0];
@@ -108,6 +117,9 @@
 				]}
 			>
 				{#each filtered as item (item.label)}
+					{#if actions[0]?.value === item.value}
+						<Divider class="my-1" />
+					{/if}
 					<li
 						{...ctx.api.getItemProps({ item })}
 						class={[
@@ -135,6 +147,9 @@
 								'*:data-[slot=avatar]:-mx-0.5 *:data-[slot=avatar]:size-6 sm:*:data-[slot=avatar]:size-5'
 							]}
 						>
+							{#if item.icon}
+								<item.icon data-slot="icon" class="mr-2" />
+							{/if}
 							{item.label}
 						</span>
 					</li>
