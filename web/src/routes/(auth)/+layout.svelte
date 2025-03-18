@@ -2,6 +2,6 @@
 	const { children } = $props();
 </script>
 
-<div class="flex min-h-svh py-8">
+<div class="bg-surface-low flex min-h-svh py-8">
 	{@render children()}
 </div>
