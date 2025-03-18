@@ -62,11 +62,15 @@
 			window.open(
 				`https://github.com/apps/${PUBLIC_GITHUB_APP_NAME}/installations/new`,
 				'popup',
-				'width=400,height=600'
+				'width=600,height=600'
 			);
 			popupOpened = true;
 		}
 	});
+
+	if (window.opener && window.opener !== window) {
+		window.close();
+	}
 </script>
 
 <Title title="New project">
