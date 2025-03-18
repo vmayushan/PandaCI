@@ -14,7 +14,7 @@
 	import ComboboxInput from '$lib/components/combobox/comboboxInput.svelte';
 	import Listbox from '$lib/components/listbox/listbox.svelte';
 	import { queries } from '$lib/queries';
-	import { createQuery } from '@tanstack/svelte-query';
+	import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 	import { GithubLogo, GitlabLogo, Plus } from 'phosphor-svelte';
 	import { PUBLIC_GITHUB_APP_NAME } from '$env/static/public';
 	import ListGithubRepos from './listGithubRepos.svelte';
@@ -57,10 +57,25 @@
 
 	if (window.opener && window.opener !== window) {
 		// github will redirect the popup back to this page, so we want to close it
-		// TODO - we should be able to refresh the parent without reloading the page
-		window.opener.location.reload();
+		window.opener.postMessage('refresh', '*');
 		window.close();
 	}
+
+	$effect(() => {
+		const handler = (e: MessageEvent) => {
+			if (e.data === 'refresh') {
+				queryClient.resetQueries(queries.github.listInstallation());
+			}
+		};
+
+		window.addEventListener('message', handler);
+
+		return () => {
+			window.removeEventListener('message', handler);
+		};
+	});
+
+	const queryClient = useQueryClient();
 </script>
 
 <Title title="New project">
@@ -73,7 +88,6 @@
 	>
 		{#snippet item(item)}
 			<item.icon class="mr-1" data-slot="icon" />
-			<!-- <svelte:element this={item?.icon} class="mr-1" data-slot="icon" /> -->
 			<span>{item.label}</span>
 		{/snippet}
 
@@ -112,7 +126,7 @@
 									window.open(
 										`https://github.com/apps/${PUBLIC_GITHUB_APP_NAME}/installations/new`,
 										'popup',
-										'width=600,height=600'
+										'width=600,height=900'
 									);
 								}
 							}
