@@ -27,7 +27,6 @@ func (g *GitRepoData) GetCommitURL(sha string, prNumber *int32) *string {
 
 	if g.Type == GitProviderTypeGithub {
 		if prNumber != nil {
-			// return Pointer(g.HTMLURL + "/pull/" + string(*prNumber) + "/commits/" + sha)
 			return Pointer(fmt.Sprintf("%s/pull/%d/commits/%s", g.HTMLURL, *prNumber, sha))
 		} else {
 			return Pointer(fmt.Sprintf("%s/commit/%s", g.HTMLURL, sha))
