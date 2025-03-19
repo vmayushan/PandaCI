@@ -7,6 +7,7 @@ import (
 	"slices"
 
 	"connectrpc.com/connect"
+	"github.com/labstack/echo/v4"
 	middlewareLoaders "github.com/pandaci-com/pandaci/app/api/middleware/loaders"
 	grpcMiddleware "github.com/pandaci-com/pandaci/app/grpc/middleware"
 	"github.com/pandaci-com/pandaci/pkg/jwt"
@@ -18,7 +19,6 @@ import (
 	pbConnect "github.com/pandaci-com/pandaci/proto/go/v1/v1connect"
 	"github.com/pandaci-com/pandaci/types"
 	typesHTTP "github.com/pandaci-com/pandaci/types/http"
-	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 )
 
@@ -102,6 +102,29 @@ func (h *Handler) GetWorkflowRunWithItems(c echo.Context) error {
 		return err
 	}
 
+	repoInfoErr := make(chan error)
+	repoInfo := make(chan *types.GitRepoData)
+
+	go func() {
+		// We can fetch this independently to the rest of the data
+		project, err := middlewareLoaders.GetProject(c)
+		if err != nil {
+			repoInfoErr <- err
+			repoInfo <- nil
+			return
+		}
+
+		info, err := h.gitHandler.GetRepoInfo(c.Request().Context(), *project)
+		if err != nil {
+			repoInfoErr <- err
+			repoInfo <- nil
+			return
+		}
+
+		repoInfoErr <- nil
+		repoInfo <- info
+	}()
+
 	jobs, err := h.queries.GetWorkflowRunJobsHTTP(c.Request().Context(), workflowRun)
 	if err != nil {
 		return err
@@ -134,6 +157,15 @@ func (h *Handler) GetWorkflowRunWithItems(c echo.Context) error {
 		}
 	}
 
+	if err := <-repoInfoErr; err != nil {
+		log.Error().Err(err).Msg("getting repo info")
+		return err
+	}
+
+	repoData := <-repoInfo
+
+	log.Debug().Interface("repoData", repoData).Msg("repoData")
+
 	return c.JSON(http.StatusOK, typesHTTP.WorkflowRun{
 		ID:         workflowRun.ID,
 		Number:     workflowRun.Number,
@@ -151,6 +183,8 @@ func (h *Handler) GetWorkflowRunWithItems(c echo.Context) error {
 		Trigger:    workflowRun.Trigger,
 		GitTitle:   workflowRun.GitTitle,
 		Committer:  committer,
+		PrURL:      repoData.GetPRURL(workflowRun.PrNumber),
+		CommitURL:  repoData.GetCommitURL(workflowRun.GitSha, workflowRun.PrNumber),
 	})
 }
 
@@ -187,8 +221,6 @@ func (h *Handler) GetWorkflowRuns(c echo.Context) error {
 			userIDs = append(userIDs, *workflow.UserID)
 		}
 	}
-
-	fmt.Println("userIDs", userIDs)
 
 	oryUsers, err := identity.ListUsersByIDs(c.Request().Context(), userIDs)
 	if err != nil {

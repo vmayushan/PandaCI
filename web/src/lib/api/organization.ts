@@ -99,6 +99,8 @@ export interface WorkflowRun {
 	trigger: WorkflowRunTrigger;
 	outputURL?: string;
 	gitTitle?: string;
+	prURL?: string;
+	commitURL?: string;
 	committer: {
 		name?: string;
 		email: string;

@@ -32,6 +32,9 @@ type WorkflowRun struct {
 
 	PrNumber *int32 `json:"prNumber,omitempty"`
 
+	PrURL     *string `json:"prURL,omitempty"`
+	CommitURL *string `json:"commitURL,omitempty"`
+
 	Trigger types.RunTrigger `json:"trigger"`
 
 	OutputURL string `json:"outputURL,omitempty"`
