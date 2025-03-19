@@ -245,7 +245,7 @@ func (h *Handler) GetWorkflowDefinitions(ctx context.Context, project typesDB.Pr
 				Trigger:  types.RunTriggerToProto(triggerEvent.Trigger),
 				PrNumber: triggerEvent.PrNumber,
 				GitInfo: &pb.GitRepo{
-					Url:        gitRepoData.URL,
+					Url:        gitRepoData.GitURL,
 					Sha:        triggerEvent.SHA,
 					Branch:     triggerEvent.Branch,
 					FetchDepth: 1,

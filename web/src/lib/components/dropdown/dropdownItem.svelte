@@ -1,15 +1,13 @@
-<script lang="ts">
+<script lang="ts" generics="T extends string | undefined = undefined">
 	import { getContext } from 'svelte';
 	import type { SvelteHTMLElements } from 'svelte/elements';
 	import type { DropdownContext } from './dropdown.svelte';
 
-	type BaseDropdownItemProps = { href?: string; value: string };
+	type DropdownItemProps<T> = { href?: T; value: string } & (T extends string
+		? SvelteHTMLElements['a']
+		: SvelteHTMLElements['button']);
 
-	type DropdownItemProps<T extends { href?: string } = object> = T extends { href: string }
-		? BaseDropdownItemProps & SvelteHTMLElements['a']
-		: BaseDropdownItemProps & SvelteHTMLElements['button'];
-
-	const { children, href, class: className, value, ...props }: DropdownItemProps = $props();
+	const { children, href, class: className, value, ...props }: DropdownItemProps<T> = $props();
 
 	const ctx = getContext<DropdownContext>('dropdown');
 </script>

@@ -163,10 +163,12 @@ func (c *GithubInstallationClient) GetProjectGitRepoData(ctx context.Context, pr
 	if err != nil {
 		return nil, err
 	}
-	url := fmt.Sprintf("https://x-access-token:%s@%s/%s/%s.git", token, "github.com", repo.GetOwner().GetLogin(), repo.GetName())
+	gitURL := fmt.Sprintf("https://x-access-token:%s@%s/%s/%s.git", token, "github.com", repo.GetOwner().GetLogin(), repo.GetName())
 
 	return &types.GitRepoData{
-		URL:           url,
+		GitURL:        gitURL,
+		HTMLURL:       repo.GetHTMLURL(),
 		DefaultBranch: repo.GetDefaultBranch(),
+		Type:          types.GitProviderTypeGithub,
 	}, nil
 }

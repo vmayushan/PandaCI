@@ -2,7 +2,7 @@
 	import { queries } from '$lib/queries';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { page } from '$app/state';
-	import { Skeleton } from '$lib/components';
+	import { Skeleton, TextLink } from '$lib/components';
 	import LiveDate from './liveDate.svelte';
 	import SubHeading from '$lib/components/subHeading.svelte';
 	import Alert from './alert.svelte';
@@ -48,7 +48,11 @@
 				{/if}
 			</RunDetail>
 			<RunDetail label="Commit">
-				{#if run.data}
+				{#if run.data && run.data.commitURL}
+					<TextLink href={run.data.commitURL} target="_blank">
+						{run.data.gitSha.slice(0, 7)}
+					</TextLink>
+				{:else if run.data}
 					{run.data.gitSha}
 				{:else}
 					<Skeleton class="mt-4 h-4 w-96" />
@@ -62,7 +66,11 @@
 				{/if}
 			</RunDetail>
 			<RunDetail label="Pr">
-				{#if run.data}
+				{#if run.data && run.data.prURL}
+					<TextLink href={run.data.prURL} target="_blank">
+						{run.data.prNumber ? `#${run.data.prNumber}` : 'N/A'}
+					</TextLink>
+				{:else if run.data}
 					{run.data.prNumber ? `#${run.data.prNumber}` : 'N/A'}
 				{:else}
 					<Skeleton class="mt-4 h-4 w-24" />

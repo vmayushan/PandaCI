@@ -17,7 +17,7 @@
 	} from '$lib/components';
 	import { queries } from '$lib/queries';
 	import { createQuery, useQueryClient } from '@tanstack/svelte-query';
-	import { CaretLeft, House, Notepad, CaretDown } from 'phosphor-svelte';
+	import { CaretLeft, House, Notepad, CaretDown, GitPullRequest } from 'phosphor-svelte';
 	import RunStatus from '$lib/components/runStatus.svelte';
 	import type { WorkflowRun } from '$lib/api/organization';
 	import type { Snippet } from 'svelte';
@@ -172,6 +172,12 @@
 					<Notepad data-slot="icon" />
 					<DropdownLabel>Workflow logs</DropdownLabel>
 				</DropdownItem>
+				{#if run.data?.prURL}
+					<DropdownItem href={run.data.prURL} target="_blank" value="pr">
+						<GitPullRequest data-slot="icon" />
+						<DropdownLabel>View PR</DropdownLabel>
+					</DropdownItem>
+				{/if}
 			</DropdownSection>
 		</DropdownMenu>
 	</Dropdown>
@@ -229,6 +235,13 @@
 					<Notepad data-slot="icon" />
 					<SidebarLabel>Workflow logs</SidebarLabel>
 				</SidebarItem>
+
+				{#if run.data?.prURL}
+					<SidebarItem href={run.data.prURL} target="_blank">
+						<GitPullRequest data-slot="icon" />
+						<SidebarLabel>View PR</SidebarLabel>
+					</SidebarItem>
+				{/if}
 			</SidebarSection>
 		</SidebarBody>
 	</Sidebar>
