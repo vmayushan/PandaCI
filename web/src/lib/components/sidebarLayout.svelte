@@ -105,7 +105,7 @@
 				</SidebarItem>
 
 				<SidebarItem
-					tooltip="Report and issue"
+					tooltip="Report an issue"
 					href="https://github.com/pandaci-com/pandaci/issues"
 					target="_blank"
 				>
