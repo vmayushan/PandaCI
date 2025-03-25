@@ -12,6 +12,7 @@
 	import { createMutation, useQueryClient } from '@tanstack/svelte-query';
 	import { queries } from '$lib/queries';
 	import DialogCloseButton from '$lib/components/dialog/dialogCloseButton.svelte';
+	import { goto } from '$app/navigation';
 
 	interface DeleteOrgModal {
 		org: Organization;
@@ -30,6 +31,7 @@
 		onSettled: () => {
 			queryClient.invalidateQueries(queries.organization.list());
 			queryClient.setQueryData(queries.organization.getByName(org.slug).queryKey, undefined);
+			goto('/account/orgs');
 		}
 	}));
 </script>
