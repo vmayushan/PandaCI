@@ -15,6 +15,7 @@ export function deployDevCoreBackendTask() {
     await initFly();
 
     // Setup environment variables
+    // test
     const flyEnv = {
       FLY_ACCESS_TOKEN: env.FLY_ACCESS_TOKEN_DEV,
       FLY_APP: env.PANDACI_PR_NUMBER
